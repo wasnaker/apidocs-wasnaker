@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "46d4200c-9641-4571-9365-9646adc76351",
+        "_postman_id": "77649e19-f127-4276-b23b-bde70ccdac07",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
