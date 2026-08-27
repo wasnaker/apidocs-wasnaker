@@ -1,0 +1,10 @@
+# Scribe/static output yang di-generate; biarkan tracked di repo ini
+# (repo ini memang khusus menampung hasil generate dokumentasi API)
+
+# abaikan file sistem
+.DS_Store
+*.log
+
+# abaikan environment lokal kalau ada
+.env
+.env.*

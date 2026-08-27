@@ -1,0 +1,487 @@
+openapi: 3.0.3
+info:
+  title: 'Wasnaker API API Documentation'
+  description: 'API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web/mobile). Autentikasi via Laravel Sanctum (Bearer token).'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://wasnaker.lan'
+tags:
+  -
+    name: Endpoints
+    description: ''
+  -
+    name: Settings
+    description: ''
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.'
+security:
+  -
+    default: []
+paths:
+  /api/health:
+    get:
+      summary: 'Cek kesehatan API.'
+      operationId: cekKesehatanAPI
+      description: 'Mengecek apakah layanan API berjalan dengan baik.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  service: wasnaker-api
+                  status: ok
+                  time: '2026-08-27T00:00:00+00:00'
+                properties:
+                  service:
+                    type: string
+                    example: wasnaker-api
+                  status:
+                    type: string
+                    example: ok
+                  time:
+                    type: string
+                    example: '2026-08-27T00:00:00+00:00'
+      tags:
+        - Endpoints
+      security: []
+  /api/login:
+    get:
+      summary: ''
+      operationId: getApiLogin
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+  /api/user:
+    get:
+      summary: 'Data user yang sedang login.'
+      operationId: dataUserYangSedangLogin
+      description: 'Mengembalikan data user terkini berdasarkan token Sanctum yang terkirim.'
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  name: Admin
+                  email: admin@wasnaker.lan
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Admin
+                  email:
+                    type: string
+                    example: admin@wasnaker.lan
+        401:
+          description: 'tidak terautentikasi'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+  /api/v1/sales:
+    get:
+      summary: 'Daftar sales.'
+      operationId: daftarSales
+      description: 'Menampilkan daftar sales dengan paginasi.'
+      parameters:
+        -
+          in: query
+          name: page
+          description: 'Nomor halaman.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Nomor halaman.'
+            example: 1
+        -
+          in: query
+          name: per_page
+          description: 'Jumlah data per halaman.'
+          example: 15
+          required: false
+          schema:
+            type: integer
+            description: 'Jumlah data per halaman.'
+            example: 15
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: []
+                  meta:
+                    count: 0
+                    per_page: 15
+                    page: 1
+                properties:
+                  data:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 0
+                      per_page:
+                        type: integer
+                        example: 15
+                      page:
+                        type: integer
+                        example: 1
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: 'Buat sales baru.'
+      operationId: buatSalesBaru
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: null
+                properties:
+                  data:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: numeric
+                  description: 'Jumlah nominal sales.'
+                  example: '150000'
+                due_date:
+                  type: date
+                  description: 'Tenggat waktu.'
+                  example: '2026-09-30'
+              required:
+                - amount
+      security: []
+  '/api/v1/sales/{id}':
+    get:
+      summary: 'Detail sales.'
+      operationId: detailSales
+      description: 'Mengembalikan satu data sales berdasarkan ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: null
+                properties:
+                  data:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - Endpoints
+      security: []
+    put:
+      summary: 'Perbarui sales.'
+      operationId: perbaruiSales
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: null
+                properties:
+                  data:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: numeric
+                  description: 'Jumlah nominal sales.'
+                  example: '175000'
+              required:
+                - amount
+      security: []
+    delete:
+      summary: 'Hapus sales.'
+      operationId: hapusSales
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ''
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'ID sales.'
+        example: 17
+        required: true
+        schema:
+          type: integer
+  '/api/settings/{key}':
+    get:
+      summary: 'Ambil satu setting berdasarkan key.'
+      operationId: ambilSatuSettingBerdasarkanKey
+      description: ''
+      parameters:
+        -
+          in: query
+          name: tenant_id
+          description: 'optional Scope tenant. Null = global.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'optional Scope tenant. Null = global.'
+            example: 1
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  key: invoice_prefix
+                  value: INV-
+                  tenant_id: null
+                properties:
+                  key:
+                    type: string
+                    example: invoice_prefix
+                  value:
+                    type: string
+                    example: INV-
+                  tenant_id:
+                    type: string
+                    example: null
+                    nullable: true
+        404:
+          description: tidak
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
+      tags:
+        - Settings
+    put:
+      summary: 'Simpan / perbarui setting (upsert by key).'
+      operationId: simpanPerbaruiSettingupsertByKey
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  key: invoice_prefix
+                  value: INV-
+                  tenant_id: null
+                properties:
+                  key:
+                    type: string
+                    example: invoice_prefix
+                  value:
+                    type: string
+                    example: INV-
+                  tenant_id:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - Settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: 'Nilai setting.'
+                  example: INV-
+                tenant_id:
+                  type: integer
+                  description: 'optional Scope tenant. Null = global.'
+                  example: 1
+              required:
+                - value
+    delete:
+      summary: 'Hapus setting berdasarkan key.'
+      operationId: hapusSettingBerdasarkanKey
+      description: ''
+      parameters:
+        -
+          in: query
+          name: tenant_id
+          description: 'optional Scope tenant. Null = global.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'optional Scope tenant. Null = global.'
+            example: 1
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Setting deleted'
+                properties:
+                  message:
+                    type: string
+                    example: 'Setting deleted'
+        404:
+          description: tidak
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
+      tags:
+        - Settings
+    parameters:
+      -
+        in: path
+        name: key
+        description: 'Kunci setting.'
+        example: invoice_prefix
+        required: true
+        schema:
+          type: string
+  /api/settings/bulk:
+    post:
+      summary: 'Ambil banyak setting sekaligus.'
+      operationId: ambilBanyakSettingSekaligus
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    invoice_prefix: INV-
+                    tax_rate: '11'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      invoice_prefix:
+                        type: string
+                        example: INV-
+                      tax_rate:
+                        type: string
+                        example: '11'
+      tags:
+        - Settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keys:
+                  type: array
+                  description: 'Daftar key.'
+                  example:
+                    - invoice_prefix
+                    - tax_rate
+                  items:
+                    type: string
+                tenant_id:
+                  type: integer
+                  description: 'optional Scope tenant. Null = global.'
+                  example: 1
+              required:
+                - keys
