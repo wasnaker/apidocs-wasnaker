@@ -8,6 +8,9 @@ servers:
     url: 'http://wasnaker.lan'
 tags:
   -
+    name: 'Activity Logs'
+    description: ''
+  -
     name: Endpoints
     description: ''
   -
@@ -23,6 +26,344 @@ security:
   -
     default: []
 paths:
+  /api/activity-logs:
+    get:
+      summary: 'List log aktivitas.'
+      operationId: listLogAktivitas
+      description: ''
+      parameters:
+        -
+          in: query
+          name: tenant_id
+          description: 'optional Filter scope tenant.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'optional Filter scope tenant.'
+            example: 1
+        -
+          in: query
+          name: causer_id
+          description: 'optional Filter berdasar user id (causer).'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'optional Filter berdasar user id (causer).'
+            example: 1
+        -
+          in: query
+          name: subject_type
+          description: 'optional Filter tipe subjek.'
+          example: App\Models\Invoice
+          required: false
+          schema:
+            type: string
+            description: 'optional Filter tipe subjek.'
+            example: App\Models\Invoice
+        -
+          in: query
+          name: subject_id
+          description: 'optional Filter id subjek.'
+          example: 5
+          required: false
+          schema:
+            type: integer
+            description: 'optional Filter id subjek.'
+            example: 5
+        -
+          in: query
+          name: per_page
+          description: 'optional Jumlah per halaman.'
+          example: 15
+          required: false
+          schema:
+            type: integer
+            description: 'optional Jumlah per halaman.'
+            example: 15
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      description: 'Invoice dibuat'
+                      subject_type: App\Models\Invoice
+                      subject_id: 5
+                      causer_type: App\Models\User
+                      causer_id: 1
+                      tenant_id: 1
+                      properties:
+                        ip: 127.0.0.1
+                      created_at: '2026-08-28T00:00:00+00:00'
+                  meta:
+                    current_page: 1
+                    per_page: 15
+                    total: 1
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        description: 'Invoice dibuat'
+                        subject_type: App\Models\Invoice
+                        subject_id: 5
+                        causer_type: App\Models\User
+                        causer_id: 1
+                        tenant_id: 1
+                        properties:
+                          ip: 127.0.0.1
+                        created_at: '2026-08-28T00:00:00+00:00'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        description:
+                          type: string
+                          example: 'Invoice dibuat'
+                        subject_type:
+                          type: string
+                          example: App\Models\Invoice
+                        subject_id:
+                          type: integer
+                          example: 5
+                        causer_type:
+                          type: string
+                          example: App\Models\User
+                        causer_id:
+                          type: integer
+                          example: 1
+                        tenant_id:
+                          type: integer
+                          example: 1
+                        properties:
+                          type: object
+                          properties:
+                            ip:
+                              type: string
+                              example: 127.0.0.1
+                        created_at:
+                          type: string
+                          example: '2026-08-28T00:00:00+00:00'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      per_page:
+                        type: integer
+                        example: 15
+                      total:
+                        type: integer
+                        example: 1
+      tags:
+        - 'Activity Logs'
+    post:
+      summary: 'Catat log aktivitas baru.'
+      operationId: catatLogAktivitasBaru
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  description: 'Invoice dibuat'
+                  subject_type: App\Models\Invoice
+                  subject_id: 5
+                  causer_type: App\Models\User
+                  causer_id: 1
+                  tenant_id: 1
+                  properties:
+                    ip: 127.0.0.1
+                  created_at: '2026-08-28T00:00:00+00:00'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  description:
+                    type: string
+                    example: 'Invoice dibuat'
+                  subject_type:
+                    type: string
+                    example: App\Models\Invoice
+                  subject_id:
+                    type: integer
+                    example: 5
+                  causer_type:
+                    type: string
+                    example: App\Models\User
+                  causer_id:
+                    type: integer
+                    example: 1
+                  tenant_id:
+                    type: integer
+                    example: 1
+                  properties:
+                    type: object
+                    properties:
+                      ip:
+                        type: string
+                        example: 127.0.0.1
+                  created_at:
+                    type: string
+                    example: '2026-08-28T00:00:00+00:00'
+      tags:
+        - 'Activity Logs'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: 'Deskripsi aktivitas.'
+                  example: 'Invoice dibuat'
+                subject_type:
+                  type: string
+                  description: 'optional Tipe subjek (FQCN).'
+                  example: App\Models\Invoice
+                  nullable: true
+                subject_id:
+                  type: integer
+                  description: 'optional ID subjek.'
+                  example: 5
+                  nullable: true
+                causer_id:
+                  type: integer
+                  description: 'optional ID user penyebab.'
+                  example: 1
+                  nullable: true
+                tenant_id:
+                  type: integer
+                  description: 'optional Scope tenant.'
+                  example: 1
+                  nullable: true
+                properties:
+                  type: object
+                  description: 'optional Data tambahan.'
+                  example:
+                    ip: 127.0.0.1
+                  properties: {  }
+                  nullable: true
+              required:
+                - description
+  '/api/activity-logs/{id}':
+    get:
+      summary: 'Ambil satu log aktivitas.'
+      operationId: ambilSatuLogAktivitas
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  description: 'Invoice dibuat'
+                  subject_type: App\Models\Invoice
+                  subject_id: 5
+                  causer_type: App\Models\User
+                  causer_id: 1
+                  tenant_id: 1
+                  properties:
+                    ip: 127.0.0.1
+                  created_at: '2026-08-28T00:00:00+00:00'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  description:
+                    type: string
+                    example: 'Invoice dibuat'
+                  subject_type:
+                    type: string
+                    example: App\Models\Invoice
+                  subject_id:
+                    type: integer
+                    example: 5
+                  causer_type:
+                    type: string
+                    example: App\Models\User
+                  causer_id:
+                    type: integer
+                    example: 1
+                  tenant_id:
+                    type: integer
+                    example: 1
+                  properties:
+                    type: object
+                    properties:
+                      ip:
+                        type: string
+                        example: 127.0.0.1
+                  created_at:
+                    type: string
+                    example: '2026-08-28T00:00:00+00:00'
+        404:
+          description: tidak
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ditemukan {\n  \"message\": \"Activity log not found\"\n}"
+      tags:
+        - 'Activity Logs'
+    delete:
+      summary: 'Hapus log aktivitas.'
+      operationId: hapusLogAktivitas
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Activity log deleted'
+                properties:
+                  message:
+                    type: string
+                    example: 'Activity log deleted'
+        404:
+          description: tidak
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ditemukan {\n  \"message\": \"Activity log not found\"\n}"
+      tags:
+        - 'Activity Logs'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'ID log.'
+        example: 1
+        required: true
+        schema:
+          type: integer
   /api/health:
     get:
       summary: 'Cek kesehatan API.'

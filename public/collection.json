@@ -10,11 +10,207 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "e76b4332-09b0-417b-8e06-636b779d6ae2",
+        "_postman_id": "46d4200c-9641-4571-9365-9646adc76351",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
+        {
+            "name": "Activity Logs",
+            "description": "",
+            "item": [
+                {
+                    "name": "List log aktivitas.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/activity-logs",
+                            "query": [
+                                {
+                                    "key": "tenant_id",
+                                    "value": "1",
+                                    "description": "optional Filter scope tenant.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "causer_id",
+                                    "value": "1",
+                                    "description": "optional Filter berdasar user id (causer).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "subject_type",
+                                    "value": "App\\Models\\Invoice",
+                                    "description": "optional Filter tipe subjek.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "subject_id",
+                                    "value": "5",
+                                    "description": "optional Filter id subjek.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "optional Jumlah per halaman.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/activity-logs?tenant_id=1&causer_id=1&subject_type=App%5CModels%5CInvoice&subject_id=5&per_page=15"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"description\": \"Invoice dibuat\",\n      \"subject_type\": \"App\\\\Models\\\\Invoice\",\n      \"subject_id\": 5,\n      \"causer_type\": \"App\\\\Models\\\\User\",\n      \"causer_id\": 1,\n      \"tenant_id\": 1,\n      \"properties\": {\"ip\": \"127.0.0.1\"},\n      \"created_at\": \"2026-08-28T00:00:00+00:00\"\n    }\n  ],\n  \"meta\": {\"current_page\": 1, \"per_page\": 15, \"total\": 1}\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Catat log aktivitas baru.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/activity-logs",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/activity-logs"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"description\":\"Invoice dibuat\",\"subject_type\":\"App\\\\Models\\\\Invoice\",\"subject_id\":5,\"causer_id\":1,\"tenant_id\":1,\"properties\":{\"ip\":\"127.0.0.1\"}}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"id\": 1,\n  \"description\": \"Invoice dibuat\",\n  \"subject_type\": \"App\\\\Models\\\\Invoice\",\n  \"subject_id\": 5,\n  \"causer_type\": \"App\\\\Models\\\\User\",\n  \"causer_id\": 1,\n  \"tenant_id\": 1,\n  \"properties\": {\"ip\": \"127.0.0.1\"},\n  \"created_at\": \"2026-08-28T00:00:00+00:00\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Ambil satu log aktivitas.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/activity-logs\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/activity-logs\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": 1,
+                                    "description": "ID log."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"id\": 1,\n  \"description\": \"Invoice dibuat\",\n  \"subject_type\": \"App\\\\Models\\\\Invoice\",\n  \"subject_id\": 5,\n  \"causer_type\": \"App\\\\Models\\\\User\",\n  \"causer_id\": 1,\n  \"tenant_id\": 1,\n  \"properties\": {\"ip\": \"127.0.0.1\"},\n  \"created_at\": \"2026-08-28T00:00:00+00:00\"\n}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "ditemukan {\n  \"message\": \"Activity log not found\"\n}",
+                            "name": "tidak"
+                        }
+                    ]
+                },
+                {
+                    "name": "Hapus log aktivitas.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/activity-logs\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/activity-logs\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": 1,
+                                    "description": "ID log."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"message\": \"Activity log deleted\"\n}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "ditemukan {\n  \"message\": \"Activity log not found\"\n}",
+                            "name": "tidak"
+                        }
+                    ]
+                }
+            ]
+        },
         {
             "name": "Endpoints",
             "description": "",
