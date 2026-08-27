@@ -66,22 +66,25 @@
                     <a href="#authenticating-requests">Authenticating requests</a>
                 </li>
                             </ul>
-                    <ul id="tocify-header-activity-logs" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="activity-logs">
-                    <a href="#activity-logs">Activity Logs</a>
+                    <ul id="tocify-header-custom-meta" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="custom-meta">
+                    <a href="#custom-meta">Custom Meta</a>
                 </li>
-                                    <ul id="tocify-subheader-activity-logs" class="tocify-subheader">
-                                                    <li class="tocify-item level-2" data-unique="activity-logs-GETapi-activity-logs">
-                                <a href="#activity-logs-GETapi-activity-logs">List log aktivitas.</a>
+                                    <ul id="tocify-subheader-custom-meta" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="custom-meta-GETapi-meta--type---id-">
+                                <a href="#custom-meta-GETapi-meta--type---id-">Ambil semua meta entity.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="activity-logs-POSTapi-activity-logs">
-                                <a href="#activity-logs-POSTapi-activity-logs">Catat log aktivitas baru.</a>
+                                                                                <li class="tocify-item level-2" data-unique="custom-meta-POSTapi-meta--type---id-">
+                                <a href="#custom-meta-POSTapi-meta--type---id-">Bulk set meta (replace) untuk entity.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="activity-logs-GETapi-activity-logs--id-">
-                                <a href="#activity-logs-GETapi-activity-logs--id-">Ambil satu log aktivitas.</a>
+                                                                                <li class="tocify-item level-2" data-unique="custom-meta-GETapi-meta--type---id---key-">
+                                <a href="#custom-meta-GETapi-meta--type---id---key-">Ambil satu meta by key.</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="activity-logs-DELETEapi-activity-logs--id-">
-                                <a href="#activity-logs-DELETEapi-activity-logs--id-">Hapus log aktivitas.</a>
+                                                                                <li class="tocify-item level-2" data-unique="custom-meta-PUTapi-meta--type---id---key-">
+                                <a href="#custom-meta-PUTapi-meta--type---id---key-">Set/update satu meta by key.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="custom-meta-DELETEapi-meta--type---id---key-">
+                                <a href="#custom-meta-DELETEapi-meta--type---id---key-">Hapus satu meta by key.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -166,11 +169,11 @@ You can switch the language used with the tabs at the top right (or from the nav
 <p>All authenticated endpoints are marked with a <code>requires authentication</code> badge in the documentation below.</p>
 <p>You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.</p>
 
-        <h1 id="activity-logs">Activity Logs</h1>
+        <h1 id="custom-meta">Custom Meta</h1>
 
     
 
-                                <h2 id="activity-logs-GETapi-activity-logs">List log aktivitas.</h2>
+                                <h2 id="custom-meta-GETapi-meta--type---id-">Ambil semua meta entity.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -178,13 +181,13 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 
 
-<span id="example-requests-GETapi-activity-logs">
+<span id="example-requests-GETapi-meta--type---id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://wasnaker.lan/api/activity-logs?tenant_id=1&amp;causer_id=1&amp;subject_type=App%5CModels%5CInvoice&amp;subject_id=5&amp;per_page=15" \
+    --get "http://wasnaker.lan/api/meta/user/1" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -192,18 +195,8 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://wasnaker.lan/api/activity-logs"
+    "http://wasnaker.lan/api/meta/user/1"
 );
-
-const params = {
-    "tenant_id": "1",
-    "causer_id": "1",
-    "subject_type": "App\Models\Invoice",
-    "subject_id": "5",
-    "per_page": "15",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
     "Authorization": "Bearer {YOUR_AUTH_KEY}",
@@ -219,73 +212,57 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-activity-logs">
+<span id="example-responses-GETapi-meta--type---id-">
             <blockquote>
             <p>Example response (200, success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;description&quot;: &quot;Invoice dibuat&quot;,
-            &quot;subject_type&quot;: &quot;App\\Models\\Invoice&quot;,
-            &quot;subject_id&quot;: 5,
-            &quot;causer_type&quot;: &quot;App\\Models\\User&quot;,
-            &quot;causer_id&quot;: 1,
-            &quot;tenant_id&quot;: 1,
-            &quot;properties&quot;: {
-                &quot;ip&quot;: &quot;127.0.0.1&quot;
-            },
-            &quot;created_at&quot;: &quot;2026-08-28T00:00:00+00:00&quot;
-        }
-    ],
-    &quot;meta&quot;: {
-        &quot;current_page&quot;: 1,
-        &quot;per_page&quot;: 15,
-        &quot;total&quot;: 1
+    &quot;data&quot;: {
+        &quot;theme&quot;: &quot;dark&quot;,
+        &quot;language&quot;: &quot;id&quot;
     }
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-activity-logs" hidden>
+<span id="execution-results-GETapi-meta--type---id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-activity-logs"></span>:
+                id="execution-response-status-GETapi-meta--type---id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-activity-logs"
+    <pre class="json"><code id="execution-response-content-GETapi-meta--type---id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-activity-logs" hidden>
+<span id="execution-error-GETapi-meta--type---id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-activity-logs">
+    <pre><code id="execution-error-message-GETapi-meta--type---id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-activity-logs" data-method="GET"
-      data-path="api/activity-logs"
+<form id="form-GETapi-meta--type---id-" data-method="GET"
+      data-path="api/meta/{type}/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-activity-logs', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-meta--type---id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-activity-logs"
-                    onclick="tryItOut('GETapi-activity-logs');">Try it out ⚡
+                    id="btn-tryout-GETapi-meta--type---id-"
+                    onclick="tryItOut('GETapi-meta--type---id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-activity-logs"
-                    onclick="cancelTryOut('GETapi-activity-logs');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-meta--type---id-"
+                    onclick="cancelTryOut('GETapi-meta--type---id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-activity-logs"
+                    id="btn-executetryout-GETapi-meta--type---id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -293,7 +270,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/activity-logs</code></b>
+            <b><code>api/meta/{type}/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -302,7 +279,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-activity-logs"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-meta--type---id-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -314,7 +291,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-activity-logs"
+                              name="Content-Type"                data-endpoint="GETapi-meta--type---id-"
                value="application/json"
                data-component="header">
     <br>
@@ -326,76 +303,40 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-activity-logs"
+                              name="Accept"                data-endpoint="GETapi-meta--type---id-"
                value="application/json"
                data-component="header">
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>tenant_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="tenant_id"                data-endpoint="GETapi-activity-logs"
-               value="1"
-               data-component="query">
-    <br>
-<p>optional Filter scope tenant. Example: <code>1</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>causer_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="causer_id"                data-endpoint="GETapi-activity-logs"
-               value="1"
-               data-component="query">
-    <br>
-<p>optional Filter berdasar user id (causer). Example: <code>1</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>subject_type</code></b>&nbsp;&nbsp;
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
-<i>optional</i> &nbsp;
+ &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="subject_type"                data-endpoint="GETapi-activity-logs"
-               value="App\Models\Invoice"
-               data-component="query">
+                              name="type"                data-endpoint="GETapi-meta--type---id-"
+               value="user"
+               data-component="url">
     <br>
-<p>optional Filter tipe subjek. Example: <code>App\Models\Invoice</code></p>
+<p>Short entity type (allowlist). Example: <code>user</code></p>
             </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>subject_id</code></b>&nbsp;&nbsp;
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
+ &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="subject_id"                data-endpoint="GETapi-activity-logs"
-               value="5"
-               data-component="query">
+               step="any"               name="id"                data-endpoint="GETapi-meta--type---id-"
+               value="1"
+               data-component="url">
     <br>
-<p>optional Filter id subjek. Example: <code>5</code></p>
+<p>Entity id. Example: <code>1</code></p>
             </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="per_page"                data-endpoint="GETapi-activity-logs"
-               value="15"
-               data-component="query">
-    <br>
-<p>optional Jumlah per halaman. Example: <code>15</code></p>
-            </div>
-                </form>
+                    </form>
 
-                    <h2 id="activity-logs-POSTapi-activity-logs">Catat log aktivitas baru.</h2>
+                    <h2 id="custom-meta-POSTapi-meta--type---id-">Bulk set meta (replace) untuk entity.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -403,24 +344,20 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-POSTapi-activity-logs">
+<span id="example-requests-POSTapi-meta--type---id-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://wasnaker.lan/api/activity-logs" \
+    "http://wasnaker.lan/api/meta/user/1" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"description\": \"Invoice dibuat\",
-    \"subject_type\": \"App\\\\Models\\\\Invoice\",
-    \"subject_id\": 5,
-    \"causer_id\": 1,
-    \"tenant_id\": 1,
-    \"properties\": {
-        \"ip\": \"127.0.0.1\"
+    \"meta\": {
+        \"theme\": \"dark\",
+        \"language\": \"id\"
     }
 }"
 </code></pre></div>
@@ -428,7 +365,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://wasnaker.lan/api/activity-logs"
+    "http://wasnaker.lan/api/meta/user/1"
 );
 
 const headers = {
@@ -438,13 +375,9 @@ const headers = {
 };
 
 let body = {
-    "description": "Invoice dibuat",
-    "subject_type": "App\\Models\\Invoice",
-    "subject_id": 5,
-    "causer_id": 1,
-    "tenant_id": 1,
-    "properties": {
-        "ip": "127.0.0.1"
+    "meta": {
+        "theme": "dark",
+        "language": "id"
     }
 };
 
@@ -456,64 +389,57 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-POSTapi-activity-logs">
+<span id="example-responses-POSTapi-meta--type---id-">
             <blockquote>
             <p>Example response (200, success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;description&quot;: &quot;Invoice dibuat&quot;,
-    &quot;subject_type&quot;: &quot;App\\Models\\Invoice&quot;,
-    &quot;subject_id&quot;: 5,
-    &quot;causer_type&quot;: &quot;App\\Models\\User&quot;,
-    &quot;causer_id&quot;: 1,
-    &quot;tenant_id&quot;: 1,
-    &quot;properties&quot;: {
-        &quot;ip&quot;: &quot;127.0.0.1&quot;
-    },
-    &quot;created_at&quot;: &quot;2026-08-28T00:00:00+00:00&quot;
+    &quot;data&quot;: {
+        &quot;theme&quot;: &quot;dark&quot;,
+        &quot;language&quot;: &quot;id&quot;
+    }
 }</code>
  </pre>
     </span>
-<span id="execution-results-POSTapi-activity-logs" hidden>
+<span id="execution-results-POSTapi-meta--type---id-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-POSTapi-activity-logs"></span>:
+                id="execution-response-status-POSTapi-meta--type---id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-activity-logs"
+    <pre class="json"><code id="execution-response-content-POSTapi-meta--type---id-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-POSTapi-activity-logs" hidden>
+<span id="execution-error-POSTapi-meta--type---id-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-activity-logs">
+    <pre><code id="execution-error-message-POSTapi-meta--type---id-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-POSTapi-activity-logs" data-method="POST"
-      data-path="api/activity-logs"
+<form id="form-POSTapi-meta--type---id-" data-method="POST"
+      data-path="api/meta/{type}/{id}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-activity-logs', this);">
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-meta--type---id-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-activity-logs"
-                    onclick="tryItOut('POSTapi-activity-logs');">Try it out ⚡
+                    id="btn-tryout-POSTapi-meta--type---id-"
+                    onclick="tryItOut('POSTapi-meta--type---id-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-activity-logs"
-                    onclick="cancelTryOut('POSTapi-activity-logs');" hidden>Cancel 🛑
+                    id="btn-canceltryout-POSTapi-meta--type---id-"
+                    onclick="cancelTryOut('POSTapi-meta--type---id-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-activity-logs"
+                    id="btn-executetryout-POSTapi-meta--type---id-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -521,7 +447,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-black">POST</small>
-            <b><code>api/activity-logs</code></b>
+            <b><code>api/meta/{type}/{id}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -530,7 +456,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-activity-logs"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-meta--type---id-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -542,7 +468,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-activity-logs"
+                              name="Content-Type"                data-endpoint="POSTapi-meta--type---id-"
                value="application/json"
                data-component="header">
     <br>
@@ -554,88 +480,53 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-activity-logs"
+                              name="Accept"                data-endpoint="POSTapi-meta--type---id-"
                value="application/json"
                data-component="header">
     <br>
 <p>Example: <code>application/json</code></p>
             </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="POSTapi-meta--type---id-"
+               value="user"
+               data-component="url">
+    <br>
+<p>Short entity type. Example: <code>user</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="POSTapi-meta--type---id-"
+               value="1"
+               data-component="url">
+    <br>
+<p>Entity id. Example: <code>1</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>description</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="description"                data-endpoint="POSTapi-activity-logs"
-               value="Invoice dibuat"
-               data-component="body">
-    <br>
-<p>Deskripsi aktivitas. Example: <code>Invoice dibuat</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>subject_type</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="subject_type"                data-endpoint="POSTapi-activity-logs"
-               value="App\Models\Invoice"
-               data-component="body">
-    <br>
-<p>optional Tipe subjek (FQCN). Example: <code>App\Models\Invoice</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>subject_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="subject_id"                data-endpoint="POSTapi-activity-logs"
-               value="5"
-               data-component="body">
-    <br>
-<p>optional ID subjek. Example: <code>5</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>causer_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="causer_id"                data-endpoint="POSTapi-activity-logs"
-               value="1"
-               data-component="body">
-    <br>
-<p>optional ID user penyebab. Example: <code>1</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>tenant_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="tenant_id"                data-endpoint="POSTapi-activity-logs"
-               value="1"
-               data-component="body">
-    <br>
-<p>optional Scope tenant. Example: <code>1</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>properties</code></b>&nbsp;&nbsp;
+            <b style="line-height: 2;"><code>meta</code></b>&nbsp;&nbsp;
 <small>object</small>&nbsp;
-<i>optional</i> &nbsp;
+ &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="properties"                data-endpoint="POSTapi-activity-logs"
+                              name="meta"                data-endpoint="POSTapi-meta--type---id-"
                value=""
                data-component="body">
     <br>
-<p>optional Data tambahan.</p>
+<p>Map key=&gt;value.</p>
         </div>
         </form>
 
-                    <h2 id="activity-logs-GETapi-activity-logs--id-">Ambil satu log aktivitas.</h2>
+                    <h2 id="custom-meta-GETapi-meta--type---id---key-">Ambil satu meta by key.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -643,13 +534,13 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-GETapi-activity-logs--id-">
+<span id="example-requests-GETapi-meta--type---id---key-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://wasnaker.lan/api/activity-logs/1" \
+    --get "http://wasnaker.lan/api/meta/user/1/theme" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -657,7 +548,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://wasnaker.lan/api/activity-logs/1"
+    "http://wasnaker.lan/api/meta/user/1/theme"
 );
 
 const headers = {
@@ -674,24 +565,15 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-GETapi-activity-logs--id-">
+<span id="example-responses-GETapi-meta--type---id---key-">
             <blockquote>
             <p>Example response (200, success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;id&quot;: 1,
-    &quot;description&quot;: &quot;Invoice dibuat&quot;,
-    &quot;subject_type&quot;: &quot;App\\Models\\Invoice&quot;,
-    &quot;subject_id&quot;: 5,
-    &quot;causer_type&quot;: &quot;App\\Models\\User&quot;,
-    &quot;causer_id&quot;: 1,
-    &quot;tenant_id&quot;: 1,
-    &quot;properties&quot;: {
-        &quot;ip&quot;: &quot;127.0.0.1&quot;
-    },
-    &quot;created_at&quot;: &quot;2026-08-28T00:00:00+00:00&quot;
+    &quot;key&quot;: &quot;theme&quot;,
+    &quot;value&quot;: &quot;dark&quot;
 }</code>
  </pre>
             <blockquote>
@@ -700,47 +582,47 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">ditemukan {
-  &quot;message&quot;: &quot;Activity log not found&quot;
+  &quot;message&quot;: &quot;Meta not found&quot;
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-activity-logs--id-" hidden>
+<span id="execution-results-GETapi-meta--type---id---key-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-GETapi-activity-logs--id-"></span>:
+                id="execution-response-status-GETapi-meta--type---id---key-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-activity-logs--id-"
+    <pre class="json"><code id="execution-response-content-GETapi-meta--type---id---key-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-activity-logs--id-" hidden>
+<span id="execution-error-GETapi-meta--type---id---key-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-activity-logs--id-">
+    <pre><code id="execution-error-message-GETapi-meta--type---id---key-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-GETapi-activity-logs--id-" data-method="GET"
-      data-path="api/activity-logs/{id}"
+<form id="form-GETapi-meta--type---id---key-" data-method="GET"
+      data-path="api/meta/{type}/{id}/{key}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-activity-logs--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-meta--type---id---key-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-activity-logs--id-"
-                    onclick="tryItOut('GETapi-activity-logs--id-');">Try it out ⚡
+                    id="btn-tryout-GETapi-meta--type---id---key-"
+                    onclick="tryItOut('GETapi-meta--type---id---key-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-activity-logs--id-"
-                    onclick="cancelTryOut('GETapi-activity-logs--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-GETapi-meta--type---id---key-"
+                    onclick="cancelTryOut('GETapi-meta--type---id---key-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-activity-logs--id-"
+                    id="btn-executetryout-GETapi-meta--type---id---key-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -748,7 +630,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/activity-logs/{id}</code></b>
+            <b><code>api/meta/{type}/{id}/{key}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -757,7 +639,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-activity-logs--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-meta--type---id---key-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -769,7 +651,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-activity-logs--id-"
+                              name="Content-Type"                data-endpoint="GETapi-meta--type---id---key-"
                value="application/json"
                data-component="header">
     <br>
@@ -781,7 +663,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-activity-logs--id-"
+                              name="Accept"                data-endpoint="GETapi-meta--type---id---key-"
                value="application/json"
                data-component="header">
     <br>
@@ -789,20 +671,44 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="GETapi-meta--type---id---key-"
+               value="user"
+               data-component="url">
+    <br>
+<p>Short entity type. Example: <code>user</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="GETapi-activity-logs--id-"
+               step="any"               name="id"                data-endpoint="GETapi-meta--type---id---key-"
                value="1"
                data-component="url">
     <br>
-<p>ID log. Example: <code>1</code></p>
+<p>Entity id. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>key</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="key"                data-endpoint="GETapi-meta--type---id---key-"
+               value="theme"
+               data-component="url">
+    <br>
+<p>Meta key. Example: <code>theme</code></p>
             </div>
                     </form>
 
-                    <h2 id="activity-logs-DELETEapi-activity-logs--id-">Hapus log aktivitas.</h2>
+                    <h2 id="custom-meta-PUTapi-meta--type---id---key-">Set/update satu meta by key.</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
@@ -810,13 +716,207 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 
 
-<span id="example-requests-DELETEapi-activity-logs--id-">
+<span id="example-requests-PUTapi-meta--type---id---key-">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request PUT \
+    "http://wasnaker.lan/api/meta/user/1/theme" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"value\": \"dark\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/meta/user/1/theme"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "value": "dark"
+};
+
+fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-PUTapi-meta--type---id---key-">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;key&quot;: &quot;theme&quot;,
+    &quot;value&quot;: &quot;dark&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-PUTapi-meta--type---id---key-" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-PUTapi-meta--type---id---key-"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-PUTapi-meta--type---id---key-"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-PUTapi-meta--type---id---key-" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-PUTapi-meta--type---id---key-">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-PUTapi-meta--type---id---key-" data-method="PUT"
+      data-path="api/meta/{type}/{id}/{key}"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('PUTapi-meta--type---id---key-', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-PUTapi-meta--type---id---key-"
+                    onclick="tryItOut('PUTapi-meta--type---id---key-');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-PUTapi-meta--type---id---key-"
+                    onclick="cancelTryOut('PUTapi-meta--type---id---key-');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-PUTapi-meta--type---id---key-"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-darkblue">PUT</small>
+            <b><code>api/meta/{type}/{id}/{key}</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="PUTapi-meta--type---id---key-"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="PUTapi-meta--type---id---key-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="PUTapi-meta--type---id---key-"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="PUTapi-meta--type---id---key-"
+               value="user"
+               data-component="url">
+    <br>
+<p>Short entity type. Example: <code>user</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="id"                data-endpoint="PUTapi-meta--type---id---key-"
+               value="1"
+               data-component="url">
+    <br>
+<p>Entity id. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>key</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="key"                data-endpoint="PUTapi-meta--type---id---key-"
+               value="theme"
+               data-component="url">
+    <br>
+<p>Meta key. Example: <code>theme</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>value</code></b>&nbsp;&nbsp;
+<small>mixed</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="value"                data-endpoint="PUTapi-meta--type---id---key-"
+               value="dark"
+               data-component="body">
+    <br>
+<p>Nilai meta. Example: <code>dark</code></p>
+        </div>
+        </form>
+
+                    <h2 id="custom-meta-DELETEapi-meta--type---id---key-">Hapus satu meta by key.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-DELETEapi-meta--type---id---key-">
 <blockquote>Example request:</blockquote>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://wasnaker.lan/api/activity-logs/1" \
+    "http://wasnaker.lan/api/meta/user/1/theme" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -824,7 +924,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://wasnaker.lan/api/activity-logs/1"
+    "http://wasnaker.lan/api/meta/user/1/theme"
 );
 
 const headers = {
@@ -841,14 +941,14 @@ fetch(url, {
 
 </span>
 
-<span id="example-responses-DELETEapi-activity-logs--id-">
+<span id="example-responses-DELETEapi-meta--type---id---key-">
             <blockquote>
             <p>Example response (200, success):</p>
         </blockquote>
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Activity log deleted&quot;
+    &quot;message&quot;: &quot;Meta deleted&quot;
 }</code>
  </pre>
             <blockquote>
@@ -857,47 +957,47 @@ fetch(url, {
                 <pre>
 
 <code class="language-json" style="max-height: 300px;">ditemukan {
-  &quot;message&quot;: &quot;Activity log not found&quot;
+  &quot;message&quot;: &quot;Meta not found&quot;
 }</code>
  </pre>
     </span>
-<span id="execution-results-DELETEapi-activity-logs--id-" hidden>
+<span id="execution-results-DELETEapi-meta--type---id---key-" hidden>
     <blockquote>Received response<span
-                id="execution-response-status-DELETEapi-activity-logs--id-"></span>:
+                id="execution-response-status-DELETEapi-meta--type---id---key-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-activity-logs--id-"
+    <pre class="json"><code id="execution-response-content-DELETEapi-meta--type---id---key-"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-DELETEapi-activity-logs--id-" hidden>
+<span id="execution-error-DELETEapi-meta--type---id---key-" hidden>
     <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-DELETEapi-activity-logs--id-">
+    <pre><code id="execution-error-message-DELETEapi-meta--type---id---key-">
 
 Tip: Check that you&#039;re properly connected to the network.
 If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
 You can check the Dev Tools console for debugging information.</code></pre>
 </span>
-<form id="form-DELETEapi-activity-logs--id-" data-method="DELETE"
-      data-path="api/activity-logs/{id}"
+<form id="form-DELETEapi-meta--type---id---key-" data-method="DELETE"
+      data-path="api/meta/{type}/{id}/{key}"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-activity-logs--id-', this);">
+      onsubmit="event.preventDefault(); executeTryOut('DELETEapi-meta--type---id---key-', this);">
     <h3>
         Request&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-DELETEapi-activity-logs--id-"
-                    onclick="tryItOut('DELETEapi-activity-logs--id-');">Try it out ⚡
+                    id="btn-tryout-DELETEapi-meta--type---id---key-"
+                    onclick="tryItOut('DELETEapi-meta--type---id---key-');">Try it out ⚡
             </button>
             <button type="button"
                     style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-DELETEapi-activity-logs--id-"
-                    onclick="cancelTryOut('DELETEapi-activity-logs--id-');" hidden>Cancel 🛑
+                    id="btn-canceltryout-DELETEapi-meta--type---id---key-"
+                    onclick="cancelTryOut('DELETEapi-meta--type---id---key-');" hidden>Cancel 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-DELETEapi-activity-logs--id-"
+                    id="btn-executetryout-DELETEapi-meta--type---id---key-"
                     data-initial-text="Send Request 💥"
                     data-loading-text="⏱ Sending..."
                     hidden>Send Request 💥
@@ -905,7 +1005,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </h3>
             <p>
             <small class="badge badge-red">DELETE</small>
-            <b><code>api/activity-logs/{id}</code></b>
+            <b><code>api/meta/{type}/{id}/{key}</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>Headers</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -914,7 +1014,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-activity-logs--id-"
+                              name="Authorization" class="auth-value"               data-endpoint="DELETEapi-meta--type---id---key-"
                value="Bearer {YOUR_AUTH_KEY}"
                data-component="header">
     <br>
@@ -926,7 +1026,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="DELETEapi-activity-logs--id-"
+                              name="Content-Type"                data-endpoint="DELETEapi-meta--type---id---key-"
                value="application/json"
                data-component="header">
     <br>
@@ -938,7 +1038,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="DELETEapi-activity-logs--id-"
+                              name="Accept"                data-endpoint="DELETEapi-meta--type---id---key-"
                value="application/json"
                data-component="header">
     <br>
@@ -946,16 +1046,40 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="DELETEapi-meta--type---id---key-"
+               value="user"
+               data-component="url">
+    <br>
+<p>Short entity type. Example: <code>user</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="id"                data-endpoint="DELETEapi-activity-logs--id-"
+               step="any"               name="id"                data-endpoint="DELETEapi-meta--type---id---key-"
                value="1"
                data-component="url">
     <br>
-<p>ID log. Example: <code>1</code></p>
+<p>Entity id. Example: <code>1</code></p>
+            </div>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>key</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="key"                data-endpoint="DELETEapi-meta--type---id---key-"
+               value="theme"
+               data-component="url">
+    <br>
+<p>Meta key. Example: <code>theme</code></p>
             </div>
                     </form>
 
