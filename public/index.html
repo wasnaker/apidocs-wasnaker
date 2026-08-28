@@ -10934,43 +10934,89 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <script id="wasnaker-hljs-http" src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/languages/http.min.js"></script>
 
-<script id="wasnaker-sidebar-toggle">
-// Klik heading grup (level-1) untuk expand/collapse subheader-nya.
-// Scribe v4 default hanya scrollspy (grup aktif selalu terbuka);
-// MutationObserver menjaga state collapse walau tema menambah .visible lagi.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="wasnaker-sidebar-toggle-css">
+#toc a.wasnaker-caret::before { content: '\25B8  '; font-size: .8em; }
+#toc a.wasnaker-caret.wasnaker-open::before { content: '\25BE  '; }
+</style>
+
+<script id="wasnaker-sidebar-toggle-v3">
+// Accordion sidebar: klik heading grup (level-1) atau subgroup (level-2)
+// untuk expand/collapse. Scrollspy tema selalu membuka subheader grup aktif;
+// MutationObserver + localStorage menjaga state collapse.
 (function () {
-  var KEY = 'wasnaker-collapsed-groups';
+  var KEY = 'wasnaker-collapsed-groups-v2';
   var collapsed = new Set();
   try { collapsed = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
 
-  function toggle(h, sub, force) {
-    var isVisible = sub.classList.contains('visible');
-    var willCollapse = force !== undefined ? !force : isVisible;
-    sub.classList.toggle('visible', !willCollapse);
-    if (willCollapse) collapsed.add(h.id); else collapsed.delete(h.id);
-    try { localStorage.setItem(KEY, JSON.stringify(Array.from(collapsed))); } catch (e) {}
-  }
+  function keyFor(sub) { return sub.parentElement.id + '::' + sub.id; }
 
-  document.querySelectorAll('#toc .tocify-header').forEach(function (h) {
-    var link = h.querySelector(':scope > li > a');
-    var sub = h.querySelector(':scope > .tocify-subheader');
+  function bind(link, sub) {
     if (!link || !sub) return;
+    link.classList.add('wasnaker-caret');
     link.style.cursor = 'pointer';
     link.addEventListener('click', function (e) {
       e.preventDefault();
-      toggle(h, sub);
+      var k = keyFor(sub);
+      var willCollapse = sub.classList.contains('visible');
+      sub.classList.toggle('visible', !willCollapse);
+      link.classList.toggle('wasnaker-open', !willCollapse);
+      if (willCollapse) collapsed.add(k); else collapsed.delete(k);
+      try { localStorage.setItem(KEY, JSON.stringify(Array.from(collapsed))); } catch (err) {}
     });
-    if (collapsed.has(h.id)) { sub.classList.remove('visible'); }
+    // terapkan state tersimpan + sinkronkan caret dengan state aktual
+    if (collapsed.has(keyFor(sub))) {
+      sub.classList.remove('visible');
+      link.classList.remove('wasnaker-open');
+    } else {
+      link.classList.toggle('wasnaker-open', sub.classList.contains('visible'));
+    }
+  }
+
+  // level-1: grup (api/v1, ...)
+  document.querySelectorAll('#toc .tocify-header').forEach(function (h) {
+    bind(h.querySelector(':scope > li > a'), h.querySelector(':scope > .tocify-subheader'));
   });
 
-  // lawan scrollspy: hapus .visible yang ditambahkan tema untuk grup collapsed
+  // level-2: subgroup (System, Settings, ...) — ul subheader adalah sibling
+  document.querySelectorAll('#toc li.tocify-item.level-2').forEach(function (li) {
+    var sub = li.nextElementSibling;
+    if (sub && sub.classList.contains('tocify-subheader')) {
+      bind(li.querySelector(':scope > a'), sub);
+    }
+  });
+
+  // lawan scrollspy: hapus .visible yang ditambahkan tema untuk item collapsed,
+  // dan sinkronkan caret (wasnaker-open) dengan state subheader aktual
   var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (m) {
       if (m.type !== 'attributes' || m.attributeName !== 'class') return;
       var sub = m.target;
-      var header = sub.parentElement;
-      if (header && collapsed.has(header.id) && sub.classList.contains('visible')) {
-        sub.classList.remove('visible');
+      if (!sub.classList.contains('tocify-subheader')) return;
+      var link = sub.previousElementSibling && sub.previousElementSibling.classList.contains('level-2')
+        ? sub.previousElementSibling.querySelector('a')
+        : sub.parentElement.querySelector(':scope > li > a');
+      if (!link) return;
+      if (collapsed.has(keyFor(sub))) {
+        if (sub.classList.contains('visible')) {
+          sub.classList.remove('visible');
+          link.classList.remove('wasnaker-open');
+        }
+      } else {
+        link.classList.toggle('wasnaker-open', sub.classList.contains('visible'));
       }
     });
   });
