@@ -22,9 +22,9 @@ security:
 paths:
   /api/v1/health:
     get:
-      summary: ''
-      operationId: getApiV1Health
-      description: ''
+      summary: 'Cek kesehatan API.'
+      operationId: cekKesehatanAPI
+      description: 'Mengecek apakah layanan API berjalan dengan baik.'
       parameters: []
       responses:
         200:
@@ -86,9 +86,9 @@ paths:
       security: []
   /api/v1/user:
     get:
-      summary: ''
-      operationId: getApiV1User
-      description: ''
+      summary: 'Data user yang sedang login.'
+      operationId: dataUserYangSedangLogin
+      description: 'Mengembalikan data user terkini berdasarkan token Sanctum yang terkirim.'
       parameters: []
       responses:
         200:
@@ -2883,9 +2883,9 @@ paths:
                     type: string
   /api/v1/sales:
     get:
-      summary: ''
-      operationId: getApiV1Sales
-      description: ''
+      summary: 'Daftar sales.'
+      operationId: daftarSales
+      description: 'Menampilkan daftar sales dengan paginasi.'
       parameters:
         -
           in: query
@@ -2940,8 +2940,8 @@ paths:
         - api/v1
       security: []
     post:
-      summary: ''
-      operationId: postApiV1Sales
+      summary: 'Buat sales baru.'
+      operationId: buatSalesBaru
       description: ''
       parameters: []
       responses:
@@ -2980,9 +2980,9 @@ paths:
       security: []
   '/api/v1/sales/{id}':
     get:
-      summary: ''
-      operationId: getApiV1SalesId
-      description: ''
+      summary: 'Detail sales.'
+      operationId: detailSales
+      description: 'Mengembalikan satu data sales berdasarkan ID.'
       parameters: []
       responses:
         200:
@@ -3002,8 +3002,8 @@ paths:
         - api/v1
       security: []
     put:
-      summary: ''
-      operationId: putApiV1SalesId
+      summary: 'Perbarui sales.'
+      operationId: perbaruiSales
       description: ''
       parameters: []
       responses:
@@ -3037,8 +3037,8 @@ paths:
                 - amount
       security: []
     delete:
-      summary: ''
-      operationId: deleteApiV1SalesId
+      summary: 'Hapus sales.'
+      operationId: hapusSales
       description: ''
       parameters: []
       responses:

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "f6eba705-f1d5-4f71-9f25-0623aeaadaaa",
+        "_postman_id": "3e893eaa-49c7-4368-9b40-09fb691fd76c",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -20,11 +20,11 @@
             "description": "",
             "item": [
                 {
-                    "name": "System\n\nCek kesehatan API.\n\nMengecek apakah layanan API berjalan dengan baik.",
+                    "name": "System",
                     "description": "",
                     "item": [
                         {
-                            "name": "GET api\/v1\/health",
+                            "name": "Cek kesehatan API.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
@@ -44,7 +44,7 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": "",
+                                "description": "Mengecek apakah layanan API berjalan dengan baik.",
                                 "auth": {
                                     "type": "noauth"
                                 }
@@ -57,13 +57,7 @@
                                     "name": ""
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    "name": "System",
-                    "description": "",
-                    "item": [
+                        },
                         {
                             "name": "Endpoint login (belum terautentikasi).",
                             "request": {
@@ -117,15 +111,9 @@
                                     "name": ""
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    "name": "System\n\nData user yang sedang login.\n\nMengembalikan data user terkini berdasarkan token Sanctum yang terkirim.",
-                    "description": "",
-                    "item": [
+                        },
                         {
-                            "name": "GET api\/v1\/user",
+                            "name": "Data user yang sedang login.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
@@ -145,7 +133,7 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": ""
+                                "description": "Mengembalikan data user terkini berdasarkan token Sanctum yang terkirim."
                             },
                             "response": [
                                 {
@@ -2460,7 +2448,7 @@
                     ]
                 },
                 {
-                    "name": "Broadcasting\n\nRealtime (pengganti App_pusher Perfex) \u2014 Laravel Broadcasting + Reverb.\nKlien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel\nvia `POST \/api\/v1\/broadcasting\/auth` (token Sanctum).",
+                    "name": "Broadcasting",
                     "description": "",
                     "item": [
                         {
@@ -2539,11 +2527,11 @@
                     ]
                 },
                 {
-                    "name": "Sales\n\nDaftar sales.\n\nMenampilkan daftar sales dengan paginasi.",
+                    "name": "Sales",
                     "description": "",
                     "item": [
                         {
-                            "name": "GET api\/v1\/sales",
+                            "name": "Daftar sales.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
@@ -2576,7 +2564,7 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": "",
+                                "description": "Menampilkan daftar sales dengan paginasi.",
                                 "auth": {
                                     "type": "noauth"
                                 }
@@ -2589,15 +2577,9 @@
                                     "name": ""
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Sales\n\nBuat sales baru.",
-                    "description": "",
-                    "item": [
+                        },
                         {
-                            "name": "POST api\/v1\/sales",
+                            "name": "Buat sales baru.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
@@ -2633,15 +2615,9 @@
                                     "name": ""
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Sales\n\nDetail sales.\n\nMengembalikan satu data sales berdasarkan ID.",
-                    "description": "",
-                    "item": [
+                        },
                         {
-                            "name": "GET api\/v1\/sales\/{id}",
+                            "name": "Detail sales.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
@@ -2669,7 +2645,7 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": "",
+                                "description": "Mengembalikan satu data sales berdasarkan ID.",
                                 "auth": {
                                     "type": "noauth"
                                 }
@@ -2682,15 +2658,9 @@
                                     "name": ""
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Sales\n\nPerbarui sales.",
-                    "description": "",
-                    "item": [
+                        },
                         {
-                            "name": "PUT api\/v1\/sales\/{id}",
+                            "name": "Perbarui sales.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
@@ -2734,15 +2704,9 @@
                                     "name": ""
                                 }
                             ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Sales\n\nHapus sales.",
-                    "description": "",
-                    "item": [
+                        },
                         {
-                            "name": "DELETE api\/v1\/sales\/{id}",
+                            "name": "Hapus sales.",
                             "request": {
                                 "url": {
                                     "host": "{{baseUrl}}",
