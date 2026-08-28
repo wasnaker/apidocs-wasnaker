@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "45515c7a-e9e5-4b59-8b8c-c3b99c623842",
+        "_postman_id": "c3573d7e-bce2-482a-993a-e3d5346b8fb7",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -829,6 +829,88 @@
             ]
         },
         {
+            "name": "Excel",
+            "description": "",
+            "item": [
+                {
+                    "name": "Export data array menjadi file Excel\/CSV.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/excel\/export",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/excel\/export"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"rows\":[\"consequatur\"],\"filename\":\"customers\",\"extension\":\"xlsx\",\"headings\":[\"consequatur\"]}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"path\": \"excel\/customers.xlsx\", \"count\": 3 }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Import file Excel\/CSV menjadi baris data.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/excel\/import",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/excel\/import"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "multipart\/form-data"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "file",
+                                    "src": [],
+                                    "type": "file"
+                                }
+                            ]
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"count\": 2, \"rows\": [ { \"name\": \"A\", \"email\": \"a@x.com\" } ] }\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Files",
             "description": "",
             "item": [
@@ -1294,7 +1376,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\"}"
+                            "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\",\"queue\":true,\"queue_name\":\"mqeopfuudtdsufvyvddqa\"}"
                         },
                         "description": ""
                     },
@@ -1373,6 +1455,129 @@
                             "header": [],
                             "code": 200,
                             "body": "{\"message\":\"Notification sent\",\"success\":true,\"recipients\":3}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Antrean email: retry failed mail job.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mail\/retry",
+                            "query": [
+                                {
+                                    "key": "queue",
+                                    "value": "emails",
+                                    "description": "Nama queue (opsional).",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/mail\/retry?queue=emails"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"message\": \"Retried 2 failed job(s)\", \"success\": true, \"retried\": 2\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Antrean email: bersihkan failed job lama.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mail\/cleanup",
+                            "query": [
+                                {
+                                    "key": "queue",
+                                    "value": "emails",
+                                    "description": "Nama queue (opsional).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "days",
+                                    "value": "7",
+                                    "description": "Umur maksimal failed job (hari).",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/mail\/cleanup?queue=emails&days=7"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"message\": \"Cleaned 5 old failed job(s)\", \"success\": true, \"cleaned\": 5\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Antrean email: jumlah job menunggu.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mail\/queue",
+                            "query": [
+                                {
+                                    "key": "queue",
+                                    "value": "emails",
+                                    "description": "Nama queue (opsional).",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/mail\/queue?queue=emails"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"pending\": 3 }\n}",
                             "name": "success"
                         }
                     ]
@@ -1720,6 +1925,158 @@
             ]
         },
         {
+            "name": "Pdf",
+            "description": "",
+            "item": [
+                {
+                    "name": "Generate satu PDF dari Blade view dan simpan ke storage.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pdf\/generate",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pdf\/generate"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"view\":\"pdf.invoice\",\"data\":[\"consequatur\"],\"filename\":\"INV-0001\",\"rel_type\":\"invoice\",\"rel_id\":10,\"tenant_id\":1,\"paper\":\"a4\",\"orientation\":\"portrait\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"path\": \"tenants\/1\/invoice\/10\/pdf\/INV-0001_20260828_123456.pdf\" }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Render string HTML menjadi PDF (binary, tanpa simpan).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pdf\/from-html",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pdf\/from-html"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"html\":\"consequatur\",\"paper\":\"a4\",\"orientation\":\"portrait\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "data: \"string\" (binary PDF)",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Bulk export banyak dokumen PDF menjadi satu ZIP (dijalankan via queue).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/pdf\/bulk-export",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/pdf\/bulk-export"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"documents\":[\"consequatur\"],\"prefix\":\"invoices-2026\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"job\": \"App\\\\Jobs\\\\PdfExportJob\", \"queued\": true }\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "QrCode",
+            "description": "",
+            "item": [
+                {
+                    "name": "Generate QR Code.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/qr-code\/generate",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/qr-code\/generate"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"content\":\"https:\\\/\\\/wasnaker.lan\",\"size\":300,\"margin\":10,\"format\":\"base64\",\"filename\":\"qr-signature\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"format\": \"base64\", \"base64\": \"...\", \"size\": 300 }\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Relations",
             "description": "",
             "item": [
@@ -1993,6 +2350,199 @@
                             "header": [],
                             "code": 200,
                             "body": "{\n  \"data\": {\n    \"invoice_prefix\": \"INV-\",\n    \"tax_rate\": \"11\"\n  }\n}",
+                            "name": "success"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Sms",
+            "description": "",
+            "item": [
+                {
+                    "name": "Kirim SMS.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/sms\/send",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/sms\/send"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"to\":\"+6281234567890\",\"body\":\"Kode OTP Anda: 123456\",\"driver\":\"log\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": { \"success\": true, \"message\": \"SMS terkirim\" }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Daftar driver SMS yang terkonfigurasi.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/sms\/drivers",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/sms\/drivers"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [\"log\"]\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "description": "",
+            "item": [
+                {
+                    "name": "Daftar semua tag.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/tags",
+                            "query": [
+                                {
+                                    "key": "type",
+                                    "value": "invoice",
+                                    "description": "Filter berdasarkan tipe tag.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/tags?type=invoice"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [ { \"id\": 1, \"name\": \"penting\" } ]\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Buat tag baru.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/tags",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/tags"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"name\":\"prioritas-tinggi\",\"type\":\"invoice\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"data\": { \"id\": 1, \"name\": \"prioritas-tinggi\" }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Hapus tag.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/tags\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/tags\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": 1,
+                                    "description": "ID tag."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"message\": \"Tag deleted\"\n}",
                             "name": "success"
                         }
                     ]

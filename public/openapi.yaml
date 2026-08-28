@@ -17,6 +17,9 @@ tags:
     name: Endpoints
     description: ''
   -
+    name: Excel
+    description: ''
+  -
     name: Files
     description: ''
   -
@@ -32,10 +35,22 @@ tags:
     name: Payment
     description: ''
   -
+    name: Pdf
+    description: ''
+  -
+    name: QrCode
+    description: ''
+  -
     name: Relations
     description: ''
   -
     name: Settings
+    description: ''
+  -
+    name: Sms
+    description: ''
+  -
+    name: Tags
     description: ''
   -
     name: Utilities
@@ -872,6 +887,126 @@ paths:
         required: true
         schema:
           type: integer
+  /api/excel/export:
+    post:
+      summary: 'Export data array menjadi file Excel/CSV.'
+      operationId: exportDataArrayMenjadiFileExcelCSV
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    path: excel/customers.xlsx
+                    count: 3
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        example: excel/customers.xlsx
+                      count:
+                        type: integer
+                        example: 3
+      tags:
+        - Excel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rows:
+                  type: array
+                  description: 'Daftar baris data.'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+                filename:
+                  type: string
+                  description: 'Nama file (tanpa ekstensi).'
+                  example: customers
+                extension:
+                  type: string
+                  description: 'Format: xlsx|csv.'
+                  example: xlsx
+                  nullable: true
+                headings:
+                  type: array
+                  description: 'optional Daftar header kolom.'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+                    nullable: true
+              required:
+                - rows
+                - filename
+  /api/excel/import:
+    post:
+      summary: 'Import file Excel/CSV menjadi baris data.'
+      operationId: importFileExcelCSVMenjadiBarisData
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    count: 2
+                    rows:
+                      -
+                        name: A
+                        email: a@x.com
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 2
+                      rows:
+                        type: array
+                        example:
+                          -
+                            name: A
+                            email: a@x.com
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: A
+                            email:
+                              type: string
+                              example: a@x.com
+      tags:
+        - Excel
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: 'File Excel/CSV (baris pertama = heading).'
+              required:
+                - file
   /api/files/limits:
     get:
       summary: 'Batas maksimal upload (utility, dari php.ini).'
@@ -1287,6 +1422,15 @@ paths:
                   type: 'array<string,'
                   description: 'mixed> optional Data untuk template.'
                   example: '{"invoice_id": 123}'
+                queue:
+                  type: boolean
+                  description: ''
+                  example: true
+                queue_name:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
               required:
                 - to
                 - subject
@@ -1401,6 +1545,129 @@ paths:
                 - user_ids
                 - subject
                 - body
+  /api/mail/retry:
+    post:
+      summary: 'Antrean email: retry failed mail job.'
+      operationId: antreanEmailRetryFailedMailJob
+      description: ''
+      parameters:
+        -
+          in: query
+          name: queue
+          description: 'Nama queue (opsional).'
+          example: emails
+          required: false
+          schema:
+            type: string
+            description: 'Nama queue (opsional).'
+            example: emails
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Retried 2 failed job(s)'
+                  success: true
+                  retried: 2
+                properties:
+                  message:
+                    type: string
+                    example: 'Retried 2 failed job(s)'
+                  success:
+                    type: boolean
+                    example: true
+                  retried:
+                    type: integer
+                    example: 2
+      tags:
+        - Mail
+  /api/mail/cleanup:
+    post:
+      summary: 'Antrean email: bersihkan failed job lama.'
+      operationId: antreanEmailBersihkanFailedJobLama
+      description: ''
+      parameters:
+        -
+          in: query
+          name: queue
+          description: 'Nama queue (opsional).'
+          example: emails
+          required: false
+          schema:
+            type: string
+            description: 'Nama queue (opsional).'
+            example: emails
+        -
+          in: query
+          name: days
+          description: 'Umur maksimal failed job (hari).'
+          example: 7
+          required: false
+          schema:
+            type: integer
+            description: 'Umur maksimal failed job (hari).'
+            example: 7
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cleaned 5 old failed job(s)'
+                  success: true
+                  cleaned: 5
+                properties:
+                  message:
+                    type: string
+                    example: 'Cleaned 5 old failed job(s)'
+                  success:
+                    type: boolean
+                    example: true
+                  cleaned:
+                    type: integer
+                    example: 5
+      tags:
+        - Mail
+  /api/mail/queue:
+    get:
+      summary: 'Antrean email: jumlah job menunggu.'
+      operationId: antreanEmailJumlahJobMenunggu
+      description: ''
+      parameters:
+        -
+          in: query
+          name: queue
+          description: 'Nama queue (opsional).'
+          example: emails
+          required: false
+          schema:
+            type: string
+            description: 'Nama queue (opsional).'
+            example: emails
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    pending: 3
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      pending:
+                        type: integer
+                        example: 3
+      tags:
+        - Mail
   /api/modules:
     get:
       summary: 'List semua modul dengan status.'
@@ -1777,6 +2044,237 @@ paths:
                 - gateway
                 - amount
                 - currency
+  /api/pdf/generate:
+    post:
+      summary: 'Generate satu PDF dari Blade view dan simpan ke storage.'
+      operationId: generateSatuPDFDariBladeViewDanSimpanKeStorage
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    path: tenants/1/invoice/10/pdf/INV-0001_20260828_123456.pdf
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        example: tenants/1/invoice/10/pdf/INV-0001_20260828_123456.pdf
+      tags:
+        - Pdf
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                view:
+                  type: string
+                  description: 'Nama view Blade.'
+                  example: pdf.invoice
+                data:
+                  type: array
+                  description: 'Data yang diteruskan ke view.'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+                    nullable: true
+                filename:
+                  type: string
+                  description: 'Nama file (tanpa ekstensi).'
+                  example: INV-0001
+                  nullable: true
+                rel_type:
+                  type: string
+                  description: 'Tipe entity (invoice, estimate, contract).'
+                  example: invoice
+                  nullable: true
+                rel_id:
+                  type: integer
+                  description: 'ID entity.'
+                  example: 10
+                  nullable: true
+                tenant_id:
+                  type: integer
+                  description: 'optional ID tenant.'
+                  example: 1
+                  nullable: true
+                paper:
+                  type: string
+                  description: 'Ukuran kertas (a4, letter).'
+                  example: a4
+                  nullable: true
+                orientation:
+                  type: string
+                  description: portrait|landscape.
+                  example: portrait
+                  nullable: true
+              required:
+                - view
+  /api/pdf/from-html:
+    post:
+      summary: 'Render string HTML menjadi PDF (binary, tanpa simpan).'
+      operationId: renderStringHTMLMenjadiPDFbinaryTanpaSimpan
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'data: "string" (binary PDF)'
+      tags:
+        - Pdf
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                html:
+                  type: string
+                  description: 'Konten HTML.'
+                  example: consequatur
+                paper:
+                  type: string
+                  description: 'Ukuran kertas.'
+                  example: a4
+                  nullable: true
+                orientation:
+                  type: string
+                  description: portrait|landscape.
+                  example: portrait
+                  nullable: true
+              required:
+                - html
+  /api/pdf/bulk-export:
+    post:
+      summary: 'Bulk export banyak dokumen PDF menjadi satu ZIP (dijalankan via queue).'
+      operationId: bulkExportBanyakDokumenPDFMenjadiSatuZIPdijalankanViaQueue
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    job: App\Jobs\PdfExportJob
+                    queued: true
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      job:
+                        type: string
+                        example: App\Jobs\PdfExportJob
+                      queued:
+                        type: boolean
+                        example: true
+      tags:
+        - Pdf
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documents:
+                  type: array
+                  description: 'Daftar dokumen.'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+                prefix:
+                  type: string
+                  description: 'Prefix nama ZIP.'
+                  example: invoices-2026
+                  nullable: true
+              required:
+                - documents
+  /api/qr-code/generate:
+    post:
+      summary: 'Generate QR Code.'
+      operationId: generateQRCode
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    format: base64
+                    base64: ...
+                    size: 300
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      format:
+                        type: string
+                        example: base64
+                      base64:
+                        type: string
+                        example: ...
+                      size:
+                        type: integer
+                        example: 300
+      tags:
+        - QrCode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'Konten/kode yang di-encode.'
+                  example: 'https://wasnaker.lan'
+                size:
+                  type: integer
+                  description: 'Ukuran pixel.'
+                  example: 300
+                  nullable: true
+                margin:
+                  type: integer
+                  description: 'Margin pixel.'
+                  example: 10
+                  nullable: true
+                format:
+                  type: string
+                  description: 'format output: base64 | data_uri | stored.'
+                  example: base64
+                  nullable: true
+                filename:
+                  type: string
+                  description: 'Nama file (jika format=stored).'
+                  example: qr-signature
+                  nullable: true
+              required:
+                - content
   /api/relations/types:
     get:
       summary: 'List tipe relasi yang terdaftar (introspeksi).'
@@ -2054,6 +2552,205 @@ paths:
                   example: 1
               required:
                 - keys
+  /api/sms/send:
+    post:
+      summary: 'Kirim SMS.'
+      operationId: kirimSMS
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    success: true
+                    message: 'SMS terkirim'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                      message:
+                        type: string
+                        example: 'SMS terkirim'
+      tags:
+        - Sms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  description: 'Nomor tujuan (format internasional).'
+                  example: '+6281234567890'
+                body:
+                  type: string
+                  description: 'Isi pesan.'
+                  example: 'Kode OTP Anda: 123456'
+                driver:
+                  type: string
+                  description: 'optional Nama driver (twilio, log).'
+                  example: log
+                  nullable: true
+              required:
+                - to
+                - body
+  /api/sms/drivers:
+    get:
+      summary: 'Daftar driver SMS yang terkonfigurasi.'
+      operationId: daftarDriverSMSYangTerkonfigurasi
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    - log
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - log
+                    items:
+                      type: string
+      tags:
+        - Sms
+  /api/tags:
+    get:
+      summary: 'Daftar semua tag.'
+      operationId: daftarSemuaTag
+      description: ''
+      parameters:
+        -
+          in: query
+          name: type
+          description: 'Filter berdasarkan tipe tag.'
+          example: invoice
+          required: false
+          schema:
+            type: string
+            description: 'Filter berdasarkan tipe tag.'
+            example: invoice
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      name: penting
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        name: penting
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: penting
+      tags:
+        - Tags
+    post:
+      summary: 'Buat tag baru.'
+      operationId: buatTagBaru
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 1
+                    name: prioritas-tinggi
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: prioritas-tinggi
+      tags:
+        - Tags
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Nama tag.'
+                  example: prioritas-tinggi
+                type:
+                  type: string
+                  description: 'optional Tipe tag.'
+                  example: invoice
+                  nullable: true
+              required:
+                - name
+  '/api/tags/{id}':
+    delete:
+      summary: 'Hapus tag.'
+      operationId: hapusTag
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Tag deleted'
+                properties:
+                  message:
+                    type: string
+                    example: 'Tag deleted'
+      tags:
+        - Tags
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'ID tag.'
+        example: 1
+        required: true
+        schema:
+          type: integer
   /api/number-to-word/convert:
     post:
       summary: 'Konversi angka ke terbilang Indonesian (format Rupiah).'
