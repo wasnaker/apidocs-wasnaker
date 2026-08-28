@@ -26,6 +26,9 @@ tags:
     name: Modules
     description: ''
   -
+    name: Payment
+    description: ''
+  -
     name: Relations
     description: ''
   -
@@ -1525,6 +1528,102 @@ paths:
         required: true
         schema:
           type: string
+  /api/payment/gateways:
+    get:
+      summary: 'List gateway yang terkonfigurasi.'
+      operationId: listGatewayYangTerkonfigurasi
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      name: stripe
+                      configured: true
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        name: stripe
+                        configured: true
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: stripe
+                        configured:
+                          type: boolean
+                          example: true
+      tags:
+        - Payment
+  /api/payment/intent:
+    post:
+      summary: 'Create payment intent via gateway.'
+      operationId: createPaymentIntentViaGateway
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  data:
+                    id: pi_...
+                    client_secret: pi_..._secret_...
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: pi_...
+                      client_secret:
+                        type: string
+                        example: pi_..._secret_...
+      tags:
+        - Payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gateway:
+                  type: string
+                  description: 'Nama gateway.'
+                  example: stripe
+                amount:
+                  type: integer
+                  description: 'Amount dalam satuan terkecil.'
+                  example: 50000
+                currency:
+                  type: string
+                  description: 'Currency code.'
+                  example: IDR
+                metadata:
+                  type: 'array<string,'
+                  description: 'mixed> optional Metadata tambahan.'
+                  example: consequatur
+              required:
+                - gateway
+                - amount
+                - currency
   /api/relations/types:
     get:
       summary: 'List tipe relasi yang terdaftar (introspeksi).'

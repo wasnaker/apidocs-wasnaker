@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "b03c7f29-8d7f-4b32-9cf9-9525ee6272c2",
+        "_postman_id": "f8ef02aa-4820-4fdc-834e-2276b2b1d698",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1503,6 +1503,79 @@
                             "code": 404,
                             "body": "{\"message\":\"Module not found\"}",
                             "name": "not-found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Payment",
+            "description": "",
+            "item": [
+                {
+                    "name": "List gateway yang terkonfigurasi.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/payment\/gateways",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/payment\/gateways"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [\n    {\"name\": \"stripe\", \"configured\": true}\n  ]\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create payment intent via gateway.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/payment\/intent",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/payment\/intent"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"gateway\":\"stripe\",\"amount\":50000,\"currency\":\"IDR\",\"metadata\":\"consequatur\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"success\": true,\n  \"data\": {\"id\": \"pi_...\", \"client_secret\": \"pi_..._secret_...\"}\n}",
+                            "name": "success"
                         }
                     ]
                 }
