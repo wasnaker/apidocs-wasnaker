@@ -12,7 +12,7 @@ tags:
     description: ''
   -
     name: Broadcasting
-    description: "\nRealtime (pengganti App_pusher Perfex) — Laravel Broadcasting + Reverb.\nKlien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel\nvia `POST /api/broadcasting/auth` (token Sanctum)."
+    description: "\nRealtime (pengganti App_pusher Perfex) — Laravel Broadcasting + Reverb.\nKlien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel\nvia `POST /api/v1/broadcasting/auth` (token Sanctum)."
   -
     name: 'Custom Meta'
     description: ''
@@ -68,7 +68,7 @@ security:
   -
     default: []
 paths:
-  /api/activity-logs:
+  /api/v1/activity-logs:
     get:
       summary: 'List log aktivitas (server-side list: paging, sort, filter, search, include).'
       operationId: listLogAktivitasserverSideListPagingSortFilterSearchInclude
@@ -393,7 +393,7 @@ paths:
                   nullable: true
               required:
                 - description
-  '/api/activity-logs/{id}':
+  '/api/v1/activity-logs/{id}':
     get:
       summary: 'Ambil satu log aktivitas.'
       operationId: ambilSatuLogAktivitas
@@ -493,7 +493,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/broadcast/config:
+  /api/v1/broadcast/config:
     get:
       summary: 'Konfigurasi koneksi realtime untuk frontend.'
       operationId: konfigurasiKoneksiRealtimeUntukFrontend
@@ -530,7 +530,7 @@ paths:
                     example: 8080
       tags:
         - Broadcasting
-  /api/broadcast/test:
+  /api/v1/broadcast/test:
     post:
       summary: 'Kirim notifikasi realtime ke user yang sedang login.'
       operationId: kirimNotifikasiRealtimeKeUserYangSedangLogin
@@ -633,7 +633,7 @@ paths:
                     - consequatur
                   items:
                     type: string
-  '/api/meta/{type}/{id}':
+  '/api/v1/meta/{type}/{id}':
     get:
       summary: 'Ambil semua meta entity.'
       operationId: ambilSemuaMetaEntity
@@ -723,7 +723,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/meta/{type}/{id}/{key}':
+  '/api/v1/meta/{type}/{id}/{key}':
     get:
       summary: 'Ambil satu meta by key.'
       operationId: ambilSatuMetaByKey
@@ -844,7 +844,7 @@ paths:
         required: true
         schema:
           type: string
-  /api/health:
+  /api/v1/health:
     get:
       summary: 'Cek kesehatan API.'
       operationId: cekKesehatanAPI
@@ -874,10 +874,10 @@ paths:
       tags:
         - Endpoints
       security: []
-  /api/login:
+  /api/v1/login:
     get:
       summary: ''
-      operationId: getApiLogin
+      operationId: getApiV1Login
       description: ''
       parameters: []
       responses:
@@ -896,7 +896,7 @@ paths:
       tags:
         - Endpoints
       security: []
-  /api/user:
+  /api/v1/user:
     get:
       summary: 'Data user yang sedang login.'
       operationId: dataUserYangSedangLogin
@@ -1117,7 +1117,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/broadcasting/auth:
+  /api/v1/broadcasting/auth:
     get:
       summary: 'Authenticate the request for channel access.'
       operationId: authenticateTheRequestForChannelAccess
@@ -1139,7 +1139,7 @@ paths:
       tags:
         - Endpoints
       security: []
-  /api/excel/export:
+  /api/v1/excel/export:
     post:
       summary: 'Export data array menjadi file Excel/CSV.'
       operationId: exportDataArrayMenjadiFileExcelCSV
@@ -1202,7 +1202,7 @@ paths:
               required:
                 - rows
                 - filename
-  /api/excel/import:
+  /api/v1/excel/import:
     post:
       summary: 'Import file Excel/CSV menjadi baris data.'
       operationId: importFileExcelCSVMenjadiBarisData
@@ -1259,7 +1259,7 @@ paths:
                   description: 'File Excel/CSV (baris pertama = heading).'
               required:
                 - file
-  /api/files/limits:
+  /api/v1/files/limits:
     get:
       summary: 'Batas maksimal upload (utility, dari php.ini).'
       operationId: batasMaksimalUploadutilityDariPhpini
@@ -1288,7 +1288,7 @@ paths:
                     example: 8388608
       tags:
         - Files
-  /api/files:
+  /api/v1/files:
     post:
       summary: 'Upload file baru.'
       operationId: uploadFileBaru
@@ -1366,7 +1366,7 @@ paths:
                 - file
                 - rel_type
                 - rel_id
-  '/api/files/{id}':
+  '/api/v1/files/{id}':
     get:
       summary: 'Ambil meta attachment.'
       operationId: ambilMetaAttachment
@@ -1416,7 +1416,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/files/{id}/download':
+  '/api/v1/files/{id}/download':
     get:
       summary: 'Download file (force attachment).'
       operationId: downloadFileforceAttachment
@@ -1446,7 +1446,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/files/{id}/preview':
+  '/api/v1/files/{id}/preview':
     get:
       summary: 'Preview file inline (image/pdf).'
       operationId: previewFileInlineimagepdf
@@ -1476,7 +1476,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/gdpr/export:
+  /api/v1/gdpr/export:
     get:
       summary: 'Export semua data user.'
       operationId: exportSemuaDataUser
@@ -1534,7 +1534,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/gdpr/anonymize:
+  /api/v1/gdpr/anonymize:
     post:
       summary: 'Anonymize data user.'
       operationId: anonymizeDataUser
@@ -1580,7 +1580,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/gdpr/delete:
+  /api/v1/gdpr/delete:
     post:
       summary: 'Hapus data user permanently.'
       operationId: hapusDataUserPermanently
@@ -1626,7 +1626,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/mail/send:
+  /api/v1/mail/send:
     post:
       summary: 'Kirim email menggunakan Mailable.'
       operationId: kirimEmailMenggunakanMailable
@@ -1687,7 +1687,7 @@ paths:
                 - to
                 - subject
                 - view
-  /api/mail/notify:
+  /api/v1/mail/notify:
     post:
       summary: 'Kirim notifikasi email ke user.'
       operationId: kirimNotifikasiEmailKeUser
@@ -1740,7 +1740,7 @@ paths:
                 - user_id
                 - subject
                 - body
-  /api/mail/notify-many:
+  /api/v1/mail/notify-many:
     post:
       summary: 'Kirim notifikasi email ke banyak user.'
       operationId: kirimNotifikasiEmailKeBanyakUser
@@ -1797,7 +1797,7 @@ paths:
                 - user_ids
                 - subject
                 - body
-  /api/mail/retry:
+  /api/v1/mail/retry:
     post:
       summary: 'Antrean email: retry failed mail job.'
       operationId: antreanEmailRetryFailedMailJob
@@ -1836,7 +1836,7 @@ paths:
                     example: 2
       tags:
         - Mail
-  /api/mail/cleanup:
+  /api/v1/mail/cleanup:
     post:
       summary: 'Antrean email: bersihkan failed job lama.'
       operationId: antreanEmailBersihkanFailedJobLama
@@ -1885,7 +1885,7 @@ paths:
                     example: 5
       tags:
         - Mail
-  /api/mail/queue:
+  /api/v1/mail/queue:
     get:
       summary: 'Antrean email: jumlah job menunggu.'
       operationId: antreanEmailJumlahJobMenunggu
@@ -1920,7 +1920,7 @@ paths:
                         example: 3
       tags:
         - Mail
-  /api/modules:
+  /api/v1/modules:
     get:
       summary: 'List semua modul dengan status.'
       operationId: listSemuaModulDenganStatus
@@ -1971,7 +1971,7 @@ paths:
                           example: Modules\Sales
       tags:
         - Modules
-  /api/modules/enabled:
+  /api/v1/modules/enabled:
     get:
       summary: 'List hanya modul yang aktif (enabled).'
       operationId: listHanyaModulYangAktifenabled
@@ -1992,7 +1992,7 @@ paths:
                     example: Unauthenticated.
       tags:
         - Modules
-  '/api/modules/{name}':
+  '/api/v1/modules/{name}':
     get:
       summary: 'Detail modul by name/alias.'
       operationId: detailModulByNamealias
@@ -2058,7 +2058,7 @@ paths:
         required: true
         schema:
           type: string
-  '/api/modules/{name}/status':
+  '/api/v1/modules/{name}/status':
     get:
       summary: 'Cek status modul (enabled/installed).'
       operationId: cekStatusModulenabledinstalled
@@ -2108,7 +2108,7 @@ paths:
         required: true
         schema:
           type: string
-  '/api/modules/{name}/enable':
+  '/api/v1/modules/{name}/enable':
     post:
       summary: 'Aktifkan modul.'
       operationId: aktifkanModul
@@ -2154,7 +2154,7 @@ paths:
         required: true
         schema:
           type: string
-  '/api/modules/{name}/disable':
+  '/api/v1/modules/{name}/disable':
     post:
       summary: 'Nonaktifkan modul.'
       operationId: nonaktifkanModul
@@ -2200,7 +2200,7 @@ paths:
         required: true
         schema:
           type: string
-  /api/payment/gateways:
+  /api/v1/payment/gateways:
     get:
       summary: 'List gateway yang terkonfigurasi.'
       operationId: listGatewayYangTerkonfigurasi
@@ -2236,7 +2236,7 @@ paths:
                           example: true
       tags:
         - Payment
-  /api/payment/intent:
+  /api/v1/payment/intent:
     post:
       summary: 'Create payment intent via gateway.'
       operationId: createPaymentIntentViaGateway
@@ -2296,7 +2296,7 @@ paths:
                 - gateway
                 - amount
                 - currency
-  /api/pdf/generate:
+  /api/v1/pdf/generate:
     post:
       summary: 'Generate satu PDF dari Blade view dan simpan ke storage.'
       operationId: generateSatuPDFDariBladeViewDanSimpanKeStorage
@@ -2372,7 +2372,7 @@ paths:
                   nullable: true
               required:
                 - view
-  /api/pdf/from-html:
+  /api/v1/pdf/from-html:
     post:
       summary: 'Render string HTML menjadi PDF (binary, tanpa simpan).'
       operationId: renderStringHTMLMenjadiPDFbinaryTanpaSimpan
@@ -2411,7 +2411,7 @@ paths:
                   nullable: true
               required:
                 - html
-  /api/pdf/bulk-export:
+  /api/v1/pdf/bulk-export:
     post:
       summary: 'Bulk export banyak dokumen PDF menjadi satu ZIP (dijalankan via queue).'
       operationId: bulkExportBanyakDokumenPDFMenjadiSatuZIPdijalankanViaQueue
@@ -2461,7 +2461,7 @@ paths:
                   nullable: true
               required:
                 - documents
-  /api/qr-code/generate:
+  /api/v1/qr-code/generate:
     post:
       summary: 'Generate QR Code.'
       operationId: generateQRCode
@@ -2527,7 +2527,7 @@ paths:
                   nullable: true
               required:
                 - content
-  /api/relations/types:
+  /api/v1/relations/types:
     get:
       summary: 'List tipe relasi yang terdaftar (introspeksi).'
       operationId: listTipeRelasiYangTerdaftarintrospeksi
@@ -2554,7 +2554,7 @@ paths:
                       type: string
       tags:
         - Relations
-  '/api/relations/{type}/{id}':
+  '/api/v1/relations/{type}/{id}':
     get:
       summary: 'Resolve entity by type + id.'
       operationId: resolveEntityByType+Id
@@ -2615,7 +2615,7 @@ paths:
         required: true
         schema:
           type: integer
-  '/api/settings/{key}':
+  '/api/v1/settings/{key}':
     get:
       summary: 'Ambil satu setting berdasarkan key.'
       operationId: ambilSatuSettingBerdasarkanKey
@@ -2754,7 +2754,7 @@ paths:
         required: true
         schema:
           type: string
-  /api/settings/bulk:
+  /api/v1/settings/bulk:
     post:
       summary: 'Ambil banyak setting sekaligus.'
       operationId: ambilBanyakSettingSekaligus
@@ -2804,7 +2804,7 @@ paths:
                   example: 1
               required:
                 - keys
-  /api/sms/send:
+  /api/v1/sms/send:
     post:
       summary: 'Kirim SMS.'
       operationId: kirimSMS
@@ -2856,7 +2856,7 @@ paths:
               required:
                 - to
                 - body
-  /api/sms/drivers:
+  /api/v1/sms/drivers:
     get:
       summary: 'Daftar driver SMS yang terkonfigurasi.'
       operationId: daftarDriverSMSYangTerkonfigurasi
@@ -2881,7 +2881,7 @@ paths:
                       type: string
       tags:
         - Sms
-  /api/tags:
+  /api/v1/tags:
     get:
       summary: 'Daftar semua tag.'
       operationId: daftarSemuaTag
@@ -2973,7 +2973,7 @@ paths:
                   nullable: true
               required:
                 - name
-  '/api/tags/{id}':
+  '/api/v1/tags/{id}':
     delete:
       summary: 'Hapus tag.'
       operationId: hapusTag
@@ -3003,7 +3003,7 @@ paths:
         required: true
         schema:
           type: integer
-  /api/number-to-word/convert:
+  /api/v1/number-to-word/convert:
     post:
       summary: 'Konversi angka ke terbilang Indonesian (format Rupiah).'
       operationId: konversiAngkaKeTerbilangIndonesianformatRupiah
@@ -3046,7 +3046,7 @@ paths:
                   nullable: true
               required:
                 - number
-  /api/number-to-word/convert-indian:
+  /api/v1/number-to-word/convert-indian:
     post:
       summary: 'Konversi angka ke terbilang Indian format (lakh/crore).'
       operationId: konversiAngkaKeTerbilangIndianFormatlakhcrore
