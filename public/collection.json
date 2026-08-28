@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "c3573d7e-bce2-482a-993a-e3d5346b8fb7",
+        "_postman_id": "f3a5f51a-2bd2-455a-a5ed-f7fa384b9ed9",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -206,6 +206,85 @@
                             "code": 404,
                             "body": "ditemukan {\n  \"message\": \"Activity log not found\"\n}",
                             "name": "tidak"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Broadcasting",
+            "description": "\nRealtime (pengganti App_pusher Perfex) \u2014 Laravel Broadcasting + Reverb.\nKlien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel\nvia `POST \/api\/broadcasting\/auth` (token Sanctum).",
+            "item": [
+                {
+                    "name": "Konfigurasi koneksi realtime untuk frontend.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/broadcast\/config",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/broadcast\/config"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Mengembalikan parameter publik (tanpa secret) agar klien bisa\nmenghubungkan laravel-echo ke server Reverb."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"driver\": \"reverb\", \"key\": \"a0adc25fe8777223fb4a\", \"scheme\": \"http\", \"host\": \"wasnaker.lan\", \"port\": 8080}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Kirim notifikasi realtime ke user yang sedang login.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/broadcast\/test",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/broadcast\/test"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"Pesan baru\",\"message\":\"Anda menerima pesan baru\",\"type\":\"success\",\"data\":[\"consequatur\"]}"
+                        },
+                        "description": "Memicu event `notification.sent` di private channel `user.{id}`.\nFrontend (Next.js) mendengarkan channel tersebut lalu menampilkan\ndesktop notification via browser Notification API."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"success\": true, \"event\": \"notification.sent\", \"channel\": \"user.1\", \"payload\": {\"title\": \"Pesan baru\", \"message\": \"Anda menerima pesan baru\", \"type\": \"success\", \"data\": [], \"sent_at\": \"2026-08-29T00:00:00+07:00\"}}",
+                            "name": "terkirim"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"The given data was invalid.\", \"errors\": {\"type\": [\"The selected type is invalid.\"]}}",
+                            "name": ""
                         }
                     ]
                 }
@@ -822,6 +901,54 @@
                             "header": [],
                             "code": 204,
                             "body": "",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Authenticate the request for channel access.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/broadcasting\/auth",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/broadcasting\/auth"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
                             "name": ""
                         }
                     ]

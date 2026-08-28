@@ -85,6 +85,19 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-broadcasting" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="broadcasting">
+                    <a href="#broadcasting">Broadcasting</a>
+                </li>
+                                    <ul id="tocify-subheader-broadcasting" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="broadcasting-GETapi-broadcast-config">
+                                <a href="#broadcasting-GETapi-broadcast-config">Konfigurasi koneksi realtime untuk frontend.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="broadcasting-POSTapi-broadcast-test">
+                                <a href="#broadcasting-POSTapi-broadcast-test">Kirim notifikasi realtime ke user yang sedang login.</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-custom-meta" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="custom-meta">
                     <a href="#custom-meta">Custom Meta</a>
@@ -135,6 +148,9 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-v1-sales--id-">
                                 <a href="#endpoints-DELETEapi-v1-sales--id-">Hapus sales.</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-broadcasting-auth">
+                                <a href="#endpoints-GETapi-broadcasting-auth">Authenticate the request for channel access.</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -1178,6 +1194,381 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>ID log. Example: <code>1</code></p>
             </div>
                     </form>
+
+                <h1 id="broadcasting">Broadcasting</h1>
+
+    <p>Realtime (pengganti App_pusher Perfex) — Laravel Broadcasting + Reverb.
+Klien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel
+via <code>POST /api/broadcasting/auth</code> (token Sanctum).</p>
+
+                                <h2 id="broadcasting-GETapi-broadcast-config">Konfigurasi koneksi realtime untuk frontend.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Mengembalikan parameter publik (tanpa secret) agar klien bisa
+menghubungkan laravel-echo ke server Reverb.</p>
+
+<span id="example-requests-GETapi-broadcast-config">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://wasnaker.lan/api/broadcast/config" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/broadcast/config"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-broadcast-config">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;driver&quot;: &quot;reverb&quot;,
+    &quot;key&quot;: &quot;a0adc25fe8777223fb4a&quot;,
+    &quot;scheme&quot;: &quot;http&quot;,
+    &quot;host&quot;: &quot;wasnaker.lan&quot;,
+    &quot;port&quot;: 8080
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-broadcast-config" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-broadcast-config"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-broadcast-config"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-broadcast-config" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-broadcast-config">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-broadcast-config" data-method="GET"
+      data-path="api/broadcast/config"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-broadcast-config', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-broadcast-config"
+                    onclick="tryItOut('GETapi-broadcast-config');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-broadcast-config"
+                    onclick="cancelTryOut('GETapi-broadcast-config');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-broadcast-config"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/broadcast/config</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-broadcast-config"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-broadcast-config"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-broadcast-config"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="broadcasting-POSTapi-broadcast-test">Kirim notifikasi realtime ke user yang sedang login.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Memicu event <code>notification.sent</code> di private channel <code>user.{id}</code>.
+Frontend (Next.js) mendengarkan channel tersebut lalu menampilkan
+desktop notification via browser Notification API.</p>
+
+<span id="example-requests-POSTapi-broadcast-test">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://wasnaker.lan/api/broadcast/test" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"title\": \"Pesan baru\",
+    \"message\": \"Anda menerima pesan baru\",
+    \"type\": \"success\",
+    \"data\": [
+        \"consequatur\"
+    ]
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/broadcast/test"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "title": "Pesan baru",
+    "message": "Anda menerima pesan baru",
+    "type": "success",
+    "data": [
+        "consequatur"
+    ]
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-broadcast-test">
+            <blockquote>
+            <p>Example response (200, terkirim):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;event&quot;: &quot;notification.sent&quot;,
+    &quot;channel&quot;: &quot;user.1&quot;,
+    &quot;payload&quot;: {
+        &quot;title&quot;: &quot;Pesan baru&quot;,
+        &quot;message&quot;: &quot;Anda menerima pesan baru&quot;,
+        &quot;type&quot;: &quot;success&quot;,
+        &quot;data&quot;: [],
+        &quot;sent_at&quot;: &quot;2026-08-29T00:00:00+07:00&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;The given data was invalid.&quot;,
+    &quot;errors&quot;: {
+        &quot;type&quot;: [
+            &quot;The selected type is invalid.&quot;
+        ]
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-broadcast-test" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-broadcast-test"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-broadcast-test"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-broadcast-test" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-broadcast-test">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-broadcast-test" data-method="POST"
+      data-path="api/broadcast/test"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-broadcast-test', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-broadcast-test"
+                    onclick="tryItOut('POSTapi-broadcast-test');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-broadcast-test"
+                    onclick="cancelTryOut('POSTapi-broadcast-test');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-broadcast-test"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/broadcast/test</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-broadcast-test"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-broadcast-test"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-broadcast-test"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>title</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="title"                data-endpoint="POSTapi-broadcast-test"
+               value="Pesan baru"
+               data-component="body">
+    <br>
+<p>optional Judul notifikasi. Example: <code>Pesan baru</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>message</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="message"                data-endpoint="POSTapi-broadcast-test"
+               value="Anda menerima pesan baru"
+               data-component="body">
+    <br>
+<p>optional Isi notifikasi. Example: <code>Anda menerima pesan baru</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>type</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="type"                data-endpoint="POSTapi-broadcast-test"
+               value="success"
+               data-component="body">
+    <br>
+<p>optional Tipe notifikasi: info|success|warning|error. Example: <code>success</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>data</code></b>&nbsp;&nbsp;
+<small>string[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="data[0]"                data-endpoint="POSTapi-broadcast-test"
+               data-component="body">
+        <input type="text" style="display: none"
+               name="data[1]"                data-endpoint="POSTapi-broadcast-test"
+               data-component="body">
+    <br>
+<p>optional Data tambahan bebas (JSON object).</p>
+        </div>
+        </form>
 
                 <h1 id="custom-meta">Custom Meta</h1>
 
@@ -3225,6 +3616,137 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="endpoints-GETapi-broadcasting-auth">Authenticate the request for channel access.</h2>
+
+<p>
+</p>
+
+
+
+<span id="example-requests-GETapi-broadcasting-auth">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://wasnaker.lan/api/broadcasting/auth" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/broadcasting/auth"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-broadcasting-auth">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Unauthenticated.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-broadcasting-auth" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-broadcasting-auth"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-broadcasting-auth"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-broadcasting-auth" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-broadcasting-auth">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-broadcasting-auth" data-method="GET"
+      data-path="api/broadcasting/auth"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-broadcasting-auth', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-broadcasting-auth"
+                    onclick="tryItOut('GETapi-broadcasting-auth');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-broadcasting-auth"
+                    onclick="cancelTryOut('GETapi-broadcasting-auth');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-broadcasting-auth"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/broadcasting/auth</code></b>
+        </p>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/broadcasting/auth</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-broadcasting-auth"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-broadcasting-auth"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
                 <h1 id="excel">Excel</h1>
 
     
@@ -3460,7 +3982,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@/tmp/phpY9eK8r" </code></pre></div>
+    --form "file=@/tmp/phpKJXlCq" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3598,7 +4120,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>File Excel/CSV (baris pertama = heading). Example: <code>/tmp/phpY9eK8r</code></p>
+<p>File Excel/CSV (baris pertama = heading). Example: <code>/tmp/phpKJXlCq</code></p>
         </div>
         </form>
 
@@ -3765,7 +4287,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rel_id=10"\
     --form "tenant_id=1"\
     --form "disk=local"\
-    --form "file=@/tmp/phplFsAvX" </code></pre></div>
+    --form "file=@/tmp/php7F9JNm" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -3905,7 +4427,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>File yang diupload. Example: <code>/tmp/phplFsAvX</code></p>
+<p>File yang diupload. Example: <code>/tmp/php7F9JNm</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>rel_type</code></b>&nbsp;&nbsp;

@@ -11,6 +11,9 @@ tags:
     name: 'Activity Logs'
     description: ''
   -
+    name: Broadcasting
+    description: "\nRealtime (pengganti App_pusher Perfex) — Laravel Broadcasting + Reverb.\nKlien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel\nvia `POST /api/broadcasting/auth` (token Sanctum)."
+  -
     name: 'Custom Meta'
     description: ''
   -
@@ -403,6 +406,146 @@ paths:
         required: true
         schema:
           type: integer
+  /api/broadcast/config:
+    get:
+      summary: 'Konfigurasi koneksi realtime untuk frontend.'
+      operationId: konfigurasiKoneksiRealtimeUntukFrontend
+      description: "Mengembalikan parameter publik (tanpa secret) agar klien bisa\nmenghubungkan laravel-echo ke server Reverb."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  driver: reverb
+                  key: a0adc25fe8777223fb4a
+                  scheme: http
+                  host: wasnaker.lan
+                  port: 8080
+                properties:
+                  driver:
+                    type: string
+                    example: reverb
+                  key:
+                    type: string
+                    example: a0adc25fe8777223fb4a
+                  scheme:
+                    type: string
+                    example: http
+                  host:
+                    type: string
+                    example: wasnaker.lan
+                  port:
+                    type: integer
+                    example: 8080
+      tags:
+        - Broadcasting
+  /api/broadcast/test:
+    post:
+      summary: 'Kirim notifikasi realtime ke user yang sedang login.'
+      operationId: kirimNotifikasiRealtimeKeUserYangSedangLogin
+      description: "Memicu event `notification.sent` di private channel `user.{id}`.\nFrontend (Next.js) mendengarkan channel tersebut lalu menampilkan\ndesktop notification via browser Notification API."
+      parameters: []
+      responses:
+        200:
+          description: terkirim
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  event: notification.sent
+                  channel: user.1
+                  payload:
+                    title: 'Pesan baru'
+                    message: 'Anda menerima pesan baru'
+                    type: success
+                    data: []
+                    sent_at: '2026-08-29T00:00:00+07:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  event:
+                    type: string
+                    example: notification.sent
+                  channel:
+                    type: string
+                    example: user.1
+                  payload:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: 'Pesan baru'
+                      message:
+                        type: string
+                        example: 'Anda menerima pesan baru'
+                      type:
+                        type: string
+                        example: success
+                      data:
+                        type: array
+                        example: []
+                      sent_at:
+                        type: string
+                        example: '2026-08-29T00:00:00+07:00'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    type:
+                      - 'The selected type is invalid.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      type:
+                        type: array
+                        example:
+                          - 'The selected type is invalid.'
+                        items:
+                          type: string
+      tags:
+        - Broadcasting
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'optional Judul notifikasi.'
+                  example: 'Pesan baru'
+                message:
+                  type: string
+                  description: 'optional Isi notifikasi.'
+                  example: 'Anda menerima pesan baru'
+                type:
+                  type: string
+                  description: 'optional Tipe notifikasi: info|success|warning|error.'
+                  example: success
+                data:
+                  type: array
+                  description: 'optional Data tambahan bebas (JSON object).'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
   '/api/meta/{type}/{id}':
     get:
       summary: 'Ambil semua meta entity.'
@@ -887,6 +1030,28 @@ paths:
         required: true
         schema:
           type: integer
+  /api/broadcasting/auth:
+    get:
+      summary: 'Authenticate the request for channel access.'
+      operationId: authenticateTheRequestForChannelAccess
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
   /api/excel/export:
     post:
       summary: 'Export data array menjadi file Excel/CSV.'
