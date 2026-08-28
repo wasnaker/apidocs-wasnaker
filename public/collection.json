@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "89089d1d-17b8-431a-9a40-bdb30ab0a70f",
+        "_postman_id": "55a70dbf-c9ac-4300-9ae7-154358e53e7a",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1125,6 +1125,273 @@
                             "code": 200,
                             "body": "{\n  \"message\": \"Attachment deleted\"\n}",
                             "name": "success"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Modules",
+            "description": "",
+            "item": [
+                {
+                    "name": "List semua modul dengan status.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/modules",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/modules"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [\n    {\"name\":\"Sales\",\"alias\":\"sales\",\"enabled\":true,\"installed\":true,\"namespace\":\"Modules\\\\Sales\"}\n  ]\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "List hanya modul yang aktif (enabled).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/modules\/enabled",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/modules\/enabled"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Detail modul by name\/alias.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/modules\/:name",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/modules\/:name",
+                            "variable": [
+                                {
+                                    "id": "name",
+                                    "key": "name",
+                                    "value": "sales",
+                                    "description": "Nama atau alias modul."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"name\":\"Sales\",\"alias\":\"sales\",\"enabled\":true,\"installed\":true,\n  \"namespace\":\"Modules\\\\Sales\",\"providers\":[],\"aliases\":[]\n}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"Module not found\"}",
+                            "name": "not-found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Cek status modul (enabled\/installed).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/modules\/:name\/status",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/modules\/:name\/status",
+                            "variable": [
+                                {
+                                    "id": "name",
+                                    "key": "name",
+                                    "value": "sales",
+                                    "description": "Nama modul."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"name\":\"sales\",\"enabled\":true,\"installed\":true}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"Module not found\"}",
+                            "name": "not-found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Aktifkan modul.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/modules\/:name\/enable",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/modules\/:name\/enable",
+                            "variable": [
+                                {
+                                    "id": "name",
+                                    "key": "name",
+                                    "value": "sales",
+                                    "description": "Nama modul."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"Module 'sales' enabled\",\"enabled\":true}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"Module not found\"}",
+                            "name": "not-found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Nonaktifkan modul.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/modules\/:name\/disable",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/modules\/:name\/disable",
+                            "variable": [
+                                {
+                                    "id": "name",
+                                    "key": "name",
+                                    "value": "sales",
+                                    "description": "Nama modul."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"Module 'sales' disabled\",\"enabled\":false}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"Module not found\"}",
+                            "name": "not-found"
                         }
                     ]
                 }

@@ -20,6 +20,9 @@ tags:
     name: Files
     description: ''
   -
+    name: Modules
+    description: ''
+  -
     name: Relations
     description: ''
   -
@@ -1077,6 +1080,286 @@ paths:
         required: true
         schema:
           type: integer
+  /api/modules:
+    get:
+      summary: 'List semua modul dengan status.'
+      operationId: listSemuaModulDenganStatus
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      name: Sales
+                      alias: sales
+                      enabled: true
+                      installed: true
+                      namespace: Modules\Sales
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        name: Sales
+                        alias: sales
+                        enabled: true
+                        installed: true
+                        namespace: Modules\Sales
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Sales
+                        alias:
+                          type: string
+                          example: sales
+                        enabled:
+                          type: boolean
+                          example: true
+                        installed:
+                          type: boolean
+                          example: true
+                        namespace:
+                          type: string
+                          example: Modules\Sales
+      tags:
+        - Modules
+  /api/modules/enabled:
+    get:
+      summary: 'List hanya modul yang aktif (enabled).'
+      operationId: listHanyaModulYangAktifenabled
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Modules
+  '/api/modules/{name}':
+    get:
+      summary: 'Detail modul by name/alias.'
+      operationId: detailModulByNamealias
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  name: Sales
+                  alias: sales
+                  enabled: true
+                  installed: true
+                  namespace: Modules\Sales
+                  providers: []
+                  aliases: []
+                properties:
+                  name:
+                    type: string
+                    example: Sales
+                  alias:
+                    type: string
+                    example: sales
+                  enabled:
+                    type: boolean
+                    example: true
+                  installed:
+                    type: boolean
+                    example: true
+                  namespace:
+                    type: string
+                    example: Modules\Sales
+                  providers:
+                    type: array
+                    example: []
+                  aliases:
+                    type: array
+                    example: []
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - Modules
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama atau alias modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  '/api/modules/{name}/status':
+    get:
+      summary: 'Cek status modul (enabled/installed).'
+      operationId: cekStatusModulenabledinstalled
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  name: sales
+                  enabled: true
+                  installed: true
+                properties:
+                  name:
+                    type: string
+                    example: sales
+                  enabled:
+                    type: boolean
+                    example: true
+                  installed:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - Modules
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  '/api/modules/{name}/enable':
+    post:
+      summary: 'Aktifkan modul.'
+      operationId: aktifkanModul
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Module 'sales' enabled"
+                  enabled: true
+                properties:
+                  message:
+                    type: string
+                    example: "Module 'sales' enabled"
+                  enabled:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - Modules
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  '/api/modules/{name}/disable':
+    post:
+      summary: 'Nonaktifkan modul.'
+      operationId: nonaktifkanModul
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Module 'sales' disabled"
+                  enabled: false
+                properties:
+                  message:
+                    type: string
+                    example: "Module 'sales' disabled"
+                  enabled:
+                    type: boolean
+                    example: false
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - Modules
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
   /api/relations/types:
     get:
       summary: 'List tipe relasi yang terdaftar (introspeksi).'
