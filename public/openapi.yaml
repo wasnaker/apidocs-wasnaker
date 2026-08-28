@@ -20,6 +20,9 @@ tags:
     name: Files
     description: ''
   -
+    name: GDPR
+    description: ''
+  -
     name: Mail
     description: ''
   -
@@ -1082,6 +1085,156 @@ paths:
         in: path
         name: id
         description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/gdpr/export:
+    get:
+      summary: 'Export semua data user.'
+      operationId: exportSemuaDataUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    user:
+                      id: 1
+                      name: ...
+                      email: ...
+                    meta: []
+                    attachments: []
+                    activity_logs: []
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: ...
+                          email:
+                            type: string
+                            example: ...
+                      meta:
+                        type: array
+                        example: []
+                      attachments:
+                        type: array
+                        example: []
+                      activity_logs:
+                        type: array
+                        example: []
+      tags:
+        - GDPR
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'ID user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/gdpr/anonymize:
+    post:
+      summary: 'Anonymize data user.'
+      operationId: anonymizeDataUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User anonymized'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'User anonymized'
+                  success:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+      tags:
+        - GDPR
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'ID user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/gdpr/delete:
+    post:
+      summary: 'Hapus data user permanently.'
+      operationId: hapusDataUserPermanently
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User deleted'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'User deleted'
+                  success:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+      tags:
+        - GDPR
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'ID user.'
         example: 1
         required: true
         schema:

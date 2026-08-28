@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "f8ef02aa-4820-4fdc-834e-2276b2b1d698",
+        "_postman_id": "45515c7a-e9e5-4b59-8b8c-c3b99c623842",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1125,6 +1125,144 @@
                             "code": 200,
                             "body": "{\n  \"message\": \"Attachment deleted\"\n}",
                             "name": "success"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "GDPR",
+            "description": "",
+            "item": [
+                {
+                    "name": "Export semua data user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/gdpr\/export",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/gdpr\/export",
+                            "variable": [
+                                {
+                                    "id": "user_id",
+                                    "key": "user_id",
+                                    "value": 1,
+                                    "description": "ID user."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": {\n    \"user\": {\"id\": 1, \"name\": \"...\", \"email\": \"...\"},\n    \"meta\": [],\n    \"attachments\": [],\n    \"activity_logs\": []\n  }\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Anonymize data user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/gdpr\/anonymize",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/gdpr\/anonymize",
+                            "variable": [
+                                {
+                                    "id": "user_id",
+                                    "key": "user_id",
+                                    "value": 1,
+                                    "description": "ID user."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"User anonymized\",\"success\":true}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"User not found\"}",
+                            "name": "not-found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Hapus data user permanently.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/gdpr\/delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/gdpr\/delete",
+                            "variable": [
+                                {
+                                    "id": "user_id",
+                                    "key": "user_id",
+                                    "value": 1,
+                                    "description": "ID user."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"User deleted\",\"success\":true}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"User not found\"}",
+                            "name": "not-found"
                         }
                     ]
                 }
