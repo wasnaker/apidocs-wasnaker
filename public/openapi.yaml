@@ -8,55 +8,7 @@ servers:
     url: 'http://wasnaker.lan'
 tags:
   -
-    name: 'Activity Logs'
-    description: ''
-  -
-    name: Broadcasting
-    description: "\nRealtime (pengganti App_pusher Perfex) — Laravel Broadcasting + Reverb.\nKlien: laravel-echo + pusher-js diarahkan ke server Reverb; auth channel\nvia `POST /api/v1/broadcasting/auth` (token Sanctum)."
-  -
-    name: 'Custom Meta'
-    description: ''
-  -
-    name: Endpoints
-    description: ''
-  -
-    name: Excel
-    description: ''
-  -
-    name: Files
-    description: ''
-  -
-    name: GDPR
-    description: ''
-  -
-    name: Mail
-    description: ''
-  -
-    name: Modules
-    description: ''
-  -
-    name: Payment
-    description: ''
-  -
-    name: Pdf
-    description: ''
-  -
-    name: QrCode
-    description: ''
-  -
-    name: Relations
-    description: ''
-  -
-    name: Settings
-    description: ''
-  -
-    name: Sms
-    description: ''
-  -
-    name: Tags
-    description: ''
-  -
-    name: Utilities
+    name: api/v1
     description: ''
 components:
   securitySchemes:
@@ -68,6 +20,300 @@ security:
   -
     default: []
 paths:
+  /api/v1/health:
+    get:
+      summary: ''
+      operationId: getApiV1Health
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  service: wasnaker-api
+                  status: ok
+                  time: '2026-08-27T00:00:00+00:00'
+                properties:
+                  service:
+                    type: string
+                    example: wasnaker-api
+                  status:
+                    type: string
+                    example: ok
+                  time:
+                    type: string
+                    example: '2026-08-27T00:00:00+00:00'
+      tags:
+        - api/v1
+      security: []
+  /api/v1/login:
+    get:
+      summary: 'Endpoint login (belum terautentikasi).'
+      operationId: endpointLoginbelumTerautentikasi
+      description: 'Path tujuan saat klien belum terautentikasi (route bernama `login`).'
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  -
+                    description: ''
+                    type: object
+                    example:
+                      message: Unauthenticated.
+                    properties:
+                      message:
+                        type: string
+                        example: Unauthenticated.
+                  -
+                    description: ''
+                    type: object
+                    example:
+                      message: Unauthenticated.
+                    properties:
+                      message:
+                        type: string
+                        example: Unauthenticated.
+      tags:
+        - api/v1
+      security: []
+  /api/v1/user:
+    get:
+      summary: ''
+      operationId: getApiV1User
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  name: Admin
+                  email: admin@wasnaker.lan
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: Admin
+                  email:
+                    type: string
+                    example: admin@wasnaker.lan
+        401:
+          description: 'tidak terautentikasi'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - api/v1
+  '/api/v1/settings/{key}':
+    get:
+      summary: 'Ambil satu setting berdasarkan key.'
+      operationId: ambilSatuSettingBerdasarkanKey
+      description: ''
+      parameters:
+        -
+          in: query
+          name: tenant_id
+          description: 'optional Scope tenant. Null = global.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'optional Scope tenant. Null = global.'
+            example: 1
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  key: invoice_prefix
+                  value: INV-
+                  tenant_id: null
+                properties:
+                  key:
+                    type: string
+                    example: invoice_prefix
+                  value:
+                    type: string
+                    example: INV-
+                  tenant_id:
+                    type: string
+                    example: null
+                    nullable: true
+        404:
+          description: tidak
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
+      tags:
+        - api/v1
+    put:
+      summary: 'Simpan / perbarui setting (upsert by key).'
+      operationId: simpanPerbaruiSettingupsertByKey
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  key: invoice_prefix
+                  value: INV-
+                  tenant_id: null
+                properties:
+                  key:
+                    type: string
+                    example: invoice_prefix
+                  value:
+                    type: string
+                    example: INV-
+                  tenant_id:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+                  description: 'Nilai setting.'
+                  example: INV-
+                tenant_id:
+                  type: integer
+                  description: 'optional Scope tenant. Null = global.'
+                  example: 1
+              required:
+                - value
+    delete:
+      summary: 'Hapus setting berdasarkan key.'
+      operationId: hapusSettingBerdasarkanKey
+      description: ''
+      parameters:
+        -
+          in: query
+          name: tenant_id
+          description: 'optional Scope tenant. Null = global.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'optional Scope tenant. Null = global.'
+            example: 1
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Setting deleted'
+                properties:
+                  message:
+                    type: string
+                    example: 'Setting deleted'
+        404:
+          description: tidak
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: key
+        description: 'Kunci setting.'
+        example: invoice_prefix
+        required: true
+        schema:
+          type: string
+  /api/v1/settings/bulk:
+    post:
+      summary: 'Ambil banyak setting sekaligus.'
+      operationId: ambilBanyakSettingSekaligus
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    invoice_prefix: INV-
+                    tax_rate: '11'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      invoice_prefix:
+                        type: string
+                        example: INV-
+                      tax_rate:
+                        type: string
+                        example: '11'
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keys:
+                  type: array
+                  description: 'Daftar key.'
+                  example:
+                    - invoice_prefix
+                    - tax_rate
+                  items:
+                    type: string
+                tenant_id:
+                  type: integer
+                  description: 'optional Scope tenant. Null = global.'
+                  example: 1
+              required:
+                - keys
   /api/v1/activity-logs:
     get:
       summary: 'List log aktivitas (server-side list: paging, sort, filter, search, include).'
@@ -296,7 +542,7 @@ paths:
                         type: integer
                         example: 50
       tags:
-        - 'Activity Logs'
+        - api/v1
     post:
       summary: 'Catat log aktivitas baru.'
       operationId: catatLogAktivitasBaru
@@ -352,7 +598,7 @@ paths:
                     type: string
                     example: '2026-08-28T00:00:00+00:00'
       tags:
-        - 'Activity Logs'
+        - api/v1
       requestBody:
         required: true
         content:
@@ -456,7 +702,7 @@ paths:
                 type: string
                 example: "ditemukan {\n  \"message\": \"Activity log not found\"\n}"
       tags:
-        - 'Activity Logs'
+        - api/v1
     delete:
       summary: 'Hapus log aktivitas.'
       operationId: hapusLogAktivitas
@@ -483,7 +729,7 @@ paths:
                 type: string
                 example: "ditemukan {\n  \"message\": \"Activity log not found\"\n}"
       tags:
-        - 'Activity Logs'
+        - api/v1
     parameters:
       -
         in: path
@@ -493,146 +739,6 @@ paths:
         required: true
         schema:
           type: integer
-  /api/v1/broadcast/config:
-    get:
-      summary: 'Konfigurasi koneksi realtime untuk frontend.'
-      operationId: konfigurasiKoneksiRealtimeUntukFrontend
-      description: "Mengembalikan parameter publik (tanpa secret) agar klien bisa\nmenghubungkan laravel-echo ke server Reverb."
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  driver: reverb
-                  key: a0adc25fe8777223fb4a
-                  scheme: http
-                  host: wasnaker.lan
-                  port: 8080
-                properties:
-                  driver:
-                    type: string
-                    example: reverb
-                  key:
-                    type: string
-                    example: a0adc25fe8777223fb4a
-                  scheme:
-                    type: string
-                    example: http
-                  host:
-                    type: string
-                    example: wasnaker.lan
-                  port:
-                    type: integer
-                    example: 8080
-      tags:
-        - Broadcasting
-  /api/v1/broadcast/test:
-    post:
-      summary: 'Kirim notifikasi realtime ke user yang sedang login.'
-      operationId: kirimNotifikasiRealtimeKeUserYangSedangLogin
-      description: "Memicu event `notification.sent` di private channel `user.{id}`.\nFrontend (Next.js) mendengarkan channel tersebut lalu menampilkan\ndesktop notification via browser Notification API."
-      parameters: []
-      responses:
-        200:
-          description: terkirim
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: true
-                  event: notification.sent
-                  channel: user.1
-                  payload:
-                    title: 'Pesan baru'
-                    message: 'Anda menerima pesan baru'
-                    type: success
-                    data: []
-                    sent_at: '2026-08-29T00:00:00+07:00'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  event:
-                    type: string
-                    example: notification.sent
-                  channel:
-                    type: string
-                    example: user.1
-                  payload:
-                    type: object
-                    properties:
-                      title:
-                        type: string
-                        example: 'Pesan baru'
-                      message:
-                        type: string
-                        example: 'Anda menerima pesan baru'
-                      type:
-                        type: string
-                        example: success
-                      data:
-                        type: array
-                        example: []
-                      sent_at:
-                        type: string
-                        example: '2026-08-29T00:00:00+07:00'
-        422:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'The given data was invalid.'
-                  errors:
-                    type:
-                      - 'The selected type is invalid.'
-                properties:
-                  message:
-                    type: string
-                    example: 'The given data was invalid.'
-                  errors:
-                    type: object
-                    properties:
-                      type:
-                        type: array
-                        example:
-                          - 'The selected type is invalid.'
-                        items:
-                          type: string
-      tags:
-        - Broadcasting
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  description: 'optional Judul notifikasi.'
-                  example: 'Pesan baru'
-                message:
-                  type: string
-                  description: 'optional Isi notifikasi.'
-                  example: 'Anda menerima pesan baru'
-                type:
-                  type: string
-                  description: 'optional Tipe notifikasi: info|success|warning|error.'
-                  example: success
-                data:
-                  type: array
-                  description: 'optional Data tambahan bebas (JSON object).'
-                  example:
-                    - consequatur
-                  items:
-                    type: string
   '/api/v1/meta/{type}/{id}':
     get:
       summary: 'Ambil semua meta entity.'
@@ -661,7 +767,7 @@ paths:
                         type: string
                         example: id
       tags:
-        - 'Custom Meta'
+        - api/v1
     post:
       summary: 'Bulk set meta (replace) untuk entity.'
       operationId: bulkSetMetareplaceUntukEntity
@@ -689,7 +795,7 @@ paths:
                         type: string
                         example: id
       tags:
-        - 'Custom Meta'
+        - api/v1
       requestBody:
         required: true
         content:
@@ -754,7 +860,7 @@ paths:
                 type: string
                 example: "ditemukan {\n  \"message\": \"Meta not found\"\n}"
       tags:
-        - 'Custom Meta'
+        - api/v1
     put:
       summary: 'Set/update satu meta by key.'
       operationId: setupdateSatuMetaByKey
@@ -778,7 +884,7 @@ paths:
                     type: string
                     example: dark
       tags:
-        - 'Custom Meta'
+        - api/v1
       requestBody:
         required: true
         content:
@@ -818,7 +924,7 @@ paths:
                 type: string
                 example: "ditemukan {\n  \"message\": \"Meta not found\"\n}"
       tags:
-        - 'Custom Meta'
+        - api/v1
     parameters:
       -
         in: path
@@ -844,63 +950,38 @@ paths:
         required: true
         schema:
           type: string
-  /api/v1/health:
+  /api/v1/relations/types:
     get:
-      summary: 'Cek kesehatan API.'
-      operationId: cekKesehatanAPI
-      description: 'Mengecek apakah layanan API berjalan dengan baik.'
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  service: wasnaker-api
-                  status: ok
-                  time: '2026-08-27T00:00:00+00:00'
-                properties:
-                  service:
-                    type: string
-                    example: wasnaker-api
-                  status:
-                    type: string
-                    example: ok
-                  time:
-                    type: string
-                    example: '2026-08-27T00:00:00+00:00'
-      tags:
-        - Endpoints
-      security: []
-  /api/v1/login:
-    get:
-      summary: ''
-      operationId: getApiV1Login
+      summary: 'List tipe relasi yang terdaftar (introspeksi).'
+      operationId: listTipeRelasiYangTerdaftarintrospeksi
       description: ''
       parameters: []
       responses:
-        401:
-          description: ''
+        200:
+          description: success
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  data:
+                    - user
+                    - customer
                 properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                  data:
+                    type: array
+                    example:
+                      - user
+                      - customer
+                    items:
+                      type: string
       tags:
-        - Endpoints
-      security: []
-  /api/v1/user:
+        - api/v1
+  '/api/v1/relations/{type}/{id}':
     get:
-      summary: 'Data user yang sedang login.'
-      operationId: dataUserYangSedangLogin
-      description: 'Mengembalikan data user terkini berdasarkan token Sanctum yang terkirim.'
+      summary: 'Resolve entity by type + id.'
+      operationId: resolveEntityByType+Id
+      description: "Hanya tipe yang sudah di-register (opt-in) yang bisa di-resolve.\nTipe tidak terdaftar -> 404."
       parameters: []
       responses:
         200:
@@ -911,20 +992,198 @@ paths:
                 type: object
                 example:
                   id: 1
+                  type: user
                   name: Admin
-                  email: admin@wasnaker.lan
+                  email: a@b.c
+                  exists: true
                 properties:
                   id:
                     type: integer
                     example: 1
+                  type:
+                    type: string
+                    example: user
                   name:
                     type: string
                     example: Admin
                   email:
                     type: string
-                    example: admin@wasnaker.lan
+                    example: a@b.c
+                  exists:
+                    type: boolean
+                    example: true
+        404:
+          description: tipe
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "tidak terdaftar {\n  \"message\": \"Relation type 'ghost' is not registered.\"\n}"
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: type
+        description: 'Tipe relasi terdaftar.'
+        example: user
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: id
+        description: 'Entity id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/number-to-word/convert:
+    post:
+      summary: 'Konversi angka ke terbilang Indonesian (format Rupiah).'
+      operationId: konversiAngkaKeTerbilangIndonesianformatRupiah
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  number: 1234567
+                  terbilang: 'satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah'
+                properties:
+                  number:
+                    type: integer
+                    example: 1234567
+                  terbilang:
+                    type: string
+                    example: 'satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah'
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: numeric
+                  description: 'Angka yang dikonversi.'
+                  example: '1234567'
+                currency:
+                  type: string
+                  description: 'optional Suffix mata uang. Default: rupiah.'
+                  example: rupiah
+                  nullable: true
+              required:
+                - number
+  /api/v1/number-to-word/convert-indian:
+    post:
+      summary: 'Konversi angka ke terbilang Indian format (lakh/crore).'
+      operationId: konversiAngkaKeTerbilangIndianFormatlakhcrore
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  number: 1234567
+                  terbilang: 'twelve lakh thirty four thousand five hundred sixty seven'
+                properties:
+                  number:
+                    type: integer
+                    example: 1234567
+                  terbilang:
+                    type: string
+                    example: 'twelve lakh thirty four thousand five hundred sixty seven'
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: numeric
+                  description: 'Angka yang dikonversi.'
+                  example: '1234567'
+                currency:
+                  type: string
+                  description: 'optional Suffix mata uang. Default: (kosong).'
+                  example: INR
+                  nullable: true
+              required:
+                - number
+  /api/v1/modules:
+    get:
+      summary: 'List semua modul dengan status.'
+      operationId: listSemuaModulDenganStatus
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      name: Sales
+                      alias: sales
+                      enabled: true
+                      installed: true
+                      namespace: Modules\Sales
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        name: Sales
+                        alias: sales
+                        enabled: true
+                        installed: true
+                        namespace: Modules\Sales
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: Sales
+                        alias:
+                          type: string
+                          example: sales
+                        enabled:
+                          type: boolean
+                          example: true
+                        installed:
+                          type: boolean
+                          example: true
+                        namespace:
+                          type: string
+                          example: Modules\Sales
+      tags:
+        - api/v1
+  /api/v1/modules/enabled:
+    get:
+      summary: 'List hanya modul yang aktif (enabled).'
+      operationId: listHanyaModulYangAktifenabled
+      description: ''
+      parameters: []
+      responses:
         401:
-          description: 'tidak terautentikasi'
+          description: ''
           content:
             application/json:
               schema:
@@ -936,86 +1195,795 @@ paths:
                     type: string
                     example: Unauthenticated.
       tags:
-        - Endpoints
-  /api/v1/sales:
+        - api/v1
+  '/api/v1/modules/{name}':
     get:
-      summary: 'Daftar sales.'
-      operationId: daftarSales
-      description: 'Menampilkan daftar sales dengan paginasi.'
+      summary: 'Detail modul by name/alias.'
+      operationId: detailModulByNamealias
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  name: Sales
+                  alias: sales
+                  enabled: true
+                  installed: true
+                  namespace: Modules\Sales
+                  providers: []
+                  aliases: []
+                properties:
+                  name:
+                    type: string
+                    example: Sales
+                  alias:
+                    type: string
+                    example: sales
+                  enabled:
+                    type: boolean
+                    example: true
+                  installed:
+                    type: boolean
+                    example: true
+                  namespace:
+                    type: string
+                    example: Modules\Sales
+                  providers:
+                    type: array
+                    example: []
+                  aliases:
+                    type: array
+                    example: []
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama atau alias modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  '/api/v1/modules/{name}/status':
+    get:
+      summary: 'Cek status modul (enabled/installed).'
+      operationId: cekStatusModulenabledinstalled
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  name: sales
+                  enabled: true
+                  installed: true
+                properties:
+                  name:
+                    type: string
+                    example: sales
+                  enabled:
+                    type: boolean
+                    example: true
+                  installed:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  '/api/v1/modules/{name}/enable':
+    post:
+      summary: 'Aktifkan modul.'
+      operationId: aktifkanModul
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Module 'sales' enabled"
+                  enabled: true
+                properties:
+                  message:
+                    type: string
+                    example: "Module 'sales' enabled"
+                  enabled:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  '/api/v1/modules/{name}/disable':
+    post:
+      summary: 'Nonaktifkan modul.'
+      operationId: nonaktifkanModul
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Module 'sales' disabled"
+                  enabled: false
+                properties:
+                  message:
+                    type: string
+                    example: "Module 'sales' disabled"
+                  enabled:
+                    type: boolean
+                    example: false
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: sales
+        required: true
+        schema:
+          type: string
+  /api/v1/files/limits:
+    get:
+      summary: 'Batas maksimal upload (utility, dari php.ini).'
+      operationId: batasMaksimalUploadutilityDariPhpini
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  max_bytes: 2097152
+                  max_human: '2 MB'
+                  max_post_bytes: 8388608
+                properties:
+                  max_bytes:
+                    type: integer
+                    example: 2097152
+                  max_human:
+                    type: string
+                    example: '2 MB'
+                  max_post_bytes:
+                    type: integer
+                    example: 8388608
+      tags:
+        - api/v1
+  /api/v1/files:
+    post:
+      summary: 'Upload file baru.'
+      operationId: uploadFileBaru
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  rel_type: invoice
+                  rel_id: 10
+                  original_name: doc.pdf
+                  mime_type: application/pdf
+                  size: 12345
+                  extension: pdf
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  rel_type:
+                    type: string
+                    example: invoice
+                  rel_id:
+                    type: integer
+                    example: 10
+                  original_name:
+                    type: string
+                    example: doc.pdf
+                  mime_type:
+                    type: string
+                    example: application/pdf
+                  size:
+                    type: integer
+                    example: 12345
+                  extension:
+                    type: string
+                    example: pdf
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: 'File yang diupload.'
+                rel_type:
+                  type: string
+                  description: 'Tipe entity (invoice, client, task).'
+                  example: invoice
+                rel_id:
+                  type: integer
+                  description: 'ID entity.'
+                  example: 10
+                tenant_id:
+                  type: integer
+                  description: 'optional ID tenant (multi-tenant).'
+                  example: 1
+                  nullable: true
+                disk:
+                  type: string
+                  description: "optional 'local' (default, private) | 'public'."
+                  example: local
+                  nullable: true
+              required:
+                - file
+                - rel_type
+                - rel_id
+  '/api/v1/files/{id}':
+    get:
+      summary: 'Ambil meta attachment.'
+      operationId: ambilMetaAttachment
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - api/v1
+    delete:
+      summary: 'Hapus attachment (file fisik + meta).'
+      operationId: hapusAttachmentfileFisik+Meta
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Attachment deleted'
+                properties:
+                  message:
+                    type: string
+                    example: 'Attachment deleted'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/files/{id}/download':
+    get:
+      summary: 'Download file (force attachment).'
+      operationId: downloadFileforceAttachment
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/files/{id}/preview':
+    get:
+      summary: 'Preview file inline (image/pdf).'
+      operationId: previewFileInlineimagepdf
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/mail/send:
+    post:
+      summary: 'Kirim email menggunakan Mailable.'
+      operationId: kirimEmailMenggunakanMailable
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Email sent'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'Email sent'
+                  success:
+                    type: boolean
+                    example: true
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  description: 'Alamat email tujuan.'
+                  example: user@example.com
+                subject:
+                  type: string
+                  description: 'Subjek email.'
+                  example: 'Invoice #123'
+                view:
+                  type: string
+                  description: 'Nama view Blade untuk template email.'
+                  example: emails.invoice
+                data:
+                  type: 'array<string,'
+                  description: 'mixed> optional Data untuk template.'
+                  example: '{"invoice_id": 123}'
+                queue:
+                  type: boolean
+                  description: ''
+                  example: false
+                queue_name:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+              required:
+                - to
+                - subject
+                - view
+  /api/v1/mail/notify:
+    post:
+      summary: 'Kirim notifikasi email ke user.'
+      operationId: kirimNotifikasiEmailKeUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notification sent'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'Notification sent'
+                  success:
+                    type: boolean
+                    example: true
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  description: 'ID user penerima.'
+                  example: 1
+                subject:
+                  type: string
+                  description: 'Subjek notifikasi.'
+                  example: 'Task assigned'
+                body:
+                  type: string
+                  description: 'Isi notifikasi.'
+                  example: 'Anda mendapat task baru'
+                action_url:
+                  type: string
+                  description: 'opsional URL aksi.'
+                  example: 'https://app.example.com/tasks/1'
+                  nullable: true
+              required:
+                - user_id
+                - subject
+                - body
+  /api/v1/mail/notify-many:
+    post:
+      summary: 'Kirim notifikasi email ke banyak user.'
+      operationId: kirimNotifikasiEmailKeBanyakUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notification sent'
+                  success: true
+                  recipients: 3
+                properties:
+                  message:
+                    type: string
+                    example: 'Notification sent'
+                  success:
+                    type: boolean
+                    example: true
+                  recipients:
+                    type: integer
+                    example: 3
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_ids:
+                  type: array<int>
+                  description: 'Daftar ID user penerima.'
+                  example: '[1,2,3]'
+                subject:
+                  type: string
+                  description: 'Subjek notifikasi.'
+                  example: 'Pengumuman penting'
+                body:
+                  type: string
+                  description: 'Isi notifikasi.'
+                  example: consequatur
+                action_url:
+                  type: string
+                  description: 'opsional URL aksi.'
+                  example: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
+                  nullable: true
+              required:
+                - user_ids
+                - subject
+                - body
+  /api/v1/mail/retry:
+    post:
+      summary: 'Antrean email: retry failed mail job.'
+      operationId: antreanEmailRetryFailedMailJob
+      description: ''
       parameters:
         -
           in: query
-          name: page
-          description: 'Nomor halaman.'
-          example: 1
+          name: queue
+          description: 'Nama queue (opsional).'
+          example: emails
           required: false
           schema:
-            type: integer
-            description: 'Nomor halaman.'
-            example: 1
-        -
-          in: query
-          name: per_page
-          description: 'Jumlah data per halaman.'
-          example: 15
-          required: false
-          schema:
-            type: integer
-            description: 'Jumlah data per halaman.'
-            example: 15
+            type: string
+            description: 'Nama queue (opsional).'
+            example: emails
       responses:
         200:
-          description: ''
+          description: success
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  data: []
-                  meta:
-                    count: 0
-                    per_page: 15
-                    page: 1
+                  message: 'Retried 2 failed job(s)'
+                  success: true
+                  retried: 2
+                properties:
+                  message:
+                    type: string
+                    example: 'Retried 2 failed job(s)'
+                  success:
+                    type: boolean
+                    example: true
+                  retried:
+                    type: integer
+                    example: 2
+      tags:
+        - api/v1
+  /api/v1/mail/cleanup:
+    post:
+      summary: 'Antrean email: bersihkan failed job lama.'
+      operationId: antreanEmailBersihkanFailedJobLama
+      description: ''
+      parameters:
+        -
+          in: query
+          name: queue
+          description: 'Nama queue (opsional).'
+          example: emails
+          required: false
+          schema:
+            type: string
+            description: 'Nama queue (opsional).'
+            example: emails
+        -
+          in: query
+          name: days
+          description: 'Umur maksimal failed job (hari).'
+          example: 7
+          required: false
+          schema:
+            type: integer
+            description: 'Umur maksimal failed job (hari).'
+            example: 7
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Cleaned 5 old failed job(s)'
+                  success: true
+                  cleaned: 5
+                properties:
+                  message:
+                    type: string
+                    example: 'Cleaned 5 old failed job(s)'
+                  success:
+                    type: boolean
+                    example: true
+                  cleaned:
+                    type: integer
+                    example: 5
+      tags:
+        - api/v1
+  /api/v1/mail/queue:
+    get:
+      summary: 'Antrean email: jumlah job menunggu.'
+      operationId: antreanEmailJumlahJobMenunggu
+      description: ''
+      parameters:
+        -
+          in: query
+          name: queue
+          description: 'Nama queue (opsional).'
+          example: emails
+          required: false
+          schema:
+            type: string
+            description: 'Nama queue (opsional).'
+            example: emails
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    pending: 3
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      pending:
+                        type: integer
+                        example: 3
+      tags:
+        - api/v1
+  /api/v1/payment/gateways:
+    get:
+      summary: 'List gateway yang terkonfigurasi.'
+      operationId: listGatewayYangTerkonfigurasi
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      name: stripe
+                      configured: true
                 properties:
                   data:
                     type: array
-                    example: []
-                  meta:
+                    example:
+                      -
+                        name: stripe
+                        configured: true
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: stripe
+                        configured:
+                          type: boolean
+                          example: true
+      tags:
+        - api/v1
+  /api/v1/payment/intent:
+    post:
+      summary: 'Create payment intent via gateway.'
+      operationId: createPaymentIntentViaGateway
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  data:
+                    id: pi_...
+                    client_secret: pi_..._secret_...
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
                     type: object
                     properties:
-                      count:
-                        type: integer
-                        example: 0
-                      per_page:
-                        type: integer
-                        example: 15
-                      page:
-                        type: integer
-                        example: 1
+                      id:
+                        type: string
+                        example: pi_...
+                      client_secret:
+                        type: string
+                        example: pi_..._secret_...
       tags:
-        - Endpoints
-      security: []
-    post:
-      summary: 'Buat sales baru.'
-      operationId: buatSalesBaru
-      description: ''
-      parameters: []
-      responses:
-        201:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data: null
-                properties:
-                  data:
-                    type: string
-                    example: null
-                    nullable: true
-      tags:
-        - Endpoints
+        - api/v1
       requestBody:
         required: true
         content:
@@ -1023,43 +1991,180 @@ paths:
             schema:
               type: object
               properties:
+                gateway:
+                  type: string
+                  description: 'Nama gateway.'
+                  example: stripe
                 amount:
-                  type: numeric
-                  description: 'Jumlah nominal sales.'
-                  example: '150000'
-                due_date:
-                  type: date
-                  description: 'Tenggat waktu.'
-                  example: '2026-09-30'
+                  type: integer
+                  description: 'Amount dalam satuan terkecil.'
+                  example: 50000
+                currency:
+                  type: string
+                  description: 'Currency code.'
+                  example: IDR
+                metadata:
+                  type: 'array<string,'
+                  description: 'mixed> optional Metadata tambahan.'
+                  example: consequatur
               required:
+                - gateway
                 - amount
-      security: []
-  '/api/v1/sales/{id}':
+                - currency
+  /api/v1/gdpr/export:
     get:
-      summary: 'Detail sales.'
-      operationId: detailSales
-      description: 'Mengembalikan satu data sales berdasarkan ID.'
+      summary: 'Export semua data user.'
+      operationId: exportSemuaDataUser
+      description: ''
       parameters: []
       responses:
         200:
-          description: ''
+          description: success
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  data: null
+                  data:
+                    user:
+                      id: 1
+                      name: ...
+                      email: ...
+                    meta: []
+                    attachments: []
+                    activity_logs: []
                 properties:
                   data:
-                    type: string
-                    example: null
-                    nullable: true
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: ...
+                          email:
+                            type: string
+                            example: ...
+                      meta:
+                        type: array
+                        example: []
+                      attachments:
+                        type: array
+                        example: []
+                      activity_logs:
+                        type: array
+                        example: []
       tags:
-        - Endpoints
-      security: []
-    put:
-      summary: 'Perbarui sales.'
-      operationId: perbaruiSales
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'ID user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/gdpr/anonymize:
+    post:
+      summary: 'Anonymize data user.'
+      operationId: anonymizeDataUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User anonymized'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'User anonymized'
+                  success:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'ID user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/gdpr/delete:
+    post:
+      summary: 'Hapus data user permanently.'
+      operationId: hapusDataUserPermanently
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User deleted'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'User deleted'
+                  success:
+                    type: boolean
+                    example: true
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'User not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'ID user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/pdf/generate:
+    post:
+      summary: 'Generate satu PDF dari Blade view dan simpan ke storage.'
+      operationId: generateSatuPDFDariBladeViewDanSimpanKeStorage
       description: ''
       parameters: []
       responses:
@@ -1070,14 +2175,17 @@ paths:
               schema:
                 type: object
                 example:
-                  data: null
+                  data:
+                    path: tenants/1/invoice/10/pdf/INV-0001_20260828_123456.pdf
                 properties:
                   data:
-                    type: string
-                    example: null
-                    nullable: true
+                    type: object
+                    properties:
+                      path:
+                        type: string
+                        example: tenants/1/invoice/10/pdf/INV-0001_20260828_123456.pdf
       tags:
-        - Endpoints
+        - api/v1
       requestBody:
         required: true
         content:
@@ -1085,60 +2193,282 @@ paths:
             schema:
               type: object
               properties:
-                amount:
-                  type: numeric
-                  description: 'Jumlah nominal sales.'
-                  example: '175000'
+                view:
+                  type: string
+                  description: 'Nama view Blade.'
+                  example: pdf.invoice
+                data:
+                  type: array
+                  description: 'Data yang diteruskan ke view.'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+                    nullable: true
+                filename:
+                  type: string
+                  description: 'Nama file (tanpa ekstensi).'
+                  example: INV-0001
+                  nullable: true
+                rel_type:
+                  type: string
+                  description: 'Tipe entity (invoice, estimate, contract).'
+                  example: invoice
+                  nullable: true
+                rel_id:
+                  type: integer
+                  description: 'ID entity.'
+                  example: 10
+                  nullable: true
+                tenant_id:
+                  type: integer
+                  description: 'optional ID tenant.'
+                  example: 1
+                  nullable: true
+                paper:
+                  type: string
+                  description: 'Ukuran kertas (a4, letter).'
+                  example: a4
+                  nullable: true
+                orientation:
+                  type: string
+                  description: portrait|landscape.
+                  example: portrait
+                  nullable: true
               required:
-                - amount
-      security: []
-    delete:
-      summary: 'Hapus sales.'
-      operationId: hapusSales
+                - view
+  /api/v1/pdf/from-html:
+    post:
+      summary: 'Render string HTML menjadi PDF (binary, tanpa simpan).'
+      operationId: renderStringHTMLMenjadiPDFbinaryTanpaSimpan
       description: ''
       parameters: []
       responses:
-        204:
+        200:
           description: ''
           content:
             text/plain:
               schema:
                 type: string
-                example: ''
+                example: 'data: "string" (binary PDF)'
       tags:
-        - Endpoints
-      security: []
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'ID sales.'
-        example: 17
+        - api/v1
+      requestBody:
         required: true
-        schema:
-          type: integer
-  /api/v1/broadcasting/auth:
-    get:
-      summary: 'Authenticate the request for channel access.'
-      operationId: authenticateTheRequestForChannelAccess
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                html:
+                  type: string
+                  description: 'Konten HTML.'
+                  example: consequatur
+                paper:
+                  type: string
+                  description: 'Ukuran kertas.'
+                  example: a4
+                  nullable: true
+                orientation:
+                  type: string
+                  description: portrait|landscape.
+                  example: portrait
+                  nullable: true
+              required:
+                - html
+  /api/v1/pdf/bulk-export:
+    post:
+      summary: 'Bulk export banyak dokumen PDF menjadi satu ZIP (dijalankan via queue).'
+      operationId: bulkExportBanyakDokumenPDFMenjadiSatuZIPdijalankanViaQueue
       description: ''
       parameters: []
       responses:
-        401:
+        200:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  data:
+                    job: App\Jobs\PdfExportJob
+                    queued: true
                 properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
+                  data:
+                    type: object
+                    properties:
+                      job:
+                        type: string
+                        example: App\Jobs\PdfExportJob
+                      queued:
+                        type: boolean
+                        example: true
       tags:
-        - Endpoints
-      security: []
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documents:
+                  type: array
+                  description: 'Daftar dokumen.'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+                prefix:
+                  type: string
+                  description: 'Prefix nama ZIP.'
+                  example: invoices-2026
+                  nullable: true
+              required:
+                - documents
+  /api/v1/sms/send:
+    post:
+      summary: 'Kirim SMS.'
+      operationId: kirimSMS
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    success: true
+                    message: 'SMS terkirim'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                      message:
+                        type: string
+                        example: 'SMS terkirim'
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  description: 'Nomor tujuan (format internasional).'
+                  example: '+6281234567890'
+                body:
+                  type: string
+                  description: 'Isi pesan.'
+                  example: 'Kode OTP Anda: 123456'
+                driver:
+                  type: string
+                  description: 'optional Nama driver (twilio, log).'
+                  example: log
+                  nullable: true
+              required:
+                - to
+                - body
+  /api/v1/sms/drivers:
+    get:
+      summary: 'Daftar driver SMS yang terkonfigurasi.'
+      operationId: daftarDriverSMSYangTerkonfigurasi
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    - log
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - log
+                    items:
+                      type: string
+      tags:
+        - api/v1
+  /api/v1/qr-code/generate:
+    post:
+      summary: 'Generate QR Code.'
+      operationId: generateQRCode
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    format: base64
+                    base64: ...
+                    size: 300
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      format:
+                        type: string
+                        example: base64
+                      base64:
+                        type: string
+                        example: ...
+                      size:
+                        type: integer
+                        example: 300
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'Konten/kode yang di-encode.'
+                  example: 'https://wasnaker.lan'
+                size:
+                  type: integer
+                  description: 'Ukuran pixel.'
+                  example: 300
+                  nullable: true
+                margin:
+                  type: integer
+                  description: 'Margin pixel.'
+                  example: 10
+                  nullable: true
+                format:
+                  type: string
+                  description: 'format output: base64 | data_uri | stored.'
+                  example: base64
+                  nullable: true
+                filename:
+                  type: string
+                  description: 'Nama file (jika format=stored).'
+                  example: qr-signature
+                  nullable: true
+              required:
+                - content
   /api/v1/excel/export:
     post:
       summary: 'Export data array menjadi file Excel/CSV.'
@@ -1167,7 +2497,7 @@ paths:
                         type: integer
                         example: 3
       tags:
-        - Excel
+        - api/v1
       requestBody:
         required: true
         content:
@@ -1245,7 +2575,7 @@ paths:
                               type: string
                               example: a@x.com
       tags:
-        - Excel
+        - api/v1
       requestBody:
         required: true
         content:
@@ -1259,1628 +2589,6 @@ paths:
                   description: 'File Excel/CSV (baris pertama = heading).'
               required:
                 - file
-  /api/v1/files/limits:
-    get:
-      summary: 'Batas maksimal upload (utility, dari php.ini).'
-      operationId: batasMaksimalUploadutilityDariPhpini
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  max_bytes: 2097152
-                  max_human: '2 MB'
-                  max_post_bytes: 8388608
-                properties:
-                  max_bytes:
-                    type: integer
-                    example: 2097152
-                  max_human:
-                    type: string
-                    example: '2 MB'
-                  max_post_bytes:
-                    type: integer
-                    example: 8388608
-      tags:
-        - Files
-  /api/v1/files:
-    post:
-      summary: 'Upload file baru.'
-      operationId: uploadFileBaru
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  rel_type: invoice
-                  rel_id: 10
-                  original_name: doc.pdf
-                  mime_type: application/pdf
-                  size: 12345
-                  extension: pdf
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  rel_type:
-                    type: string
-                    example: invoice
-                  rel_id:
-                    type: integer
-                    example: 10
-                  original_name:
-                    type: string
-                    example: doc.pdf
-                  mime_type:
-                    type: string
-                    example: application/pdf
-                  size:
-                    type: integer
-                    example: 12345
-                  extension:
-                    type: string
-                    example: pdf
-      tags:
-        - Files
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: 'File yang diupload.'
-                rel_type:
-                  type: string
-                  description: 'Tipe entity (invoice, client, task).'
-                  example: invoice
-                rel_id:
-                  type: integer
-                  description: 'ID entity.'
-                  example: 10
-                tenant_id:
-                  type: integer
-                  description: 'optional ID tenant (multi-tenant).'
-                  example: 1
-                  nullable: true
-                disk:
-                  type: string
-                  description: "optional 'local' (default, private) | 'public'."
-                  example: local
-                  nullable: true
-              required:
-                - file
-                - rel_type
-                - rel_id
-  '/api/v1/files/{id}':
-    get:
-      summary: 'Ambil meta attachment.'
-      operationId: ambilMetaAttachment
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Files
-    delete:
-      summary: 'Hapus attachment (file fisik + meta).'
-      operationId: hapusAttachmentfileFisik+Meta
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Attachment deleted'
-                properties:
-                  message:
-                    type: string
-                    example: 'Attachment deleted'
-      tags:
-        - Files
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Attachment id.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  '/api/v1/files/{id}/download':
-    get:
-      summary: 'Download file (force attachment).'
-      operationId: downloadFileforceAttachment
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Files
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Attachment id.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  '/api/v1/files/{id}/preview':
-    get:
-      summary: 'Preview file inline (image/pdf).'
-      operationId: previewFileInlineimagepdf
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Files
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'Attachment id.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  /api/v1/gdpr/export:
-    get:
-      summary: 'Export semua data user.'
-      operationId: exportSemuaDataUser
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    user:
-                      id: 1
-                      name: ...
-                      email: ...
-                    meta: []
-                    attachments: []
-                    activity_logs: []
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      user:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 1
-                          name:
-                            type: string
-                            example: ...
-                          email:
-                            type: string
-                            example: ...
-                      meta:
-                        type: array
-                        example: []
-                      attachments:
-                        type: array
-                        example: []
-                      activity_logs:
-                        type: array
-                        example: []
-      tags:
-        - GDPR
-    parameters:
-      -
-        in: path
-        name: user_id
-        description: 'ID user.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  /api/v1/gdpr/anonymize:
-    post:
-      summary: 'Anonymize data user.'
-      operationId: anonymizeDataUser
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'User anonymized'
-                  success: true
-                properties:
-                  message:
-                    type: string
-                    example: 'User anonymized'
-                  success:
-                    type: boolean
-                    example: true
-        404:
-          description: not-found
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'User not found'
-                properties:
-                  message:
-                    type: string
-                    example: 'User not found'
-      tags:
-        - GDPR
-    parameters:
-      -
-        in: path
-        name: user_id
-        description: 'ID user.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  /api/v1/gdpr/delete:
-    post:
-      summary: 'Hapus data user permanently.'
-      operationId: hapusDataUserPermanently
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'User deleted'
-                  success: true
-                properties:
-                  message:
-                    type: string
-                    example: 'User deleted'
-                  success:
-                    type: boolean
-                    example: true
-        404:
-          description: not-found
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'User not found'
-                properties:
-                  message:
-                    type: string
-                    example: 'User not found'
-      tags:
-        - GDPR
-    parameters:
-      -
-        in: path
-        name: user_id
-        description: 'ID user.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  /api/v1/mail/send:
-    post:
-      summary: 'Kirim email menggunakan Mailable.'
-      operationId: kirimEmailMenggunakanMailable
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Email sent'
-                  success: true
-                properties:
-                  message:
-                    type: string
-                    example: 'Email sent'
-                  success:
-                    type: boolean
-                    example: true
-      tags:
-        - Mail
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                to:
-                  type: string
-                  description: 'Alamat email tujuan.'
-                  example: user@example.com
-                subject:
-                  type: string
-                  description: 'Subjek email.'
-                  example: 'Invoice #123'
-                view:
-                  type: string
-                  description: 'Nama view Blade untuk template email.'
-                  example: emails.invoice
-                data:
-                  type: 'array<string,'
-                  description: 'mixed> optional Data untuk template.'
-                  example: '{"invoice_id": 123}'
-                queue:
-                  type: boolean
-                  description: ''
-                  example: false
-                queue_name:
-                  type: string
-                  description: 'Must not be greater than 120 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: true
-              required:
-                - to
-                - subject
-                - view
-  /api/v1/mail/notify:
-    post:
-      summary: 'Kirim notifikasi email ke user.'
-      operationId: kirimNotifikasiEmailKeUser
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Notification sent'
-                  success: true
-                properties:
-                  message:
-                    type: string
-                    example: 'Notification sent'
-                  success:
-                    type: boolean
-                    example: true
-      tags:
-        - Mail
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-                  description: 'ID user penerima.'
-                  example: 1
-                subject:
-                  type: string
-                  description: 'Subjek notifikasi.'
-                  example: 'Task assigned'
-                body:
-                  type: string
-                  description: 'Isi notifikasi.'
-                  example: 'Anda mendapat task baru'
-                action_url:
-                  type: string
-                  description: 'opsional URL aksi.'
-                  example: 'https://app.example.com/tasks/1'
-                  nullable: true
-              required:
-                - user_id
-                - subject
-                - body
-  /api/v1/mail/notify-many:
-    post:
-      summary: 'Kirim notifikasi email ke banyak user.'
-      operationId: kirimNotifikasiEmailKeBanyakUser
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Notification sent'
-                  success: true
-                  recipients: 3
-                properties:
-                  message:
-                    type: string
-                    example: 'Notification sent'
-                  success:
-                    type: boolean
-                    example: true
-                  recipients:
-                    type: integer
-                    example: 3
-      tags:
-        - Mail
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                user_ids:
-                  type: array<int>
-                  description: 'Daftar ID user penerima.'
-                  example: '[1,2,3]'
-                subject:
-                  type: string
-                  description: 'Subjek notifikasi.'
-                  example: 'Pengumuman penting'
-                body:
-                  type: string
-                  description: 'Isi notifikasi.'
-                  example: consequatur
-                action_url:
-                  type: string
-                  description: 'opsional URL aksi.'
-                  example: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
-                  nullable: true
-              required:
-                - user_ids
-                - subject
-                - body
-  /api/v1/mail/retry:
-    post:
-      summary: 'Antrean email: retry failed mail job.'
-      operationId: antreanEmailRetryFailedMailJob
-      description: ''
-      parameters:
-        -
-          in: query
-          name: queue
-          description: 'Nama queue (opsional).'
-          example: emails
-          required: false
-          schema:
-            type: string
-            description: 'Nama queue (opsional).'
-            example: emails
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Retried 2 failed job(s)'
-                  success: true
-                  retried: 2
-                properties:
-                  message:
-                    type: string
-                    example: 'Retried 2 failed job(s)'
-                  success:
-                    type: boolean
-                    example: true
-                  retried:
-                    type: integer
-                    example: 2
-      tags:
-        - Mail
-  /api/v1/mail/cleanup:
-    post:
-      summary: 'Antrean email: bersihkan failed job lama.'
-      operationId: antreanEmailBersihkanFailedJobLama
-      description: ''
-      parameters:
-        -
-          in: query
-          name: queue
-          description: 'Nama queue (opsional).'
-          example: emails
-          required: false
-          schema:
-            type: string
-            description: 'Nama queue (opsional).'
-            example: emails
-        -
-          in: query
-          name: days
-          description: 'Umur maksimal failed job (hari).'
-          example: 7
-          required: false
-          schema:
-            type: integer
-            description: 'Umur maksimal failed job (hari).'
-            example: 7
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Cleaned 5 old failed job(s)'
-                  success: true
-                  cleaned: 5
-                properties:
-                  message:
-                    type: string
-                    example: 'Cleaned 5 old failed job(s)'
-                  success:
-                    type: boolean
-                    example: true
-                  cleaned:
-                    type: integer
-                    example: 5
-      tags:
-        - Mail
-  /api/v1/mail/queue:
-    get:
-      summary: 'Antrean email: jumlah job menunggu.'
-      operationId: antreanEmailJumlahJobMenunggu
-      description: ''
-      parameters:
-        -
-          in: query
-          name: queue
-          description: 'Nama queue (opsional).'
-          example: emails
-          required: false
-          schema:
-            type: string
-            description: 'Nama queue (opsional).'
-            example: emails
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    pending: 3
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      pending:
-                        type: integer
-                        example: 3
-      tags:
-        - Mail
-  /api/v1/modules:
-    get:
-      summary: 'List semua modul dengan status.'
-      operationId: listSemuaModulDenganStatus
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    -
-                      name: Sales
-                      alias: sales
-                      enabled: true
-                      installed: true
-                      namespace: Modules\Sales
-                properties:
-                  data:
-                    type: array
-                    example:
-                      -
-                        name: Sales
-                        alias: sales
-                        enabled: true
-                        installed: true
-                        namespace: Modules\Sales
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: Sales
-                        alias:
-                          type: string
-                          example: sales
-                        enabled:
-                          type: boolean
-                          example: true
-                        installed:
-                          type: boolean
-                          example: true
-                        namespace:
-                          type: string
-                          example: Modules\Sales
-      tags:
-        - Modules
-  /api/v1/modules/enabled:
-    get:
-      summary: 'List hanya modul yang aktif (enabled).'
-      operationId: listHanyaModulYangAktifenabled
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Modules
-  '/api/v1/modules/{name}':
-    get:
-      summary: 'Detail modul by name/alias.'
-      operationId: detailModulByNamealias
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  name: Sales
-                  alias: sales
-                  enabled: true
-                  installed: true
-                  namespace: Modules\Sales
-                  providers: []
-                  aliases: []
-                properties:
-                  name:
-                    type: string
-                    example: Sales
-                  alias:
-                    type: string
-                    example: sales
-                  enabled:
-                    type: boolean
-                    example: true
-                  installed:
-                    type: boolean
-                    example: true
-                  namespace:
-                    type: string
-                    example: Modules\Sales
-                  providers:
-                    type: array
-                    example: []
-                  aliases:
-                    type: array
-                    example: []
-        404:
-          description: not-found
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Module not found'
-                properties:
-                  message:
-                    type: string
-                    example: 'Module not found'
-      tags:
-        - Modules
-    parameters:
-      -
-        in: path
-        name: name
-        description: 'Nama atau alias modul.'
-        example: sales
-        required: true
-        schema:
-          type: string
-  '/api/v1/modules/{name}/status':
-    get:
-      summary: 'Cek status modul (enabled/installed).'
-      operationId: cekStatusModulenabledinstalled
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  name: sales
-                  enabled: true
-                  installed: true
-                properties:
-                  name:
-                    type: string
-                    example: sales
-                  enabled:
-                    type: boolean
-                    example: true
-                  installed:
-                    type: boolean
-                    example: true
-        404:
-          description: not-found
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Module not found'
-                properties:
-                  message:
-                    type: string
-                    example: 'Module not found'
-      tags:
-        - Modules
-    parameters:
-      -
-        in: path
-        name: name
-        description: 'Nama modul.'
-        example: sales
-        required: true
-        schema:
-          type: string
-  '/api/v1/modules/{name}/enable':
-    post:
-      summary: 'Aktifkan modul.'
-      operationId: aktifkanModul
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: "Module 'sales' enabled"
-                  enabled: true
-                properties:
-                  message:
-                    type: string
-                    example: "Module 'sales' enabled"
-                  enabled:
-                    type: boolean
-                    example: true
-        404:
-          description: not-found
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Module not found'
-                properties:
-                  message:
-                    type: string
-                    example: 'Module not found'
-      tags:
-        - Modules
-    parameters:
-      -
-        in: path
-        name: name
-        description: 'Nama modul.'
-        example: sales
-        required: true
-        schema:
-          type: string
-  '/api/v1/modules/{name}/disable':
-    post:
-      summary: 'Nonaktifkan modul.'
-      operationId: nonaktifkanModul
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: "Module 'sales' disabled"
-                  enabled: false
-                properties:
-                  message:
-                    type: string
-                    example: "Module 'sales' disabled"
-                  enabled:
-                    type: boolean
-                    example: false
-        404:
-          description: not-found
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Module not found'
-                properties:
-                  message:
-                    type: string
-                    example: 'Module not found'
-      tags:
-        - Modules
-    parameters:
-      -
-        in: path
-        name: name
-        description: 'Nama modul.'
-        example: sales
-        required: true
-        schema:
-          type: string
-  /api/v1/payment/gateways:
-    get:
-      summary: 'List gateway yang terkonfigurasi.'
-      operationId: listGatewayYangTerkonfigurasi
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    -
-                      name: stripe
-                      configured: true
-                properties:
-                  data:
-                    type: array
-                    example:
-                      -
-                        name: stripe
-                        configured: true
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: stripe
-                        configured:
-                          type: boolean
-                          example: true
-      tags:
-        - Payment
-  /api/v1/payment/intent:
-    post:
-      summary: 'Create payment intent via gateway.'
-      operationId: createPaymentIntentViaGateway
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: true
-                  data:
-                    id: pi_...
-                    client_secret: pi_..._secret_...
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: pi_...
-                      client_secret:
-                        type: string
-                        example: pi_..._secret_...
-      tags:
-        - Payment
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                gateway:
-                  type: string
-                  description: 'Nama gateway.'
-                  example: stripe
-                amount:
-                  type: integer
-                  description: 'Amount dalam satuan terkecil.'
-                  example: 50000
-                currency:
-                  type: string
-                  description: 'Currency code.'
-                  example: IDR
-                metadata:
-                  type: 'array<string,'
-                  description: 'mixed> optional Metadata tambahan.'
-                  example: consequatur
-              required:
-                - gateway
-                - amount
-                - currency
-  /api/v1/pdf/generate:
-    post:
-      summary: 'Generate satu PDF dari Blade view dan simpan ke storage.'
-      operationId: generateSatuPDFDariBladeViewDanSimpanKeStorage
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    path: tenants/1/invoice/10/pdf/INV-0001_20260828_123456.pdf
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      path:
-                        type: string
-                        example: tenants/1/invoice/10/pdf/INV-0001_20260828_123456.pdf
-      tags:
-        - Pdf
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                view:
-                  type: string
-                  description: 'Nama view Blade.'
-                  example: pdf.invoice
-                data:
-                  type: array
-                  description: 'Data yang diteruskan ke view.'
-                  example:
-                    - consequatur
-                  items:
-                    type: string
-                    nullable: true
-                filename:
-                  type: string
-                  description: 'Nama file (tanpa ekstensi).'
-                  example: INV-0001
-                  nullable: true
-                rel_type:
-                  type: string
-                  description: 'Tipe entity (invoice, estimate, contract).'
-                  example: invoice
-                  nullable: true
-                rel_id:
-                  type: integer
-                  description: 'ID entity.'
-                  example: 10
-                  nullable: true
-                tenant_id:
-                  type: integer
-                  description: 'optional ID tenant.'
-                  example: 1
-                  nullable: true
-                paper:
-                  type: string
-                  description: 'Ukuran kertas (a4, letter).'
-                  example: a4
-                  nullable: true
-                orientation:
-                  type: string
-                  description: portrait|landscape.
-                  example: portrait
-                  nullable: true
-              required:
-                - view
-  /api/v1/pdf/from-html:
-    post:
-      summary: 'Render string HTML menjadi PDF (binary, tanpa simpan).'
-      operationId: renderStringHTMLMenjadiPDFbinaryTanpaSimpan
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: 'data: "string" (binary PDF)'
-      tags:
-        - Pdf
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                html:
-                  type: string
-                  description: 'Konten HTML.'
-                  example: consequatur
-                paper:
-                  type: string
-                  description: 'Ukuran kertas.'
-                  example: a4
-                  nullable: true
-                orientation:
-                  type: string
-                  description: portrait|landscape.
-                  example: portrait
-                  nullable: true
-              required:
-                - html
-  /api/v1/pdf/bulk-export:
-    post:
-      summary: 'Bulk export banyak dokumen PDF menjadi satu ZIP (dijalankan via queue).'
-      operationId: bulkExportBanyakDokumenPDFMenjadiSatuZIPdijalankanViaQueue
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    job: App\Jobs\PdfExportJob
-                    queued: true
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      job:
-                        type: string
-                        example: App\Jobs\PdfExportJob
-                      queued:
-                        type: boolean
-                        example: true
-      tags:
-        - Pdf
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                documents:
-                  type: array
-                  description: 'Daftar dokumen.'
-                  example:
-                    - consequatur
-                  items:
-                    type: string
-                prefix:
-                  type: string
-                  description: 'Prefix nama ZIP.'
-                  example: invoices-2026
-                  nullable: true
-              required:
-                - documents
-  /api/v1/qr-code/generate:
-    post:
-      summary: 'Generate QR Code.'
-      operationId: generateQRCode
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    format: base64
-                    base64: ...
-                    size: 300
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      format:
-                        type: string
-                        example: base64
-                      base64:
-                        type: string
-                        example: ...
-                      size:
-                        type: integer
-                        example: 300
-      tags:
-        - QrCode
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                content:
-                  type: string
-                  description: 'Konten/kode yang di-encode.'
-                  example: 'https://wasnaker.lan'
-                size:
-                  type: integer
-                  description: 'Ukuran pixel.'
-                  example: 300
-                  nullable: true
-                margin:
-                  type: integer
-                  description: 'Margin pixel.'
-                  example: 10
-                  nullable: true
-                format:
-                  type: string
-                  description: 'format output: base64 | data_uri | stored.'
-                  example: base64
-                  nullable: true
-                filename:
-                  type: string
-                  description: 'Nama file (jika format=stored).'
-                  example: qr-signature
-                  nullable: true
-              required:
-                - content
-  /api/v1/relations/types:
-    get:
-      summary: 'List tipe relasi yang terdaftar (introspeksi).'
-      operationId: listTipeRelasiYangTerdaftarintrospeksi
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    - user
-                    - customer
-                properties:
-                  data:
-                    type: array
-                    example:
-                      - user
-                      - customer
-                    items:
-                      type: string
-      tags:
-        - Relations
-  '/api/v1/relations/{type}/{id}':
-    get:
-      summary: 'Resolve entity by type + id.'
-      operationId: resolveEntityByType+Id
-      description: "Hanya tipe yang sudah di-register (opt-in) yang bisa di-resolve.\nTipe tidak terdaftar -> 404."
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  id: 1
-                  type: user
-                  name: Admin
-                  email: a@b.c
-                  exists: true
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  type:
-                    type: string
-                    example: user
-                  name:
-                    type: string
-                    example: Admin
-                  email:
-                    type: string
-                    example: a@b.c
-                  exists:
-                    type: boolean
-                    example: true
-        404:
-          description: tipe
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "tidak terdaftar {\n  \"message\": \"Relation type 'ghost' is not registered.\"\n}"
-      tags:
-        - Relations
-    parameters:
-      -
-        in: path
-        name: type
-        description: 'Tipe relasi terdaftar.'
-        example: user
-        required: true
-        schema:
-          type: string
-      -
-        in: path
-        name: id
-        description: 'Entity id.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  '/api/v1/settings/{key}':
-    get:
-      summary: 'Ambil satu setting berdasarkan key.'
-      operationId: ambilSatuSettingBerdasarkanKey
-      description: ''
-      parameters:
-        -
-          in: query
-          name: tenant_id
-          description: 'optional Scope tenant. Null = global.'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'optional Scope tenant. Null = global.'
-            example: 1
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  key: invoice_prefix
-                  value: INV-
-                  tenant_id: null
-                properties:
-                  key:
-                    type: string
-                    example: invoice_prefix
-                  value:
-                    type: string
-                    example: INV-
-                  tenant_id:
-                    type: string
-                    example: null
-                    nullable: true
-        404:
-          description: tidak
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
-      tags:
-        - Settings
-    put:
-      summary: 'Simpan / perbarui setting (upsert by key).'
-      operationId: simpanPerbaruiSettingupsertByKey
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  key: invoice_prefix
-                  value: INV-
-                  tenant_id: null
-                properties:
-                  key:
-                    type: string
-                    example: invoice_prefix
-                  value:
-                    type: string
-                    example: INV-
-                  tenant_id:
-                    type: string
-                    example: null
-                    nullable: true
-      tags:
-        - Settings
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                value:
-                  type: string
-                  description: 'Nilai setting.'
-                  example: INV-
-                tenant_id:
-                  type: integer
-                  description: 'optional Scope tenant. Null = global.'
-                  example: 1
-              required:
-                - value
-    delete:
-      summary: 'Hapus setting berdasarkan key.'
-      operationId: hapusSettingBerdasarkanKey
-      description: ''
-      parameters:
-        -
-          in: query
-          name: tenant_id
-          description: 'optional Scope tenant. Null = global.'
-          example: 1
-          required: false
-          schema:
-            type: integer
-            description: 'optional Scope tenant. Null = global.'
-            example: 1
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Setting deleted'
-                properties:
-                  message:
-                    type: string
-                    example: 'Setting deleted'
-        404:
-          description: tidak
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
-      tags:
-        - Settings
-    parameters:
-      -
-        in: path
-        name: key
-        description: 'Kunci setting.'
-        example: invoice_prefix
-        required: true
-        schema:
-          type: string
-  /api/v1/settings/bulk:
-    post:
-      summary: 'Ambil banyak setting sekaligus.'
-      operationId: ambilBanyakSettingSekaligus
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    invoice_prefix: INV-
-                    tax_rate: '11'
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      invoice_prefix:
-                        type: string
-                        example: INV-
-                      tax_rate:
-                        type: string
-                        example: '11'
-      tags:
-        - Settings
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                keys:
-                  type: array
-                  description: 'Daftar key.'
-                  example:
-                    - invoice_prefix
-                    - tax_rate
-                  items:
-                    type: string
-                tenant_id:
-                  type: integer
-                  description: 'optional Scope tenant. Null = global.'
-                  example: 1
-              required:
-                - keys
-  /api/v1/sms/send:
-    post:
-      summary: 'Kirim SMS.'
-      operationId: kirimSMS
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    success: true
-                    message: 'SMS terkirim'
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      success:
-                        type: boolean
-                        example: true
-                      message:
-                        type: string
-                        example: 'SMS terkirim'
-      tags:
-        - Sms
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                to:
-                  type: string
-                  description: 'Nomor tujuan (format internasional).'
-                  example: '+6281234567890'
-                body:
-                  type: string
-                  description: 'Isi pesan.'
-                  example: 'Kode OTP Anda: 123456'
-                driver:
-                  type: string
-                  description: 'optional Nama driver (twilio, log).'
-                  example: log
-                  nullable: true
-              required:
-                - to
-                - body
-  /api/v1/sms/drivers:
-    get:
-      summary: 'Daftar driver SMS yang terkonfigurasi.'
-      operationId: daftarDriverSMSYangTerkonfigurasi
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    - log
-                properties:
-                  data:
-                    type: array
-                    example:
-                      - log
-                    items:
-                      type: string
-      tags:
-        - Sms
   /api/v1/tags:
     get:
       summary: 'Daftar semua tag.'
@@ -2926,7 +2634,7 @@ paths:
                           type: string
                           example: penting
       tags:
-        - Tags
+        - api/v1
     post:
       summary: 'Buat tag baru.'
       operationId: buatTagBaru
@@ -2954,7 +2662,7 @@ paths:
                         type: string
                         example: prioritas-tinggi
       tags:
-        - Tags
+        - api/v1
       requestBody:
         required: true
         content:
@@ -2993,7 +2701,7 @@ paths:
                     type: string
                     example: 'Tag deleted'
       tags:
-        - Tags
+        - api/v1
     parameters:
       -
         in: path
@@ -3003,31 +2711,225 @@ paths:
         required: true
         schema:
           type: integer
-  /api/v1/number-to-word/convert:
-    post:
-      summary: 'Konversi angka ke terbilang Indonesian (format Rupiah).'
-      operationId: konversiAngkaKeTerbilangIndonesianformatRupiah
-      description: ''
+  /api/v1/broadcast/config:
+    get:
+      summary: 'Konfigurasi koneksi realtime untuk frontend.'
+      operationId: konfigurasiKoneksiRealtimeUntukFrontend
+      description: "Mengembalikan parameter publik (tanpa secret) agar klien bisa\nmenghubungkan laravel-echo ke server Reverb."
       parameters: []
       responses:
         200:
-          description: success
+          description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  number: 1234567
-                  terbilang: 'satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah'
+                  driver: reverb
+                  key: a0adc25fe8777223fb4a
+                  scheme: http
+                  host: wasnaker.lan
+                  port: 8080
                 properties:
-                  number:
-                    type: integer
-                    example: 1234567
-                  terbilang:
+                  driver:
                     type: string
-                    example: 'satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah'
+                    example: reverb
+                  key:
+                    type: string
+                    example: a0adc25fe8777223fb4a
+                  scheme:
+                    type: string
+                    example: http
+                  host:
+                    type: string
+                    example: wasnaker.lan
+                  port:
+                    type: integer
+                    example: 8080
       tags:
-        - Utilities
+        - api/v1
+  /api/v1/broadcast/test:
+    post:
+      summary: 'Kirim notifikasi realtime ke user yang sedang login.'
+      operationId: kirimNotifikasiRealtimeKeUserYangSedangLogin
+      description: "Memicu event `notification.sent` di private channel `user.{id}`.\nFrontend (Next.js) mendengarkan channel tersebut lalu menampilkan\ndesktop notification via browser Notification API."
+      parameters: []
+      responses:
+        200:
+          description: terkirim
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  event: notification.sent
+                  channel: user.1
+                  payload:
+                    title: 'Pesan baru'
+                    message: 'Anda menerima pesan baru'
+                    type: success
+                    data: []
+                    sent_at: '2026-08-29T00:00:00+07:00'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  event:
+                    type: string
+                    example: notification.sent
+                  channel:
+                    type: string
+                    example: user.1
+                  payload:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: 'Pesan baru'
+                      message:
+                        type: string
+                        example: 'Anda menerima pesan baru'
+                      type:
+                        type: string
+                        example: success
+                      data:
+                        type: array
+                        example: []
+                      sent_at:
+                        type: string
+                        example: '2026-08-29T00:00:00+07:00'
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The given data was invalid.'
+                  errors:
+                    type:
+                      - 'The selected type is invalid.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The given data was invalid.'
+                  errors:
+                    type: object
+                    properties:
+                      type:
+                        type: array
+                        example:
+                          - 'The selected type is invalid.'
+                        items:
+                          type: string
+      tags:
+        - api/v1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'optional Judul notifikasi.'
+                  example: 'Pesan baru'
+                message:
+                  type: string
+                  description: 'optional Isi notifikasi.'
+                  example: 'Anda menerima pesan baru'
+                type:
+                  type: string
+                  description: 'optional Tipe notifikasi: info|success|warning|error.'
+                  example: success
+                data:
+                  type: array
+                  description: 'optional Data tambahan bebas (JSON object).'
+                  example:
+                    - consequatur
+                  items:
+                    type: string
+  /api/v1/sales:
+    get:
+      summary: ''
+      operationId: getApiV1Sales
+      description: ''
+      parameters:
+        -
+          in: query
+          name: page
+          description: 'Nomor halaman.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Nomor halaman.'
+            example: 1
+        -
+          in: query
+          name: per_page
+          description: 'Jumlah data per halaman.'
+          example: 15
+          required: false
+          schema:
+            type: integer
+            description: 'Jumlah data per halaman.'
+            example: 15
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: []
+                  meta:
+                    count: 0
+                    per_page: 15
+                    page: 1
+                properties:
+                  data:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 0
+                      per_page:
+                        type: integer
+                        example: 15
+                      page:
+                        type: integer
+                        example: 1
+      tags:
+        - api/v1
+      security: []
+    post:
+      summary: ''
+      operationId: postApiV1Sales
+      description: ''
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: null
+                properties:
+                  data:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - api/v1
       requestBody:
         required: true
         content:
@@ -3035,42 +2937,61 @@ paths:
             schema:
               type: object
               properties:
-                number:
+                amount:
                   type: numeric
-                  description: 'Angka yang dikonversi.'
-                  example: '1234567'
-                currency:
-                  type: string
-                  description: 'optional Suffix mata uang. Default: rupiah.'
-                  example: rupiah
-                  nullable: true
+                  description: 'Jumlah nominal sales.'
+                  example: '150000'
+                due_date:
+                  type: date
+                  description: 'Tenggat waktu.'
+                  example: '2026-09-30'
               required:
-                - number
-  /api/v1/number-to-word/convert-indian:
-    post:
-      summary: 'Konversi angka ke terbilang Indian format (lakh/crore).'
-      operationId: konversiAngkaKeTerbilangIndianFormatlakhcrore
+                - amount
+      security: []
+  '/api/v1/sales/{id}':
+    get:
+      summary: ''
+      operationId: getApiV1SalesId
       description: ''
       parameters: []
       responses:
         200:
-          description: success
+          description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  number: 1234567
-                  terbilang: 'twelve lakh thirty four thousand five hundred sixty seven'
+                  data: null
                 properties:
-                  number:
-                    type: integer
-                    example: 1234567
-                  terbilang:
+                  data:
                     type: string
-                    example: 'twelve lakh thirty four thousand five hundred sixty seven'
+                    example: null
+                    nullable: true
       tags:
-        - Utilities
+        - api/v1
+      security: []
+    put:
+      summary: ''
+      operationId: putApiV1SalesId
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: null
+                properties:
+                  data:
+                    type: string
+                    example: null
+                    nullable: true
+      tags:
+        - api/v1
       requestBody:
         required: true
         content:
@@ -3078,14 +2999,35 @@ paths:
             schema:
               type: object
               properties:
-                number:
+                amount:
                   type: numeric
-                  description: 'Angka yang dikonversi.'
-                  example: '1234567'
-                currency:
-                  type: string
-                  description: 'optional Suffix mata uang. Default: (kosong).'
-                  example: INR
-                  nullable: true
+                  description: 'Jumlah nominal sales.'
+                  example: '175000'
               required:
-                - number
+                - amount
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiV1SalesId
+      description: ''
+      parameters: []
+      responses:
+        204:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ''
+      tags:
+        - api/v1
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'ID sales.'
+        example: 17
+        required: true
+        schema:
+          type: integer
