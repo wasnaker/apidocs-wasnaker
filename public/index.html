@@ -11019,5 +11019,53 @@ You can check the Dev Tools console for debugging information.</code></pre>
                             </div>
             </div>
 </div>
+
+<script id="wasnaker-sidebar-toggle">
+// Klik heading grup (level-1) untuk expand/collapse subheader-nya.
+// Scribe v4 default hanya scrollspy (grup aktif selalu terbuka);
+// MutationObserver menjaga state collapse walau tema menambah .visible lagi.
+(function () {
+  var KEY = 'wasnaker-collapsed-groups';
+  var collapsed = new Set();
+  try { collapsed = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) {}
+
+  function toggle(h, sub, force) {
+    var isVisible = sub.classList.contains('visible');
+    var willCollapse = force !== undefined ? !force : isVisible;
+    sub.classList.toggle('visible', !willCollapse);
+    if (willCollapse) collapsed.add(h.id); else collapsed.delete(h.id);
+    try { localStorage.setItem(KEY, JSON.stringify(Array.from(collapsed))); } catch (e) {}
+  }
+
+  document.querySelectorAll('#toc .tocify-header').forEach(function (h) {
+    var link = h.querySelector(':scope > li > a');
+    var sub = h.querySelector(':scope > .tocify-subheader');
+    if (!link || !sub) return;
+    link.style.cursor = 'pointer';
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      toggle(h, sub);
+    });
+    // terapkan state tersimpan (mis. grup di-collapse sesi lalu)
+    if (collapsed.has(h.id)) { sub.classList.remove('visible'); }
+  });
+
+  // lawan scrollspy: hapus .visible yang ditambahkan tema untuk grup collapsed
+  var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      if (m.type !== 'attributes' || m.attributeName !== 'class') return;
+      var sub = m.target;
+      var header = sub.parentElement;
+      if (header && collapsed.has(header.id) && sub.classList.contains('visible')) {
+        sub.classList.remove('visible');
+      }
+    });
+  });
+  document.querySelectorAll('#toc .tocify-subheader').forEach(function (sub) {
+    observer.observe(sub, { attributes: true, attributeFilter: ['class'] });
+  });
+})();
+</script>
+
 </body>
 </html>
