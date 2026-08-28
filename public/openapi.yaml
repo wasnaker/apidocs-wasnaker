@@ -8,10 +8,10 @@ servers:
     url: 'http://wasnaker.lan'
 tags:
   -
-    name: 'Custom Meta'
+    name: Endpoints
     description: ''
   -
-    name: Endpoints
+    name: Files
     description: ''
   -
     name: Settings
@@ -26,217 +26,6 @@ security:
   -
     default: []
 paths:
-  '/api/meta/{type}/{id}':
-    get:
-      summary: 'Ambil semua meta entity.'
-      operationId: ambilSemuaMetaEntity
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    theme: dark
-                    language: id
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      theme:
-                        type: string
-                        example: dark
-                      language:
-                        type: string
-                        example: id
-      tags:
-        - 'Custom Meta'
-    post:
-      summary: 'Bulk set meta (replace) untuk entity.'
-      operationId: bulkSetMetareplaceUntukEntity
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    theme: dark
-                    language: id
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      theme:
-                        type: string
-                        example: dark
-                      language:
-                        type: string
-                        example: id
-      tags:
-        - 'Custom Meta'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                meta:
-                  type: object
-                  description: 'Map key=>value.'
-                  example:
-                    theme: dark
-                    language: id
-                  properties: {  }
-              required:
-                - meta
-    parameters:
-      -
-        in: path
-        name: type
-        description: 'Short entity type (allowlist).'
-        example: user
-        required: true
-        schema:
-          type: string
-      -
-        in: path
-        name: id
-        description: 'Entity id.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-  '/api/meta/{type}/{id}/{key}':
-    get:
-      summary: 'Ambil satu meta by key.'
-      operationId: ambilSatuMetaByKey
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  key: theme
-                  value: dark
-                properties:
-                  key:
-                    type: string
-                    example: theme
-                  value:
-                    type: string
-                    example: dark
-        404:
-          description: tidak
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Meta not found\"\n}"
-      tags:
-        - 'Custom Meta'
-    put:
-      summary: 'Set/update satu meta by key.'
-      operationId: setupdateSatuMetaByKey
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  key: theme
-                  value: dark
-                properties:
-                  key:
-                    type: string
-                    example: theme
-                  value:
-                    type: string
-                    example: dark
-      tags:
-        - 'Custom Meta'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                value:
-                  type: mixed
-                  description: 'Nilai meta.'
-                  example: dark
-              required:
-                - value
-    delete:
-      summary: 'Hapus satu meta by key.'
-      operationId: hapusSatuMetaByKey
-      description: ''
-      parameters: []
-      responses:
-        200:
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'Meta deleted'
-                properties:
-                  message:
-                    type: string
-                    example: 'Meta deleted'
-        404:
-          description: tidak
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Meta not found\"\n}"
-      tags:
-        - 'Custom Meta'
-    parameters:
-      -
-        in: path
-        name: type
-        description: 'Short entity type.'
-        example: user
-        required: true
-        schema:
-          type: string
-      -
-        in: path
-        name: id
-        description: 'Entity id.'
-        example: 1
-        required: true
-        schema:
-          type: integer
-      -
-        in: path
-        name: key
-        description: 'Meta key.'
-        example: theme
-        required: true
-        schema:
-          type: string
   /api/health:
     get:
       summary: 'Cek kesehatan API.'
@@ -507,6 +296,223 @@ paths:
         name: id
         description: 'ID sales.'
         example: 17
+        required: true
+        schema:
+          type: integer
+  /api/files/limits:
+    get:
+      summary: 'Batas maksimal upload (utility, dari php.ini).'
+      operationId: batasMaksimalUploadutilityDariPhpini
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  max_bytes: 2097152
+                  max_human: '2 MB'
+                  max_post_bytes: 8388608
+                properties:
+                  max_bytes:
+                    type: integer
+                    example: 2097152
+                  max_human:
+                    type: string
+                    example: '2 MB'
+                  max_post_bytes:
+                    type: integer
+                    example: 8388608
+      tags:
+        - Files
+  /api/files:
+    post:
+      summary: 'Upload file baru.'
+      operationId: uploadFileBaru
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  rel_type: invoice
+                  rel_id: 10
+                  original_name: doc.pdf
+                  mime_type: application/pdf
+                  size: 12345
+                  extension: pdf
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  rel_type:
+                    type: string
+                    example: invoice
+                  rel_id:
+                    type: integer
+                    example: 10
+                  original_name:
+                    type: string
+                    example: doc.pdf
+                  mime_type:
+                    type: string
+                    example: application/pdf
+                  size:
+                    type: integer
+                    example: 12345
+                  extension:
+                    type: string
+                    example: pdf
+      tags:
+        - Files
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: 'File yang diupload.'
+                rel_type:
+                  type: string
+                  description: 'Tipe entity (invoice, client, task).'
+                  example: invoice
+                rel_id:
+                  type: integer
+                  description: 'ID entity.'
+                  example: 10
+                tenant_id:
+                  type: integer
+                  description: 'optional ID tenant (multi-tenant).'
+                  example: 1
+                  nullable: true
+                disk:
+                  type: string
+                  description: "optional 'local' (default, private) | 'public'."
+                  example: local
+                  nullable: true
+              required:
+                - file
+                - rel_type
+                - rel_id
+  '/api/files/{id}':
+    get:
+      summary: 'Ambil meta attachment.'
+      operationId: ambilMetaAttachment
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Files
+    delete:
+      summary: 'Hapus attachment (file fisik + meta).'
+      operationId: hapusAttachmentfileFisik+Meta
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Attachment deleted'
+                properties:
+                  message:
+                    type: string
+                    example: 'Attachment deleted'
+      tags:
+        - Files
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/files/{id}/download':
+    get:
+      summary: 'Download file (force attachment).'
+      operationId: downloadFileforceAttachment
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Files
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/files/{id}/preview':
+    get:
+      summary: 'Preview file inline (image/pdf).'
+      operationId: previewFileInlineimagepdf
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Files
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'Attachment id.'
+        example: 1
         required: true
         schema:
           type: integer
