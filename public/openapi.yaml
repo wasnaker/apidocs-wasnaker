@@ -20,6 +20,9 @@ tags:
     name: Files
     description: ''
   -
+    name: Mail
+    description: ''
+  -
     name: Modules
     description: ''
   -
@@ -1080,6 +1083,168 @@ paths:
         required: true
         schema:
           type: integer
+  /api/mail/send:
+    post:
+      summary: 'Kirim email menggunakan Mailable.'
+      operationId: kirimEmailMenggunakanMailable
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Email sent'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'Email sent'
+                  success:
+                    type: boolean
+                    example: true
+      tags:
+        - Mail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  description: 'Alamat email tujuan.'
+                  example: user@example.com
+                subject:
+                  type: string
+                  description: 'Subjek email.'
+                  example: 'Invoice #123'
+                view:
+                  type: string
+                  description: 'Nama view Blade untuk template email.'
+                  example: emails.invoice
+                data:
+                  type: 'array<string,'
+                  description: 'mixed> optional Data untuk template.'
+                  example: '{"invoice_id": 123}'
+              required:
+                - to
+                - subject
+                - view
+  /api/mail/notify:
+    post:
+      summary: 'Kirim notifikasi email ke user.'
+      operationId: kirimNotifikasiEmailKeUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notification sent'
+                  success: true
+                properties:
+                  message:
+                    type: string
+                    example: 'Notification sent'
+                  success:
+                    type: boolean
+                    example: true
+      tags:
+        - Mail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  description: 'ID user penerima.'
+                  example: 1
+                subject:
+                  type: string
+                  description: 'Subjek notifikasi.'
+                  example: 'Task assigned'
+                body:
+                  type: string
+                  description: 'Isi notifikasi.'
+                  example: 'Anda mendapat task baru'
+                action_url:
+                  type: string
+                  description: 'opsional URL aksi.'
+                  example: 'https://app.example.com/tasks/1'
+                  nullable: true
+              required:
+                - user_id
+                - subject
+                - body
+  /api/mail/notify-many:
+    post:
+      summary: 'Kirim notifikasi email ke banyak user.'
+      operationId: kirimNotifikasiEmailKeBanyakUser
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Notification sent'
+                  success: true
+                  recipients: 3
+                properties:
+                  message:
+                    type: string
+                    example: 'Notification sent'
+                  success:
+                    type: boolean
+                    example: true
+                  recipients:
+                    type: integer
+                    example: 3
+      tags:
+        - Mail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_ids:
+                  type: array<int>
+                  description: 'Daftar ID user penerima.'
+                  example: '[1,2,3]'
+                subject:
+                  type: string
+                  description: 'Subjek notifikasi.'
+                  example: 'Pengumuman penting'
+                body:
+                  type: string
+                  description: 'Isi notifikasi.'
+                  example: consequatur
+                action_url:
+                  type: string
+                  description: 'opsional URL aksi.'
+                  example: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
+                  nullable: true
+              required:
+                - user_ids
+                - subject
+                - body
   /api/modules:
     get:
       summary: 'List semua modul dengan status.'

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "55a70dbf-c9ac-4300-9ae7-154358e53e7a",
+        "_postman_id": "b03c7f29-8d7f-4b32-9cf9-9525ee6272c2",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1124,6 +1124,117 @@
                             "header": [],
                             "code": 200,
                             "body": "{\n  \"message\": \"Attachment deleted\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Mail",
+            "description": "",
+            "item": [
+                {
+                    "name": "Kirim email menggunakan Mailable.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mail\/send",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mail\/send"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"Email sent\",\"success\":true}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Kirim notifikasi email ke user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mail\/notify",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mail\/notify"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_id\":1,\"subject\":\"Task assigned\",\"body\":\"Anda mendapat task baru\",\"action_url\":\"https:\\\/\\\/app.example.com\\\/tasks\\\/1\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"Notification sent\",\"success\":true}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Kirim notifikasi email ke banyak user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/mail\/notify-many",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/mail\/notify-many"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_ids\":\"[1,2,3]\",\"subject\":\"Pengumuman penting\",\"body\":\"consequatur\",\"action_url\":\"http:\\\/\\\/kunze.biz\\\/iste-laborum-eius-est-dolor.html\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"Notification sent\",\"success\":true,\"recipients\":3}",
                             "name": "success"
                         }
                     ]
