@@ -72,7 +72,7 @@
                 </li>
                                     <ul id="tocify-subheader-activity-logs" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="activity-logs-GETapi-activity-logs">
-                                <a href="#activity-logs-GETapi-activity-logs">List log aktivitas.</a>
+                                <a href="#activity-logs-GETapi-activity-logs">List log aktivitas (server-side list: paging, sort, filter, search, include).</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="activity-logs-POSTapi-activity-logs">
                                 <a href="#activity-logs-POSTapi-activity-logs">Catat log aktivitas baru.</a>
@@ -406,13 +406,23 @@ You can switch the language used with the tabs at the top right (or from the nav
 
     
 
-                                <h2 id="activity-logs-GETapi-activity-logs">List log aktivitas.</h2>
+                                <h2 id="activity-logs-GETapi-activity-logs">List log aktivitas (server-side list: paging, sort, filter, search, include).</h2>
 
 <p>
 <small class="badge badge-darkred">requires authentication</small>
 </p>
 
-
+<p>Pengganti <code>data_tables_init()</code> Perfex — kontrak DataTables diterjemahkan
+ke query param REST:
+?sort=-created_at,id            (whitelist, prefix - = DESC)
+&amp;filter[tenant_id]=1            (exact)
+&amp;filter[causer_id]=1            (exact)
+&amp;filter[subject_type]=...       (exact)
+&amp;filter[subject_id]=5           (exact)
+&amp;filter[description]=cari       (partial / LIKE)
+&amp;search=...                     (global search: description + subject_type)
+&amp;include=causer,tenant          (eager load relasi)
+&amp;per_page=25&amp;page=2             (pagination)</p>
 
 <span id="example-requests-GETapi-activity-logs">
 <blockquote>Example request:</blockquote>
@@ -420,7 +430,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://wasnaker.lan/api/activity-logs?tenant_id=1&amp;causer_id=1&amp;subject_type=App%5CModels%5CInvoice&amp;subject_id=5&amp;per_page=15" \
+    --get "http://wasnaker.lan/api/activity-logs?sort=-created_at&amp;filter%5Btenant_id%5D=1&amp;filter%5Bcauser_id%5D=1&amp;filter%5Bsubject_type%5D=App%5CModels%5CInvoice&amp;filter%5Bsubject_id%5D=5&amp;filter%5Bdescription%5D=invoice&amp;search=invoice&amp;include=causer%2Ctenant&amp;per_page=25&amp;page=2" \
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -432,11 +442,16 @@ You can switch the language used with the tabs at the top right (or from the nav
 );
 
 const params = {
-    "tenant_id": "1",
-    "causer_id": "1",
-    "subject_type": "App\Models\Invoice",
-    "subject_id": "5",
-    "per_page": "15",
+    "sort": "-created_at",
+    "filter[tenant_id]": "1",
+    "filter[causer_id]": "1",
+    "filter[subject_type]": "App\Models\Invoice",
+    "filter[subject_id]": "5",
+    "filter[description]": "invoice",
+    "search": "invoice",
+    "include": "causer,tenant",
+    "per_page": "25",
+    "page": "2",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -477,10 +492,20 @@ fetch(url, {
             &quot;created_at&quot;: &quot;2026-08-28T00:00:00+00:00&quot;
         }
     ],
+    &quot;links&quot;: {
+        &quot;first&quot;: &quot;...?page=1&quot;,
+        &quot;last&quot;: &quot;...?page=3&quot;,
+        &quot;next&quot;: &quot;...?page=2&quot;,
+        &quot;prev&quot;: null
+    },
     &quot;meta&quot;: {
-        &quot;current_page&quot;: 1,
-        &quot;per_page&quot;: 15,
-        &quot;total&quot;: 1
+        &quot;current_page&quot;: 2,
+        &quot;from&quot;: 26,
+        &quot;last_page&quot;: 3,
+        &quot;per_page&quot;: 25,
+        &quot;to&quot;: 50,
+        &quot;total&quot;: 80,
+        &quot;total_filtered&quot;: 50
     }
 }</code>
  </pre>
@@ -570,52 +595,100 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                             <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>tenant_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="tenant_id"                data-endpoint="GETapi-activity-logs"
-               value="1"
-               data-component="query">
-    <br>
-<p>optional Filter scope tenant. Example: <code>1</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>causer_id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               step="any"               name="causer_id"                data-endpoint="GETapi-activity-logs"
-               value="1"
-               data-component="query">
-    <br>
-<p>optional Filter berdasar user id (causer). Example: <code>1</code></p>
-            </div>
-                                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>subject_type</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>sort</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="subject_type"                data-endpoint="GETapi-activity-logs"
-               value="App\Models\Invoice"
+                              name="sort"                data-endpoint="GETapi-activity-logs"
+               value="-created_at"
                data-component="query">
     <br>
-<p>optional Filter tipe subjek. Example: <code>App\Models\Invoice</code></p>
+<p>optional Kolom urut (whitelist): id, description, subject_type, subject_id, causer_id, tenant_id, created_at; prefix - untuk DESC. Example: <code>-created_at</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>subject_id</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>filter[tenant_id]</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
 <i>optional</i> &nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="subject_id"                data-endpoint="GETapi-activity-logs"
+               step="any"               name="filter[tenant_id]"                data-endpoint="GETapi-activity-logs"
+               value="1"
+               data-component="query">
+    <br>
+<p>optional Filter exact tenant. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>filter[causer_id]</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="filter[causer_id]"                data-endpoint="GETapi-activity-logs"
+               value="1"
+               data-component="query">
+    <br>
+<p>optional Filter exact user penyebab. Example: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>filter[subject_type]</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="filter[subject_type]"                data-endpoint="GETapi-activity-logs"
+               value="App\Models\Invoice"
+               data-component="query">
+    <br>
+<p>optional Filter exact tipe subjek. Example: <code>App\Models\Invoice</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>filter[subject_id]</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="filter[subject_id]"                data-endpoint="GETapi-activity-logs"
                value="5"
                data-component="query">
     <br>
-<p>optional Filter id subjek. Example: <code>5</code></p>
+<p>optional Filter exact id subjek. Example: <code>5</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>filter[description]</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="filter[description]"                data-endpoint="GETapi-activity-logs"
+               value="invoice"
+               data-component="query">
+    <br>
+<p>optional Filter partial (LIKE) deskripsi. Example: <code>invoice</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-activity-logs"
+               value="invoice"
+               data-component="query">
+    <br>
+<p>optional Pencarian global (description + subject_type). Example: <code>invoice</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>include</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="include"                data-endpoint="GETapi-activity-logs"
+               value="causer,tenant"
+               data-component="query">
+    <br>
+<p>optional Relasi yang di-eager-load: causer,subject,tenant (pisahkan koma). Example: <code>causer,tenant</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>per_page</code></b>&nbsp;&nbsp;
@@ -624,10 +697,22 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="per_page"                data-endpoint="GETapi-activity-logs"
-               value="15"
+               value="25"
                data-component="query">
     <br>
-<p>optional Jumlah per halaman. Example: <code>15</code></p>
+<p>optional Jumlah per halaman (max 100). Example: <code>25</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-activity-logs"
+               value="2"
+               data-component="query">
+    <br>
+<p>optional Halaman. Example: <code>2</code></p>
             </div>
                 </form>
 
@@ -3982,7 +4067,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@/tmp/phpKJXlCq" </code></pre></div>
+    --form "file=@/tmp/phpPVaE4X" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -4120,7 +4205,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>File Excel/CSV (baris pertama = heading). Example: <code>/tmp/phpKJXlCq</code></p>
+<p>File Excel/CSV (baris pertama = heading). Example: <code>/tmp/phpPVaE4X</code></p>
         </div>
         </form>
 
@@ -4287,7 +4372,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rel_id=10"\
     --form "tenant_id=1"\
     --form "disk=local"\
-    --form "file=@/tmp/php7F9JNm" </code></pre></div>
+    --form "file=@/tmp/php51MCNC" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -4427,7 +4512,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>File yang diupload. Example: <code>/tmp/php7F9JNm</code></p>
+<p>File yang diupload. Example: <code>/tmp/php51MCNC</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>rel_type</code></b>&nbsp;&nbsp;
@@ -5596,7 +5681,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"subject\": \"Invoice #123\",
     \"view\": \"emails.invoice\",
     \"data\": \"{\\\"invoice_id\\\": 123}\",
-    \"queue\": true,
+    \"queue\": false,
     \"queue_name\": \"mqeopfuudtdsufvyvddqa\"
 }"
 </code></pre></div>
@@ -5618,7 +5703,7 @@ let body = {
     "subject": "Invoice #123",
     "view": "emails.invoice",
     "data": "{\"invoice_id\": 123}",
-    "queue": true,
+    "queue": false,
     "queue_name": "mqeopfuudtdsufvyvddqa"
 };
 
@@ -5794,7 +5879,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>queue_name</code></b>&nbsp;&nbsp;
