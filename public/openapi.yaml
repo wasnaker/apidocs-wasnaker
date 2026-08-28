@@ -164,12 +164,17 @@ paths:
                     example: null
                     nullable: true
         404:
-          description: tidak
+          description: 'tidak ditemukan'
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
+                type: object
+                example:
+                  message: 'Setting not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Setting not found'
       tags:
         - api/v1
     put:
@@ -247,12 +252,17 @@ paths:
                     type: string
                     example: 'Setting deleted'
         404:
-          description: tidak
+          description: 'tidak ditemukan'
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Setting not found\"\n}"
+                type: object
+                example:
+                  message: 'Setting not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Setting not found'
       tags:
         - api/v1
     parameters:
@@ -695,12 +705,17 @@ paths:
                     type: string
                     example: '2026-08-28T00:00:00+00:00'
         404:
-          description: tidak
+          description: 'tidak ditemukan'
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Activity log not found\"\n}"
+                type: object
+                example:
+                  message: 'Activity log not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Activity log not found'
       tags:
         - api/v1
     delete:
@@ -722,12 +737,17 @@ paths:
                     type: string
                     example: 'Activity log deleted'
         404:
-          description: tidak
+          description: 'tidak ditemukan'
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Activity log not found\"\n}"
+                type: object
+                example:
+                  message: 'Activity log not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Activity log not found'
       tags:
         - api/v1
     parameters:
@@ -853,12 +873,17 @@ paths:
                     type: string
                     example: dark
         404:
-          description: tidak
+          description: 'tidak ditemukan'
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Meta not found\"\n}"
+                type: object
+                example:
+                  message: 'Meta not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Meta not found'
       tags:
         - api/v1
     put:
@@ -917,12 +942,17 @@ paths:
                     type: string
                     example: 'Meta deleted'
         404:
-          description: tidak
+          description: 'tidak ditemukan'
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: "ditemukan {\n  \"message\": \"Meta not found\"\n}"
+                type: object
+                example:
+                  message: 'Meta not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Meta not found'
       tags:
         - api/v1
     parameters:

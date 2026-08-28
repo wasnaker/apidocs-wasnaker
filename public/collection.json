@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "a5039dbc-ed64-432b-9ac3-5733370eb949",
+        "_postman_id": "f6eba705-f1d5-4f71-9f25-0623aeaadaaa",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -216,8 +216,8 @@
                                 {
                                     "header": [],
                                     "code": 404,
-                                    "body": "ditemukan {\n  \"message\": \"Setting not found\"\n}",
-                                    "name": "tidak"
+                                    "body": "{\n  \"message\": \"Setting not found\"\n}",
+                                    "name": "tidak ditemukan"
                                 }
                             ]
                         },
@@ -312,8 +312,8 @@
                                 {
                                     "header": [],
                                     "code": 404,
-                                    "body": "ditemukan {\n  \"message\": \"Setting not found\"\n}",
-                                    "name": "tidak"
+                                    "body": "{\n  \"message\": \"Setting not found\"\n}",
+                                    "name": "tidak ditemukan"
                                 }
                             ]
                         },
@@ -527,8 +527,8 @@
                                 {
                                     "header": [],
                                     "code": 404,
-                                    "body": "ditemukan {\n  \"message\": \"Activity log not found\"\n}",
-                                    "name": "tidak"
+                                    "body": "{\n  \"message\": \"Activity log not found\"\n}",
+                                    "name": "tidak ditemukan"
                                 }
                             ]
                         },
@@ -573,8 +573,8 @@
                                 {
                                     "header": [],
                                     "code": 404,
-                                    "body": "ditemukan {\n  \"message\": \"Activity log not found\"\n}",
-                                    "name": "tidak"
+                                    "body": "{\n  \"message\": \"Activity log not found\"\n}",
+                                    "name": "tidak ditemukan"
                                 }
                             ]
                         }
@@ -732,8 +732,8 @@
                                 {
                                     "header": [],
                                     "code": 404,
-                                    "body": "ditemukan {\n  \"message\": \"Meta not found\"\n}",
-                                    "name": "tidak"
+                                    "body": "{\n  \"message\": \"Meta not found\"\n}",
+                                    "name": "tidak ditemukan"
                                 }
                             ]
                         },
@@ -845,8 +845,8 @@
                                 {
                                     "header": [],
                                     "code": 404,
-                                    "body": "ditemukan {\n  \"message\": \"Meta not found\"\n}",
-                                    "name": "tidak"
+                                    "body": "{\n  \"message\": \"Meta not found\"\n}",
+                                    "name": "tidak ditemukan"
                                 }
                             ]
                         }
