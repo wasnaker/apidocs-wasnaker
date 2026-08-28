@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "f2db1cc2-d9f7-4774-9fdd-ffcbed80a875",
+        "_postman_id": "2632480d-507d-46bc-98bb-b504e0c6b7c4",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1125,6 +1125,96 @@
                             "code": 200,
                             "body": "{\n  \"message\": \"Attachment deleted\"\n}",
                             "name": "success"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Relations",
+            "description": "",
+            "item": [
+                {
+                    "name": "List tipe relasi yang terdaftar (introspeksi).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/relations\/types",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/relations\/types"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [\"user\", \"customer\"]\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Resolve entity by type + id.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/relations\/:type\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/relations\/:type\/:id",
+                            "variable": [
+                                {
+                                    "id": "type",
+                                    "key": "type",
+                                    "value": "user",
+                                    "description": "Tipe relasi terdaftar."
+                                },
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": 1,
+                                    "description": "Entity id."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Hanya tipe yang sudah di-register (opt-in) yang bisa di-resolve.\nTipe tidak terdaftar -> 404."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"id\": 1, \"type\": \"user\", \"name\": \"Admin\", \"email\": \"a@b.c\", \"exists\": true\n}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "tidak terdaftar {\n  \"message\": \"Relation type 'ghost' is not registered.\"\n}",
+                            "name": "tipe"
                         }
                     ]
                 }

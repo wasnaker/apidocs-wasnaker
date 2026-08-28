@@ -20,6 +20,9 @@ tags:
     name: Files
     description: ''
   -
+    name: Relations
+    description: ''
+  -
     name: Settings
     description: ''
 components:
@@ -1067,6 +1070,94 @@ paths:
         in: path
         name: id
         description: 'Attachment id.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/relations/types:
+    get:
+      summary: 'List tipe relasi yang terdaftar (introspeksi).'
+      operationId: listTipeRelasiYangTerdaftarintrospeksi
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    - user
+                    - customer
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - user
+                      - customer
+                    items:
+                      type: string
+      tags:
+        - Relations
+  '/api/relations/{type}/{id}':
+    get:
+      summary: 'Resolve entity by type + id.'
+      operationId: resolveEntityByType+Id
+      description: "Hanya tipe yang sudah di-register (opt-in) yang bisa di-resolve.\nTipe tidak terdaftar -> 404."
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  type: user
+                  name: Admin
+                  email: a@b.c
+                  exists: true
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  type:
+                    type: string
+                    example: user
+                  name:
+                    type: string
+                    example: Admin
+                  email:
+                    type: string
+                    example: a@b.c
+                  exists:
+                    type: boolean
+                    example: true
+        404:
+          description: tipe
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "tidak terdaftar {\n  \"message\": \"Relation type 'ghost' is not registered.\"\n}"
+      tags:
+        - Relations
+    parameters:
+      -
+        in: path
+        name: type
+        description: 'Tipe relasi terdaftar.'
+        example: user
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: id
+        description: 'Entity id.'
         example: 1
         required: true
         schema:
