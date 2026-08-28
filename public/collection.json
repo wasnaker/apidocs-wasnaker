@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "2632480d-507d-46bc-98bb-b504e0c6b7c4",
+        "_postman_id": "89089d1d-17b8-431a-9a40-bdb30ab0a70f",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -1404,6 +1404,82 @@
                             "header": [],
                             "code": 200,
                             "body": "{\n  \"data\": {\n    \"invoice_prefix\": \"INV-\",\n    \"tax_rate\": \"11\"\n  }\n}",
+                            "name": "success"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Utilities",
+            "description": "",
+            "item": [
+                {
+                    "name": "Konversi angka ke terbilang Indonesian (format Rupiah).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/number-to-word\/convert",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/number-to-word\/convert"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"number\":\"1234567\",\"currency\":\"rupiah\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"number\": 1234567,\n  \"terbilang\": \"satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Konversi angka ke terbilang Indian format (lakh\/crore).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/number-to-word\/convert-indian",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/number-to-word\/convert-indian"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"number\":\"1234567\",\"currency\":\"INR\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"number\": 1234567,\n  \"terbilang\": \"twelve lakh thirty four thousand five hundred sixty seven\"\n}",
                             "name": "success"
                         }
                     ]

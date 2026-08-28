@@ -25,6 +25,9 @@ tags:
   -
     name: Settings
     description: ''
+  -
+    name: Utilities
+    description: ''
 components:
   securitySchemes:
     default:
@@ -1351,3 +1354,89 @@ paths:
                   example: 1
               required:
                 - keys
+  /api/number-to-word/convert:
+    post:
+      summary: 'Konversi angka ke terbilang Indonesian (format Rupiah).'
+      operationId: konversiAngkaKeTerbilangIndonesianformatRupiah
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  number: 1234567
+                  terbilang: 'satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah'
+                properties:
+                  number:
+                    type: integer
+                    example: 1234567
+                  terbilang:
+                    type: string
+                    example: 'satu juta dua ratus tiga puluh empat ribu lima ratus enam puluh tujuh rupiah'
+      tags:
+        - Utilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: numeric
+                  description: 'Angka yang dikonversi.'
+                  example: '1234567'
+                currency:
+                  type: string
+                  description: 'optional Suffix mata uang. Default: rupiah.'
+                  example: rupiah
+                  nullable: true
+              required:
+                - number
+  /api/number-to-word/convert-indian:
+    post:
+      summary: 'Konversi angka ke terbilang Indian format (lakh/crore).'
+      operationId: konversiAngkaKeTerbilangIndianFormatlakhcrore
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  number: 1234567
+                  terbilang: 'twelve lakh thirty four thousand five hundred sixty seven'
+                properties:
+                  number:
+                    type: integer
+                    example: 1234567
+                  terbilang:
+                    type: string
+                    example: 'twelve lakh thirty four thousand five hundred sixty seven'
+      tags:
+        - Utilities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: numeric
+                  description: 'Angka yang dikonversi.'
+                  example: '1234567'
+                currency:
+                  type: string
+                  description: 'optional Suffix mata uang. Default: (kosong).'
+                  example: INR
+                  nullable: true
+              required:
+                - number
