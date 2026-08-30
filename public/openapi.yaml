@@ -9,7 +9,7 @@ servers:
 tags:
   -
     name: api/v1
-    description: ''
+    description: '    * @subgroup System'
 components:
   securitySchemes:
     default:
@@ -1226,6 +1226,64 @@ paths:
                     example: Unauthenticated.
       tags:
         - api/v1
+  /api/v1/modules/install:
+    post:
+      summary: 'Install modul baru dari upload zip.'
+      operationId: installModulBaruDariUploadZip
+      description: "Zip wajib berisi `module.json` (di root atau dalam satu folder\ntop-level). Modul langsung di-enable dan migrasinya dijalankan.\nDiadopsi dari `App_module_installer.php` PerfexCRM."
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Module 'Demo' installed"
+                  data:
+                    name: Demo
+                    enabled: true
+                properties:
+                  message:
+                    type: string
+                    example: "Module 'Demo' installed"
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Demo
+                      enabled:
+                        type: boolean
+                        example: true
+        422:
+          description: invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'File zip modul tidak valid atau modul sudah terinstall'
+                properties:
+                  message:
+                    type: string
+                    example: 'File zip modul tidak valid atau modul sudah terinstall'
+      tags:
+        - api/v1
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: 'File zip modul (maks 20MB).'
+              required:
+                - file
   '/api/v1/modules/{name}':
     get:
       summary: 'Detail modul by name/alias.'
@@ -1434,6 +1492,89 @@ paths:
         required: true
         schema:
           type: string
+  '/api/v1/modules/{name}/uninstall':
+    post:
+      summary: 'Uninstall modul: nonaktifkan; hapus file hanya dengan ?purge=1.'
+      operationId: uninstallModulNonaktifkanHapusFileHanyaDenganpurge1
+      description: ''
+      parameters:
+        -
+          in: query
+          name: purge
+          description: 'Hapus direktori modul dari disk.'
+          example: false
+          required: false
+          schema:
+            type: boolean
+            description: 'Hapus direktori modul dari disk.'
+            example: false
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Module 'demo' uninstalled"
+                  purge: false
+                properties:
+                  message:
+                    type: string
+                    example: "Module 'demo' uninstalled"
+                  purge:
+                    type: boolean
+                    example: false
+        404:
+          description: not-found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Module not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'Module not found'
+      tags:
+        - api/v1
+    parameters:
+      -
+        in: path
+        name: name
+        description: 'Nama modul.'
+        example: demo
+        required: true
+        schema:
+          type: string
+  /api/v1/system/languages:
+    get:
+      summary: 'Daftar bahasa (locale) yang tersedia di aplikasi.'
+      operationId: daftarBahasalocaleYangTersediaDiAplikasi
+      description: "Memindai direktori `lang/` (konvensi Laravel 12) + selalu menyertakan\n`app.locale` default. Belum ada folder lang → hanya locale default."
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    - id
+                    - en
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - id
+                      - en
+                    items:
+                      type: string
+      tags:
+        - api/v1
   /api/v1/files/limits:
     get:
       summary: 'Batas maksimal upload (utility, dari php.ini).'
@@ -1702,7 +1843,7 @@ paths:
                 queue:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                 queue_name:
                   type: string
                   description: 'Must not be greater than 120 characters.'

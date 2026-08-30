@@ -171,6 +171,9 @@
                                                                             <li class="tocify-item level-3" data-unique="apiv1-GETapi-v1-modules-enabled">
                                             <a href="#apiv1-GETapi-v1-modules-enabled">List hanya modul yang aktif (enabled).</a>
                                         </li>
+                                                                            <li class="tocify-item level-3" data-unique="apiv1-POSTapi-v1-modules-install">
+                                            <a href="#apiv1-POSTapi-v1-modules-install">Install modul baru dari upload zip.</a>
+                                        </li>
                                                                             <li class="tocify-item level-3" data-unique="apiv1-GETapi-v1-modules--name-">
                                             <a href="#apiv1-GETapi-v1-modules--name-">Detail modul by name/alias.</a>
                                         </li>
@@ -183,7 +186,13 @@
                                                                             <li class="tocify-item level-3" data-unique="apiv1-POSTapi-v1-modules--name--disable">
                                             <a href="#apiv1-POSTapi-v1-modules--name--disable">Nonaktifkan modul.</a>
                                         </li>
+                                                                            <li class="tocify-item level-3" data-unique="apiv1-POSTapi-v1-modules--name--uninstall">
+                                            <a href="#apiv1-POSTapi-v1-modules--name--uninstall">Uninstall modul: nonaktifkan; hapus file hanya dengan ?purge=1.</a>
+                                        </li>
                                                                     </ul>
+                                                                                <li class="tocify-item level-2" data-unique="apiv1-GETapi-v1-system-languages">
+                                <a href="#apiv1-GETapi-v1-system-languages">Daftar bahasa (locale) yang tersedia di aplikasi.</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="apiv1-files">
                                 <a href="#apiv1-files">Files</a>
                             </li>
@@ -355,7 +364,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: August 28, 2026</li>
+        <li>Last updated: August 30, 2026</li>
     </ul>
 </div>
 
@@ -379,7 +388,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
         <h1 id="apiv1">api/v1</h1>
 
-    
+    <pre><code>* @subgroup System</code></pre>
 
                         <h2 id="apiv1-system">System</h2>
                                                     <h2 id="apiv1-GETapi-v1-health">Cek kesehatan API.</h2>
@@ -4235,6 +4244,173 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
+                    <h2 id="apiv1-POSTapi-v1-modules-install">Install modul baru dari upload zip.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Zip wajib berisi <code>module.json</code> (di root atau dalam satu folder
+top-level). Modul langsung di-enable dan migrasinya dijalankan.
+Diadopsi dari <code>App_module_installer.php</code> PerfexCRM.</p>
+
+<span id="example-requests-POSTapi-v1-modules-install">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://wasnaker.lan/api/v1/modules/install" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: multipart/form-data" \
+    --header "Accept: application/json" \
+    --form "file=@/tmp/php4z5NAF" </code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/v1/modules/install"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "multipart/form-data",
+    "Accept": "application/json",
+};
+
+const body = new FormData();
+body.append('file', document.querySelector('input[name="file"]').files[0]);
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-modules-install">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Module &#039;Demo&#039; installed&quot;,
+    &quot;data&quot;: {
+        &quot;name&quot;: &quot;Demo&quot;,
+        &quot;enabled&quot;: true
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422, invalid):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;File zip modul tidak valid atau modul sudah terinstall&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-modules-install" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-modules-install"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-modules-install"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-modules-install" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-modules-install">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-modules-install" data-method="POST"
+      data-path="api/v1/modules/install"
+      data-authed="1"
+      data-hasfiles="1"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-modules-install', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-modules-install"
+                    onclick="tryItOut('POSTapi-v1-modules-install');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-modules-install"
+                    onclick="cancelTryOut('POSTapi-v1-modules-install');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-modules-install"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/modules/install</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-modules-install"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-modules-install"
+               value="multipart/form-data"
+               data-component="header">
+    <br>
+<p>Example: <code>multipart/form-data</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-modules-install"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>file</code></b>&nbsp;&nbsp;
+<small>file</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="file" style="display: none"
+                              name="file"                data-endpoint="POSTapi-v1-modules-install"
+               value=""
+               data-component="body">
+    <br>
+<p>File zip modul (maks 20MB). Example: <code>/tmp/php4z5NAF</code></p>
+        </div>
+        </form>
+
                     <h2 id="apiv1-GETapi-v1-modules--name-">Detail modul by name/alias.</h2>
 
 <p>
@@ -4873,6 +5049,332 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                     </form>
 
+                    <h2 id="apiv1-POSTapi-v1-modules--name--uninstall">Uninstall modul: nonaktifkan; hapus file hanya dengan ?purge=1.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTapi-v1-modules--name--uninstall">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://wasnaker.lan/api/v1/modules/demo/uninstall?purge=" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/v1/modules/demo/uninstall"
+);
+
+const params = {
+    "purge": "0",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "POST",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-v1-modules--name--uninstall">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Module &#039;demo&#039; uninstalled&quot;,
+    &quot;purge&quot;: false
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404, not-found):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;message&quot;: &quot;Module not found&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-v1-modules--name--uninstall" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-v1-modules--name--uninstall"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-v1-modules--name--uninstall"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-v1-modules--name--uninstall" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-v1-modules--name--uninstall">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-v1-modules--name--uninstall" data-method="POST"
+      data-path="api/v1/modules/{name}/uninstall"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-v1-modules--name--uninstall', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-v1-modules--name--uninstall"
+                    onclick="tryItOut('POSTapi-v1-modules--name--uninstall');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-v1-modules--name--uninstall"
+                    onclick="cancelTryOut('POSTapi-v1-modules--name--uninstall');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-v1-modules--name--uninstall"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/v1/modules/{name}/uninstall</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="POSTapi-v1-modules--name--uninstall"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-v1-modules--name--uninstall"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-v1-modules--name--uninstall"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="name"                data-endpoint="POSTapi-v1-modules--name--uninstall"
+               value="demo"
+               data-component="url">
+    <br>
+<p>Nama modul. Example: <code>demo</code></p>
+            </div>
+                        <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>purge</code></b>&nbsp;&nbsp;
+<small>boolean</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <label data-endpoint="POSTapi-v1-modules--name--uninstall" style="display: none">
+            <input type="radio" name="purge"
+                   value="1"
+                   data-endpoint="POSTapi-v1-modules--name--uninstall"
+                   data-component="query"             >
+            <code>true</code>
+        </label>
+        <label data-endpoint="POSTapi-v1-modules--name--uninstall" style="display: none">
+            <input type="radio" name="purge"
+                   value="0"
+                   data-endpoint="POSTapi-v1-modules--name--uninstall"
+                   data-component="query"             >
+            <code>false</code>
+        </label>
+    <br>
+<p>Hapus direktori modul dari disk. Example: <code>false</code></p>
+            </div>
+                </form>
+
+                                        <h2 id="apiv1-GETapi-v1-system-languages">Daftar bahasa (locale) yang tersedia di aplikasi.</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Memindai direktori <code>lang/</code> (konvensi Laravel 12) + selalu menyertakan
+<code>app.locale</code> default. Belum ada folder lang → hanya locale default.</p>
+
+<span id="example-requests-GETapi-v1-system-languages">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://wasnaker.lan/api/v1/system/languages" \
+    --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://wasnaker.lan/api/v1/system/languages"
+);
+
+const headers = {
+    "Authorization": "Bearer {YOUR_AUTH_KEY}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-system-languages">
+            <blockquote>
+            <p>Example response (200, success):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;data&quot;: [
+        &quot;id&quot;,
+        &quot;en&quot;
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-system-languages" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-v1-system-languages"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-system-languages"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-system-languages" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-system-languages">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-v1-system-languages" data-method="GET"
+      data-path="api/v1/system/languages"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-system-languages', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-system-languages"
+                    onclick="tryItOut('GETapi-v1-system-languages');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-system-languages"
+                    onclick="cancelTryOut('GETapi-v1-system-languages');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-system-languages"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/system/languages</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-system-languages"
+               value="Bearer {YOUR_AUTH_KEY}"
+               data-component="header">
+    <br>
+<p>Example: <code>Bearer {YOUR_AUTH_KEY}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-system-languages"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-system-languages"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
                                 <h2 id="apiv1-files">Files</h2>
                                                     <h2 id="apiv1-GETapi-v1-files-limits">Batas maksimal upload (utility, dari php.ini).</h2>
 
@@ -5033,7 +5535,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "rel_id=10"\
     --form "tenant_id=1"\
     --form "disk=local"\
-    --form "file=@/tmp/php6Ub5nn" </code></pre></div>
+    --form "file=@/tmp/phpyZwNx5" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -5173,7 +5675,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>File yang diupload. Example: <code>/tmp/php6Ub5nn</code></p>
+<p>File yang diupload. Example: <code>/tmp/phpyZwNx5</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>rel_type</code></b>&nbsp;&nbsp;
@@ -5862,7 +6364,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"subject\": \"Invoice #123\",
     \"view\": \"emails.invoice\",
     \"data\": \"{\\\"invoice_id\\\": 123}\",
-    \"queue\": false,
+    \"queue\": true,
     \"queue_name\": \"mqeopfuudtdsufvyvddqa\"
 }"
 </code></pre></div>
@@ -5884,7 +6386,7 @@ let body = {
     "subject": "Invoice #123",
     "view": "emails.invoice",
     "data": "{\"invoice_id\": 123}",
-    "queue": false,
+    "queue": true,
     "queue_name": "mqeopfuudtdsufvyvddqa"
 };
 
@@ -6060,7 +6562,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>queue_name</code></b>&nbsp;&nbsp;
@@ -9193,7 +9695,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Authorization: Bearer {YOUR_AUTH_KEY}" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
-    --form "file=@/tmp/phptqC4d0" </code></pre></div>
+    --form "file=@/tmp/php5OGINZ" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -9331,7 +9833,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>File Excel/CSV (baris pertama = heading). Example: <code>/tmp/phptqC4d0</code></p>
+<p>File Excel/CSV (baris pertama = heading). Example: <code>/tmp/php5OGINZ</code></p>
         </div>
         </form>
 
@@ -10933,20 +11435,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </div>
 
 <script id="wasnaker-hljs-http" src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/languages/http.min.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <style id="wasnaker-sidebar-toggle-css">
 #toc a.wasnaker-caret::before { content: '\25B8  '; font-size: .8em; }

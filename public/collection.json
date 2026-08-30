@@ -10,14 +10,14 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "3e893eaa-49c7-4368-9b40-09fb691fd76c",
+        "_postman_id": "036a93aa-ae38-40c8-8d63-f02123eb8f28",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
     "item": [
         {
             "name": "api\/v1",
-            "description": "",
+            "description": "    * @subgroup System",
             "item": [
                 {
                     "name": "System",
@@ -1088,6 +1088,53 @@
                             ]
                         },
                         {
+                            "name": "Install modul baru dari upload zip.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/modules\/install",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/modules\/install"
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "multipart\/form-data"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "file",
+                                            "src": [],
+                                            "type": "file"
+                                        }
+                                    ]
+                                },
+                                "description": "Zip wajib berisi `module.json` (di root atau dalam satu folder\ntop-level). Modul langsung di-enable dan migrasinya dijalankan.\nDiadopsi dari `App_module_installer.php` PerfexCRM."
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\n  \"message\": \"Module 'Demo' installed\",\n  \"data\": {\"name\":\"Demo\",\"enabled\":true}\n}",
+                                    "name": "success"
+                                },
+                                {
+                                    "header": [],
+                                    "code": 422,
+                                    "body": "{\n  \"message\": \"File zip modul tidak valid atau modul sudah terinstall\"\n}",
+                                    "name": "invalid"
+                                }
+                            ]
+                        },
+                        {
                             "name": "Detail modul by name\/alias.",
                             "request": {
                                 "url": {
@@ -1270,6 +1317,91 @@
                                     "name": "not-found"
                                 }
                             ]
+                        },
+                        {
+                            "name": "Uninstall modul: nonaktifkan; hapus file hanya dengan ?purge=1.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/modules\/:name\/uninstall",
+                                    "query": [
+                                        {
+                                            "key": "purge",
+                                            "value": "",
+                                            "description": "Hapus direktori modul dari disk.",
+                                            "disabled": true
+                                        }
+                                    ],
+                                    "raw": "{{baseUrl}}\/api\/v1\/modules\/:name\/uninstall?purge=",
+                                    "variable": [
+                                        {
+                                            "id": "name",
+                                            "key": "name",
+                                            "value": "demo",
+                                            "description": "Nama modul."
+                                        }
+                                    ]
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": ""
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\"message\":\"Module 'demo' uninstalled\",\"purge\":false}",
+                                    "name": "success"
+                                },
+                                {
+                                    "header": [],
+                                    "code": 404,
+                                    "body": "{\"message\":\"Module not found\"}",
+                                    "name": "not-found"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Daftar bahasa (locale) yang tersedia di aplikasi.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/system\/languages",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/system\/languages"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Memindai direktori `lang\/` (konvensi Laravel 12) + selalu menyertakan\n`app.locale` default. Belum ada folder lang \u2192 hanya locale default."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": [\"id\", \"en\"]\n}",
+                            "name": "success"
                         }
                     ]
                 },
@@ -1601,7 +1733,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\",\"queue\":false,\"queue_name\":\"mqeopfuudtdsufvyvddqa\"}"
+                                    "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\",\"queue\":true,\"queue_name\":\"mqeopfuudtdsufvyvddqa\"}"
                                 },
                                 "description": ""
                             },
