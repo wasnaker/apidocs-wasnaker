@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Wasnaker API API Documentation",
-        "_postman_id": "036a93aa-ae38-40c8-8d63-f02123eb8f28",
+        "_postman_id": "fc536d80-11d7-4e1f-a05e-109682d0be76",
         "description": "API resmi platform Wasnaker. Kontrak konsisten untuk semua frontend (web\/mobile). Autentikasi via Laravel Sanctum (Bearer token).",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -147,6 +147,230 @@
                                     "code": 401,
                                     "body": "{\n  \"message\": \"Unauthenticated.\"\n}",
                                     "name": "tidak terautentikasi"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Sales",
+                    "description": "",
+                    "item": [
+                        {
+                            "name": "Daftar sales.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/sales",
+                                    "query": [
+                                        {
+                                            "key": "page",
+                                            "value": "1",
+                                            "description": "Nomor halaman.",
+                                            "disabled": false
+                                        },
+                                        {
+                                            "key": "per_page",
+                                            "value": "15",
+                                            "description": "Jumlah data per halaman.",
+                                            "disabled": false
+                                        }
+                                    ],
+                                    "raw": "{{baseUrl}}\/api\/v1\/sales?page=1&per_page=15"
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "Menampilkan daftar sales dengan paginasi.",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\n  \"data\": [],\n  \"meta\": { \"count\": 0, \"per_page\": 15, \"page\": 1 }\n}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Buat sales baru.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/sales",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/sales"
+                                },
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\"amount\":\"150000\",\"due_date\":\"2026-09-30\"}"
+                                },
+                                "description": "",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 201,
+                                    "body": "{\n  \"data\": null\n}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Detail sales.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/sales\/:id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/sales\/:id",
+                                    "variable": [
+                                        {
+                                            "id": "id",
+                                            "key": "id",
+                                            "value": 17,
+                                            "description": "ID sales."
+                                        }
+                                    ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "Mengembalikan satu data sales berdasarkan ID.",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\n  \"data\": null\n}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Perbarui sales.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/sales\/:id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/sales\/:id",
+                                    "variable": [
+                                        {
+                                            "id": "id",
+                                            "key": "id",
+                                            "value": 17,
+                                            "description": "ID sales."
+                                        }
+                                    ]
+                                },
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\"amount\":\"175000\"}"
+                                },
+                                "description": "",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 200,
+                                    "body": "{\n  \"data\": null\n}",
+                                    "name": ""
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Hapus sales.",
+                            "request": {
+                                "url": {
+                                    "host": "{{baseUrl}}",
+                                    "path": "api\/v1\/sales\/:id",
+                                    "query": [],
+                                    "raw": "{{baseUrl}}\/api\/v1\/sales\/:id",
+                                    "variable": [
+                                        {
+                                            "id": "id",
+                                            "key": "id",
+                                            "value": 17,
+                                            "description": "ID sales."
+                                        }
+                                    ]
+                                },
+                                "method": "DELETE",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application\/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application\/json"
+                                    }
+                                ],
+                                "body": null,
+                                "description": "",
+                                "auth": {
+                                    "type": "noauth"
+                                }
+                            },
+                            "response": [
+                                {
+                                    "header": [],
+                                    "code": 204,
+                                    "body": "",
+                                    "name": ""
                                 }
                             ]
                         }
@@ -373,7 +597,7 @@
                                         },
                                         {
                                             "key": "filter[subject_type]",
-                                            "value": "App\\Models\\Invoice",
+                                            "value": "Spine\\Models\\Invoice",
                                             "description": "optional Filter exact tipe subjek.",
                                             "disabled": false
                                         },
@@ -414,7 +638,7 @@
                                             "disabled": false
                                         }
                                     ],
-                                    "raw": "{{baseUrl}}\/api\/v1\/activity-logs?sort=-created_at&filter%5Btenant_id%5D=1&filter%5Bcauser_id%5D=1&filter%5Bsubject_type%5D=App%5CModels%5CInvoice&filter%5Bsubject_id%5D=5&filter%5Bdescription%5D=invoice&search=invoice&include=causer%2Ctenant&per_page=25&page=2"
+                                    "raw": "{{baseUrl}}\/api\/v1\/activity-logs?sort=-created_at&filter%5Btenant_id%5D=1&filter%5Bcauser_id%5D=1&filter%5Bsubject_type%5D=Spine%5CModels%5CInvoice&filter%5Bsubject_id%5D=5&filter%5Bdescription%5D=invoice&search=invoice&include=causer%2Ctenant&per_page=25&page=2"
                                 },
                                 "method": "GET",
                                 "header": [
@@ -428,13 +652,13 @@
                                     }
                                 ],
                                 "body": null,
-                                "description": "Pengganti `data_tables_init()` Perfex \u2014 kontrak DataTables diterjemahkan\nke query param REST:\n  ?sort=-created_at,id            (whitelist, prefix - = DESC)\n  &filter[tenant_id]=1            (exact)\n  &filter[causer_id]=1            (exact)\n  &filter[subject_type]=...       (exact)\n  &filter[subject_id]=5           (exact)\n  &filter[description]=cari       (partial \/ LIKE)\n  &search=...                     (global search: description + subject_type)\n  &include=causer,tenant          (eager load relasi)\n  &per_page=25&page=2             (pagination)"
+                                "description": "Pengganti `data_tables_init()` legacy \u2014 kontrak DataTables diterjemahkan\nke query param REST:\n  ?sort=-created_at,id            (whitelist, prefix - = DESC)\n  &filter[tenant_id]=1            (exact)\n  &filter[causer_id]=1            (exact)\n  &filter[subject_type]=...       (exact)\n  &filter[subject_id]=5           (exact)\n  &filter[description]=cari       (partial \/ LIKE)\n  &search=...                     (global search: description + subject_type)\n  &include=causer,tenant          (eager load relasi)\n  &per_page=25&page=2             (pagination)"
                             },
                             "response": [
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"description\": \"Invoice dibuat\",\n      \"subject_type\": \"App\\\\Models\\\\Invoice\",\n      \"subject_id\": 5,\n      \"causer_type\": \"App\\\\Models\\\\User\",\n      \"causer_id\": 1,\n      \"tenant_id\": 1,\n      \"properties\": {\"ip\": \"127.0.0.1\"},\n      \"created_at\": \"2026-08-28T00:00:00+00:00\"\n    }\n  ],\n  \"links\": {\"first\": \"...?page=1\", \"last\": \"...?page=3\", \"next\": \"...?page=2\", \"prev\": null},\n  \"meta\": {\n    \"current_page\": 2, \"from\": 26, \"last_page\": 3, \"per_page\": 25, \"to\": 50,\n    \"total\": 80, \"total_filtered\": 50\n  }\n}",
+                                    "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"description\": \"Invoice dibuat\",\n      \"subject_type\": \"Spine\\\\Models\\\\Invoice\",\n      \"subject_id\": 5,\n      \"causer_type\": \"Spine\\\\Models\\\\User\",\n      \"causer_id\": 1,\n      \"tenant_id\": 1,\n      \"properties\": {\"ip\": \"127.0.0.1\"},\n      \"created_at\": \"2026-08-28T00:00:00+00:00\"\n    }\n  ],\n  \"links\": {\"first\": \"...?page=1\", \"last\": \"...?page=3\", \"next\": \"...?page=2\", \"prev\": null},\n  \"meta\": {\n    \"current_page\": 2, \"from\": 26, \"last_page\": 3, \"per_page\": 25, \"to\": 50,\n    \"total\": 80, \"total_filtered\": 50\n  }\n}",
                                     "name": "success"
                                 }
                             ]
@@ -461,7 +685,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"description\":\"Invoice dibuat\",\"subject_type\":\"App\\\\Models\\\\Invoice\",\"subject_id\":5,\"causer_id\":1,\"tenant_id\":1,\"properties\":{\"ip\":\"127.0.0.1\"}}"
+                                    "raw": "{\"description\":\"Invoice dibuat\",\"subject_type\":\"Spine\\\\Models\\\\Invoice\",\"subject_id\":5,\"causer_id\":1,\"tenant_id\":1,\"properties\":{\"ip\":\"127.0.0.1\"}}"
                                 },
                                 "description": ""
                             },
@@ -469,7 +693,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"id\": 1,\n  \"description\": \"Invoice dibuat\",\n  \"subject_type\": \"App\\\\Models\\\\Invoice\",\n  \"subject_id\": 5,\n  \"causer_type\": \"App\\\\Models\\\\User\",\n  \"causer_id\": 1,\n  \"tenant_id\": 1,\n  \"properties\": {\"ip\": \"127.0.0.1\"},\n  \"created_at\": \"2026-08-28T00:00:00+00:00\"\n}",
+                                    "body": "{\n  \"id\": 1,\n  \"description\": \"Invoice dibuat\",\n  \"subject_type\": \"Spine\\\\Models\\\\Invoice\",\n  \"subject_id\": 5,\n  \"causer_type\": \"Spine\\\\Models\\\\User\",\n  \"causer_id\": 1,\n  \"tenant_id\": 1,\n  \"properties\": {\"ip\": \"127.0.0.1\"},\n  \"created_at\": \"2026-08-28T00:00:00+00:00\"\n}",
                                     "name": "success"
                                 }
                             ]
@@ -509,7 +733,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"id\": 1,\n  \"description\": \"Invoice dibuat\",\n  \"subject_type\": \"App\\\\Models\\\\Invoice\",\n  \"subject_id\": 5,\n  \"causer_type\": \"App\\\\Models\\\\User\",\n  \"causer_id\": 1,\n  \"tenant_id\": 1,\n  \"properties\": {\"ip\": \"127.0.0.1\"},\n  \"created_at\": \"2026-08-28T00:00:00+00:00\"\n}",
+                                    "body": "{\n  \"id\": 1,\n  \"description\": \"Invoice dibuat\",\n  \"subject_type\": \"Spine\\\\Models\\\\Invoice\",\n  \"subject_id\": 5,\n  \"causer_type\": \"Spine\\\\Models\\\\User\",\n  \"causer_id\": 1,\n  \"tenant_id\": 1,\n  \"properties\": {\"ip\": \"127.0.0.1\"},\n  \"created_at\": \"2026-08-28T00:00:00+00:00\"\n}",
                                     "name": "success"
                                 },
                                 {
@@ -1117,7 +1341,7 @@
                                         }
                                     ]
                                 },
-                                "description": "Zip wajib berisi `module.json` (di root atau dalam satu folder\ntop-level). Modul langsung di-enable dan migrasinya dijalankan.\nDiadopsi dari `App_module_installer.php` PerfexCRM."
+                                "description": "Zip wajib berisi `module.json` (di root atau dalam satu folder\ntop-level). Modul langsung di-enable dan migrasinya dijalankan.\nDiadopsi dari `App_module_installer.php` legacy CRM."
                             },
                             "response": [
                                 {
@@ -1733,7 +1957,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\",\"queue\":true,\"queue_name\":\"mqeopfuudtdsufvyvddqa\"}"
+                                    "raw": "{\"to\":\"user@example.com\",\"subject\":\"Invoice #123\",\"view\":\"emails.invoice\",\"data\":\"{\\\"invoice_id\\\": 123}\",\"queue\":false,\"queue_name\":\"mqeopfuudtdsufvyvddqa\"}"
                                 },
                                 "description": ""
                             },
@@ -2015,140 +2239,126 @@
                     ]
                 },
                 {
-                    "name": "GDPR",
-                    "description": "",
-                    "item": [
-                        {
-                            "name": "Export semua data user.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/gdpr\/export",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/gdpr\/export",
-                                    "variable": [
-                                        {
-                                            "id": "user_id",
-                                            "key": "user_id",
-                                            "value": 1,
-                                            "description": "ID user."
-                                        }
-                                    ]
-                                },
-                                "method": "GET",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": null,
-                                "description": ""
-                            },
-                            "response": [
+                    "name": "Export semua data user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/gdpr\/export",
+                            "query": [
                                 {
-                                    "header": [],
-                                    "code": 200,
-                                    "body": "{\n  \"data\": {\n    \"user\": {\"id\": 1, \"name\": \"...\", \"email\": \"...\"},\n    \"meta\": [],\n    \"attachments\": [],\n    \"activity_logs\": []\n  }\n}",
-                                    "name": "success"
+                                    "key": "user_id",
+                                    "value": "1",
+                                    "description": "ID user.",
+                                    "disabled": false
                                 }
-                            ]
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/gdpr\/export?user_id=1"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_id\":17}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": {\n    \"user\": {\"id\": 1, \"name\": \"...\", \"email\": \"...\"},\n    \"meta\": [],\n    \"attachments\": [],\n    \"activity_logs\": []\n  }\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Anonymize data user.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/gdpr\/anonymize",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/gdpr\/anonymize"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_id\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"User anonymized\",\"success\":true}",
+                            "name": "success"
                         },
                         {
-                            "name": "Anonymize data user.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/gdpr\/anonymize",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/gdpr\/anonymize",
-                                    "variable": [
-                                        {
-                                            "id": "user_id",
-                                            "key": "user_id",
-                                            "value": 1,
-                                            "description": "ID user."
-                                        }
-                                    ]
-                                },
-                                "method": "POST",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": null,
-                                "description": ""
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"User not found\"}",
+                            "name": "not-found"
+                        }
+                    ]
+                },
+                {
+                    "name": "Hapus data user permanently.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/gdpr\/delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/gdpr\/delete"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
                             },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 200,
-                                    "body": "{\"message\":\"User anonymized\",\"success\":true}",
-                                    "name": "success"
-                                },
-                                {
-                                    "header": [],
-                                    "code": 404,
-                                    "body": "{\"message\":\"User not found\"}",
-                                    "name": "not-found"
-                                }
-                            ]
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"user_id\":1}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\":\"User deleted\",\"success\":true}",
+                            "name": "success"
                         },
                         {
-                            "name": "Hapus data user permanently.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/gdpr\/delete",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/gdpr\/delete",
-                                    "variable": [
-                                        {
-                                            "id": "user_id",
-                                            "key": "user_id",
-                                            "value": 1,
-                                            "description": "ID user."
-                                        }
-                                    ]
-                                },
-                                "method": "POST",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": null,
-                                "description": ""
-                            },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 200,
-                                    "body": "{\"message\":\"User deleted\",\"success\":true}",
-                                    "name": "success"
-                                },
-                                {
-                                    "header": [],
-                                    "code": 404,
-                                    "body": "{\"message\":\"User not found\"}",
-                                    "name": "not-found"
-                                }
-                            ]
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\":\"User not found\"}",
+                            "name": "not-found"
                         }
                     ]
                 },
@@ -2256,7 +2466,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\n  \"data\": { \"job\": \"App\\\\Jobs\\\\PdfExportJob\", \"queued\": true }\n}",
+                                    "body": "{\n  \"data\": { \"job\": \"Spine\\\\Jobs\\\\PdfExportJob\", \"queued\": true }\n}",
                                     "name": ""
                                 }
                             ]
@@ -2362,7 +2572,7 @@
                                 ],
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\"content\":\"https:\\\/\\\/wasnaker.lan\",\"size\":300,\"margin\":10,\"format\":\"base64\",\"filename\":\"qr-signature\"}"
+                                    "raw": "{\"content\":\"https:\\\/\\\/api.example.com\",\"size\":300,\"margin\":10,\"format\":\"base64\",\"filename\":\"qr-signature\"}"
                                 },
                                 "description": ""
                             },
@@ -2610,7 +2820,7 @@
                                 {
                                     "header": [],
                                     "code": 200,
-                                    "body": "{\"driver\": \"reverb\", \"key\": \"a0adc25fe8777223fb4a\", \"scheme\": \"http\", \"host\": \"wasnaker.lan\", \"port\": 8080}",
+                                    "body": "{\"driver\": \"reverb\", \"key\": \"a0adc25fe8777223fb4a\", \"scheme\": \"http\", \"host\": \"api.example.com\", \"port\": 8080}",
                                     "name": ""
                                 }
                             ]
@@ -2652,230 +2862,6 @@
                                     "header": [],
                                     "code": 422,
                                     "body": "{\"message\": \"The given data was invalid.\", \"errors\": {\"type\": [\"The selected type is invalid.\"]}}",
-                                    "name": ""
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Sales",
-                    "description": "",
-                    "item": [
-                        {
-                            "name": "Daftar sales.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/sales",
-                                    "query": [
-                                        {
-                                            "key": "page",
-                                            "value": "1",
-                                            "description": "Nomor halaman.",
-                                            "disabled": false
-                                        },
-                                        {
-                                            "key": "per_page",
-                                            "value": "15",
-                                            "description": "Jumlah data per halaman.",
-                                            "disabled": false
-                                        }
-                                    ],
-                                    "raw": "{{baseUrl}}\/api\/v1\/sales?page=1&per_page=15"
-                                },
-                                "method": "GET",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": null,
-                                "description": "Menampilkan daftar sales dengan paginasi.",
-                                "auth": {
-                                    "type": "noauth"
-                                }
-                            },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 200,
-                                    "body": "{\n  \"data\": [],\n  \"meta\": { \"count\": 0, \"per_page\": 15, \"page\": 1 }\n}",
-                                    "name": ""
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Buat sales baru.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/sales",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/sales"
-                                },
-                                "method": "POST",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": {
-                                    "mode": "raw",
-                                    "raw": "{\"amount\":\"150000\",\"due_date\":\"2026-09-30\"}"
-                                },
-                                "description": "",
-                                "auth": {
-                                    "type": "noauth"
-                                }
-                            },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 201,
-                                    "body": "{\n  \"data\": null\n}",
-                                    "name": ""
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Detail sales.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/sales\/:id",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/sales\/:id",
-                                    "variable": [
-                                        {
-                                            "id": "id",
-                                            "key": "id",
-                                            "value": 17,
-                                            "description": "ID sales."
-                                        }
-                                    ]
-                                },
-                                "method": "GET",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": null,
-                                "description": "Mengembalikan satu data sales berdasarkan ID.",
-                                "auth": {
-                                    "type": "noauth"
-                                }
-                            },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 200,
-                                    "body": "{\n  \"data\": null\n}",
-                                    "name": ""
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Perbarui sales.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/sales\/:id",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/sales\/:id",
-                                    "variable": [
-                                        {
-                                            "id": "id",
-                                            "key": "id",
-                                            "value": 17,
-                                            "description": "ID sales."
-                                        }
-                                    ]
-                                },
-                                "method": "PUT",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": {
-                                    "mode": "raw",
-                                    "raw": "{\"amount\":\"175000\"}"
-                                },
-                                "description": "",
-                                "auth": {
-                                    "type": "noauth"
-                                }
-                            },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 200,
-                                    "body": "{\n  \"data\": null\n}",
-                                    "name": ""
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Hapus sales.",
-                            "request": {
-                                "url": {
-                                    "host": "{{baseUrl}}",
-                                    "path": "api\/v1\/sales\/:id",
-                                    "query": [],
-                                    "raw": "{{baseUrl}}\/api\/v1\/sales\/:id",
-                                    "variable": [
-                                        {
-                                            "id": "id",
-                                            "key": "id",
-                                            "value": 17,
-                                            "description": "ID sales."
-                                        }
-                                    ]
-                                },
-                                "method": "DELETE",
-                                "header": [
-                                    {
-                                        "key": "Content-Type",
-                                        "value": "application\/json"
-                                    },
-                                    {
-                                        "key": "Accept",
-                                        "value": "application\/json"
-                                    }
-                                ],
-                                "body": null,
-                                "description": "",
-                                "auth": {
-                                    "type": "noauth"
-                                }
-                            },
-                            "response": [
-                                {
-                                    "header": [],
-                                    "code": 204,
-                                    "body": "",
                                     "name": ""
                                 }
                             ]
